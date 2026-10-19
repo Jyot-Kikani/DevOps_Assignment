@@ -1,0 +1,16 @@
+{
+  "fixture": true,
+  "rows": 5,
+  "sha256": "353556285cc3d22b3eb2179a78b3a95cfe0f4cd5bad1be070ea97ebb7bfcec06",
+  "real_source_ids": [
+    "3864972938605115520",
+    "4472832130942575872",
+    "5853498713190525696"
+  ],
+  "synthetic_source_ids": [
+    "9007199254740993",
+    "9007199254740995"
+  ],
+  "source_raw_sha256": "20271720bc7b5038f05df0c25d17a5e1cc51158eed74ee1b27472c7faf4ede94",
+  "attribution": "Gaia/ESA/DPAC; Gaia Collaboration (2021) GCNS; see data/LICENSE-NOTICE.md. Last two rows are invented test fixtures, never observations."
+}

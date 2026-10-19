@@ -2261,6 +2261,24 @@
     "infra/terraform/runtime/.terraform.lock.hcl": {
       "sha256": "2459a8ecefd491891de51373d6c6a12b8d52d3b979aaa5761e9e115f68f14d67",
       "bytes": 1317
+    },
+    "tools/codegen/package.json": {
+      "sha256": "c9ac92158dfaa7d52cc6cba944c3a4b3462ee4bc8e35bff77bb2598ebb35b31f"
+    },
+    "tools/codegen/package-lock.json": {
+      "sha256": "4adb904375b7750a34b4b5d065104bee6769a64aeb04713d0d825a2e9909a0f9"
+    },
+    "packages/python/pyproject.toml": {
+      "sha256": "3e347c65a68d953d9f1cb07b94bd492d1c49632d4a42851ffa4e51401885792b"
+    },
+    "services/catalog/pyproject.toml": {
+      "sha256": "ac43fab6e396ac2589823d5d97eb414cbc787a511fd27ddcff529072ed4015cd"
+    },
+    "services/journey/pyproject.toml": {
+      "sha256": "bd407d841274d9929abde18e608b58a9b3c6e175f64f80d12dd131d9a8efa56b"
+    },
+    "jobs/importer/pyproject.toml": {
+      "sha256": "189892b011ab72c28541eb32bcfa8aaffdee6b8a03ce9cf242913c94fea0505a"
     }
   },
   "retired_downloads": {
@@ -2308,5 +2326,12 @@
         "checkov"
       ]
     }
+  },
+  "contract_codegen": {
+    "package": "openapi-typescript",
+    "version": "7.13.0",
+    "typescript_peer": "5.9.3",
+    "scope": "isolated generator; application compiler remains 7.0.2",
+    "lock": "tools/codegen/package-lock.json"
   }
 }

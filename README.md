@@ -60,6 +60,16 @@ on the current process PATH, use `npm.cmd --prefix apps/web run build`, `typeche
 frontend build/tooling checks do not establish a usable atlas. Dockerfiles,
 Compose, database persistence and running services belong to later phases.
 
+After installing the locked Python environments, build/install the first-party
+packages with `python tools/build_packages.py`. With the pinned Node directory
+on the process PATH, restore both npm graphs using `npm.cmd ci --ignore-scripts
+--engine-strict --no-audit --no-fund --cache=.local/npm-cache --prefix apps/web`
+and the same command with `--prefix tools/codegen`.
+Run `python tools/run.py contracts --check --json` to check generated schemas/types,
+or omit `--check` to regenerate. `python tools/run.py test --json` runs the implemented
+unit/contract/frontend gates and records their exact scope; it does not claim
+database, deployment or browser E2E acceptance.
+
 ## Data and evidence
 
 Preserve `validation/` and `design/mockups/`. The existing validation scripts

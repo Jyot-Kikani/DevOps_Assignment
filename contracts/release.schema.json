@@ -1,0 +1,178 @@
+{
+  "$defs": {
+    "Compatibility": {
+      "additionalProperties": false,
+      "properties": {
+        "catalog_schema": {
+          "const": 1,
+          "title": "Catalog Schema",
+          "type": "integer"
+        },
+        "journey_schema": {
+          "const": 1,
+          "title": "Journey Schema",
+          "type": "integer"
+        },
+        "model": {
+          "const": "constant-speed-v1",
+          "title": "Model",
+          "type": "string"
+        }
+      },
+      "required": [
+        "catalog_schema",
+        "journey_schema",
+        "model"
+      ],
+      "title": "Compatibility",
+      "type": "object"
+    },
+    "Dataset": {
+      "additionalProperties": false,
+      "properties": {
+        "fixture": {
+          "const": false,
+          "title": "Fixture",
+          "type": "boolean"
+        },
+        "raw_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Raw Sha256",
+          "type": "string"
+        },
+        "snapshot_id": {
+          "pattern": "^[a-z0-9][a-z0-9-]{0,95}$",
+          "title": "Snapshot Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "raw_sha256",
+        "fixture"
+      ],
+      "title": "Dataset",
+      "type": "object"
+    },
+    "Image": {
+      "additionalProperties": false,
+      "properties": {
+        "ref": {
+          "pattern": "^ghcr\\.io/[a-z0-9-]+/stellar-atlas-(web|catalog|journey|importer)@sha256:[a-f0-9]{64}$",
+          "title": "Ref",
+          "type": "string"
+        },
+        "sbom_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Sbom Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ref",
+        "sbom_sha256"
+      ],
+      "title": "Image",
+      "type": "object"
+    },
+    "Images": {
+      "additionalProperties": false,
+      "properties": {
+        "catalog": {
+          "$ref": "#/$defs/Image"
+        },
+        "importer": {
+          "$ref": "#/$defs/Image"
+        },
+        "journey": {
+          "$ref": "#/$defs/Image"
+        },
+        "web": {
+          "$ref": "#/$defs/Image"
+        }
+      },
+      "required": [
+        "web",
+        "catalog",
+        "journey",
+        "importer"
+      ],
+      "title": "Images",
+      "type": "object"
+    },
+    "Verification": {
+      "additionalProperties": false,
+      "properties": {
+        "state": {
+          "const": "pending",
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "state"
+      ],
+      "title": "Verification",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "compatibility": {
+      "$ref": "#/$defs/Compatibility"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "dataset": {
+      "$ref": "#/$defs/Dataset"
+    },
+    "images": {
+      "$ref": "#/$defs/Images"
+    },
+    "release_id": {
+      "pattern": "^r[0-9]+-a[0-9]+-[a-f0-9]{12}$",
+      "title": "Release Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "signer_identity": {
+      "title": "Signer Identity",
+      "type": "string"
+    },
+    "source_repository": {
+      "pattern": "^[A-Za-z0-9-]+/stellar-atlas$",
+      "title": "Source Repository",
+      "type": "string"
+    },
+    "source_sha": {
+      "pattern": "^[a-f0-9]{40}$",
+      "title": "Source Sha",
+      "type": "string"
+    },
+    "verification": {
+      "$ref": "#/$defs/Verification"
+    }
+  },
+  "required": [
+    "schema_version",
+    "release_id",
+    "source_sha",
+    "source_repository",
+    "created_at",
+    "dataset",
+    "images",
+    "signer_identity",
+    "compatibility",
+    "verification"
+  ],
+  "title": "Release",
+  "type": "object"
+}

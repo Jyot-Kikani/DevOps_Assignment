@@ -13,6 +13,11 @@ def parser():
     commands = result.add_subparsers(dest="action", required=True)
     action = commands.add_parser("doctor", help="Read-only prerequisites and GitHub/port checks")
     action.add_argument("--json", action="store_true")
+    action = commands.add_parser("contracts", help="Regenerate API/schema contracts and pinned TypeScript types")
+    action.add_argument("--check", action="store_true", help="Fail on drift without writing")
+    action.add_argument("--json", action="store_true")
+    action = commands.add_parser("test", help="Run implemented phase gates; integration gates grow with their phase")
+    action.add_argument("--json", action="store_true")
     action = commands.add_parser("tools-lock", help="Verify locks or restore frozen tools; never select moving versions")
     action.add_argument("--verify-only", action="store_true")
     action.add_argument("--json", action="store_true")
@@ -31,6 +36,12 @@ def main(argv=None):
         elif arguments.action == "tools-lock":
             from .locks import verify_locks, restore_tools
             report = verify_locks() if arguments.verify_only else restore_tools()
+        elif arguments.action == "contracts":
+            from .quality import contracts
+            report = contracts(check=arguments.check)
+        elif arguments.action == "test":
+            from .quality import tests
+            report = tests()
     except Exception as exc:
         report = {"status": "failed", "error": str(exc), "action": arguments.action}
     report["action"] = arguments.action

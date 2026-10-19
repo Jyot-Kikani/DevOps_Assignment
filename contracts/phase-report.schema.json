@@ -1,0 +1,176 @@
+{
+  "$defs": {
+    "Command": {
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Command",
+          "type": "array"
+        },
+        "exit_code": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Exit Code"
+        },
+        "report": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Report"
+        }
+      },
+      "required": [
+        "command",
+        "exit_code"
+      ],
+      "title": "Command",
+      "type": "object"
+    },
+    "Step": {
+      "additionalProperties": false,
+      "properties": {
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        },
+        "evidence": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "not_run",
+            "in_progress",
+            "passed",
+            "failed",
+            "blocked"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "step": {
+          "minimum": 1,
+          "title": "Step",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "step",
+        "status",
+        "detail",
+        "evidence"
+      ],
+      "title": "Step",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "checked_at_utc": {
+      "format": "date-time",
+      "title": "Checked At Utc",
+      "type": "string"
+    },
+    "commands": {
+      "items": {
+        "$ref": "#/$defs/Command"
+      },
+      "title": "Commands",
+      "type": "array"
+    },
+    "depends_on": {
+      "items": {
+        "pattern": "^P(0[0-9]|1[0-9]|2[0-3])$",
+        "type": "string"
+      },
+      "title": "Depends On",
+      "type": "array"
+    },
+    "human_actions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Human Actions",
+      "type": "array"
+    },
+    "metadata": {
+      "additionalProperties": true,
+      "title": "Metadata",
+      "type": "object"
+    },
+    "notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Notes",
+      "type": "array"
+    },
+    "phase": {
+      "pattern": "^P(0[0-9]|1[0-9]|2[0-3])$",
+      "title": "Phase",
+      "type": "string"
+    },
+    "source_commit": {
+      "anyOf": [
+        {
+          "pattern": "^[a-f0-9]{40}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Source Commit"
+    },
+    "status": {
+      "enum": [
+        "not_run",
+        "in_progress",
+        "passed",
+        "failed",
+        "blocked"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "steps": {
+      "items": {
+        "$ref": "#/$defs/Step"
+      },
+      "title": "Steps",
+      "type": "array"
+    }
+  },
+  "required": [
+    "phase",
+    "status",
+    "checked_at_utc",
+    "source_commit",
+    "depends_on",
+    "steps",
+    "commands",
+    "notes",
+    "human_actions"
+  ],
+  "title": "PhaseReport",
+  "type": "object"
+}

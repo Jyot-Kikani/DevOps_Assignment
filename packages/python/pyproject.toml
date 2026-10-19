@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools==84.0.0", "wheel==0.48.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stellar-common"
+version = "0.1.0"
+description = "Stellar Atlas identity, units, binary format and safe logging primitives"
+requires-python = ">=3.13,<3.14"
+license = "MIT"
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["stellar_common*"]

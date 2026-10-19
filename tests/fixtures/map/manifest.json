@@ -1,0 +1,6 @@
+{
+  "format_version": 1,
+  "records": 2,
+  "sha256": "440ce9cafb5f6c37597179762b6e1af39e17bd992d61a454a642223bda5c4e1f",
+  "source": "Hand-written IEEE754/little-endian oracle; synthetic, no Gaia coordinates"
+}

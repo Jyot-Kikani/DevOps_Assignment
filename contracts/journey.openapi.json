@@ -1,0 +1,1697 @@
+{
+  "components": {
+    "schemas": {
+      "Error": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "details": {
+            "items": {
+              "$ref": "#/components/schemas/ErrorDetail"
+            },
+            "title": "Details",
+            "type": "array"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 64,
+            "pattern": "^[A-Za-z0-9._-]+$",
+            "title": "Request Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "request_id",
+          "details"
+        ],
+        "title": "Error",
+        "type": "object"
+      },
+      "ErrorDetail": {
+        "additionalProperties": false,
+        "properties": {
+          "location": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "location",
+          "reason"
+        ],
+        "title": "ErrorDetail",
+        "type": "object"
+      },
+      "ErrorResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/Error"
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "title": "ErrorResponse",
+        "type": "object"
+      },
+      "Estimate": {
+        "additionalProperties": false,
+        "properties": {
+          "assumptions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Assumptions",
+            "type": "array"
+          },
+          "destination_id": {
+            "examples": [
+              "5853498713190525696",
+              "sun"
+            ],
+            "pattern": "^(sun|[0-9]{1,20})$",
+            "title": "Destination Id",
+            "type": "string"
+          },
+          "destination_position_pc": {
+            "maxItems": 3,
+            "minItems": 3,
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "title": "Destination Position Pc",
+            "type": "array"
+          },
+          "distance_ly": {
+            "minimum": 0.0,
+            "title": "Distance Ly",
+            "type": "number"
+          },
+          "distance_pc": {
+            "minimum": 0.0,
+            "title": "Distance Pc",
+            "type": "number"
+          },
+          "duration_julian_years": {
+            "minimum": 0.0,
+            "title": "Duration Julian Years",
+            "type": "number"
+          },
+          "model_version": {
+            "const": "constant-speed-v1",
+            "title": "Model Version",
+            "type": "string"
+          },
+          "origin_id": {
+            "examples": [
+              "5853498713190525696",
+              "sun"
+            ],
+            "pattern": "^(sun|[0-9]{1,20})$",
+            "title": "Origin Id",
+            "type": "string"
+          },
+          "origin_position_pc": {
+            "maxItems": 3,
+            "minItems": 3,
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "title": "Origin Position Pc",
+            "type": "array"
+          },
+          "snapshot_id": {
+            "examples": [
+              "gcns-edr3-20261013-20271720"
+            ],
+            "pattern": "^[a-z0-9][a-z0-9-]{0,95}$",
+            "title": "Snapshot Id",
+            "type": "string"
+          },
+          "speed_fraction_c": {
+            "maximum": 0.5,
+            "minimum": 0.001,
+            "title": "Speed Fraction C",
+            "type": "number"
+          },
+          "speed_km_s": {
+            "minimum": 0.0,
+            "title": "Speed Km S",
+            "type": "number"
+          }
+        },
+        "required": [
+          "snapshot_id",
+          "origin_id",
+          "destination_id",
+          "origin_position_pc",
+          "destination_position_pc",
+          "distance_pc",
+          "distance_ly",
+          "speed_fraction_c",
+          "speed_km_s",
+          "duration_julian_years",
+          "model_version",
+          "assumptions"
+        ],
+        "title": "Estimate",
+        "type": "object"
+      },
+      "EstimateRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "destination_id": {
+            "examples": [
+              "5853498713190525696",
+              "sun"
+            ],
+            "pattern": "^(sun|[0-9]{1,20})$",
+            "title": "Destination Id",
+            "type": "string"
+          },
+          "origin_id": {
+            "examples": [
+              "5853498713190525696",
+              "sun"
+            ],
+            "pattern": "^(sun|[0-9]{1,20})$",
+            "title": "Origin Id",
+            "type": "string"
+          },
+          "snapshot_id": {
+            "examples": [
+              "gcns-edr3-20261013-20271720"
+            ],
+            "pattern": "^[a-z0-9][a-z0-9-]{0,95}$",
+            "title": "Snapshot Id",
+            "type": "string"
+          },
+          "speed_fraction_c": {
+            "examples": [
+              0.1
+            ],
+            "maximum": 0.5,
+            "minimum": 0.001,
+            "title": "Speed Fraction C",
+            "type": "number"
+          }
+        },
+        "required": [
+          "snapshot_id",
+          "origin_id",
+          "destination_id",
+          "speed_fraction_c"
+        ],
+        "title": "EstimateRequest",
+        "type": "object"
+      },
+      "Health": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "live",
+              "ready",
+              "unavailable"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "Health",
+        "type": "object"
+      },
+      "Journey": {
+        "additionalProperties": false,
+        "properties": {
+          "assumptions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Assumptions",
+            "type": "array"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "destination_id": {
+            "examples": [
+              "5853498713190525696",
+              "sun"
+            ],
+            "pattern": "^(sun|[0-9]{1,20})$",
+            "title": "Destination Id",
+            "type": "string"
+          },
+          "destination_position_pc": {
+            "maxItems": 3,
+            "minItems": 3,
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "title": "Destination Position Pc",
+            "type": "array"
+          },
+          "distance_ly": {
+            "minimum": 0.0,
+            "title": "Distance Ly",
+            "type": "number"
+          },
+          "distance_pc": {
+            "minimum": 0.0,
+            "title": "Distance Pc",
+            "type": "number"
+          },
+          "duration_julian_years": {
+            "minimum": 0.0,
+            "title": "Duration Julian Years",
+            "type": "number"
+          },
+          "expires_at": {
+            "format": "date-time",
+            "title": "Expires At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "model_version": {
+            "const": "constant-speed-v1",
+            "title": "Model Version",
+            "type": "string"
+          },
+          "origin_id": {
+            "examples": [
+              "5853498713190525696",
+              "sun"
+            ],
+            "pattern": "^(sun|[0-9]{1,20})$",
+            "title": "Origin Id",
+            "type": "string"
+          },
+          "origin_position_pc": {
+            "maxItems": 3,
+            "minItems": 3,
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "title": "Origin Position Pc",
+            "type": "array"
+          },
+          "snapshot_id": {
+            "examples": [
+              "gcns-edr3-20261013-20271720"
+            ],
+            "pattern": "^[a-z0-9][a-z0-9-]{0,95}$",
+            "title": "Snapshot Id",
+            "type": "string"
+          },
+          "speed_fraction_c": {
+            "maximum": 0.5,
+            "minimum": 0.001,
+            "title": "Speed Fraction C",
+            "type": "number"
+          },
+          "speed_km_s": {
+            "minimum": 0.0,
+            "title": "Speed Km S",
+            "type": "number"
+          }
+        },
+        "required": [
+          "snapshot_id",
+          "origin_id",
+          "destination_id",
+          "origin_position_pc",
+          "destination_position_pc",
+          "distance_pc",
+          "distance_ly",
+          "speed_fraction_c",
+          "speed_km_s",
+          "duration_julian_years",
+          "model_version",
+          "assumptions",
+          "id",
+          "created_at",
+          "expires_at"
+        ],
+        "title": "Journey",
+        "type": "object"
+      },
+      "Meta": {
+        "additionalProperties": false,
+        "properties": {
+          "active_snapshot": {
+            "anyOf": [
+              {
+                "examples": [
+                  "gcns-edr3-20261013-20271720"
+                ],
+                "pattern": "^[a-z0-9][a-z0-9-]{0,95}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active Snapshot"
+          },
+          "readiness": {
+            "title": "Readiness",
+            "type": "boolean"
+          },
+          "release_id": {
+            "pattern": "^r[0-9]+-a[0-9]+-[a-f0-9]{12}$",
+            "title": "Release Id",
+            "type": "string"
+          },
+          "schema_version": {
+            "const": 1,
+            "title": "Schema Version",
+            "type": "integer"
+          },
+          "service": {
+            "enum": [
+              "catalog",
+              "journey"
+            ],
+            "title": "Service",
+            "type": "string"
+          },
+          "source_sha": {
+            "pattern": "^[a-f0-9]{40}$",
+            "title": "Source Sha",
+            "type": "string"
+          }
+        },
+        "required": [
+          "service",
+          "source_sha",
+          "release_id",
+          "schema_version",
+          "readiness",
+          "active_snapshot"
+        ],
+        "title": "Meta",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "Contract scaffold. Data handlers deliberately return 503 until their implementation phase.",
+    "title": "Stellar Atlas Journey",
+    "version": "1.0.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/health/live": {
+      "get": {
+        "operationId": "journey_live",
+        "parameters": [
+          {
+            "description": "Propagated internal ID. Invalid or overlong values replaced; gateway generates public IDs.",
+            "example": "contract-example-1",
+            "in": "header",
+            "name": "X-Request-ID",
+            "required": false,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9._-]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            },
+            "description": "Successful Response",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Malformed query or JSON",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Record not found",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Snapshot or idempotency conflict",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Expired journey",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid body fields",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Rate limit; Retry-After header",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Dependency unavailable",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Live"
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "operationId": "journey_ready",
+        "parameters": [
+          {
+            "description": "Propagated internal ID. Invalid or overlong values replaced; gateway generates public IDs.",
+            "example": "contract-example-1",
+            "in": "header",
+            "name": "X-Request-ID",
+            "required": false,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9._-]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            },
+            "description": "Successful Response",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Malformed query or JSON",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Record not found",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Snapshot or idempotency conflict",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Expired journey",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid body fields",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Rate limit; Retry-After header",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Dependency unavailable",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Ready"
+      }
+    },
+    "/metrics": {
+      "get": {
+        "operationId": "journey_metrics",
+        "parameters": [
+          {
+            "description": "Propagated internal ID. Invalid or overlong values replaced; gateway generates public IDs.",
+            "example": "contract-example-1",
+            "in": "header",
+            "name": "X-Request-ID",
+            "required": false,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9._-]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Successful Response",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Malformed query or JSON",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Record not found",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "409": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Snapshot or idempotency conflict",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "410": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Expired journey",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid body fields",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Rate limit; Retry-After header",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Dependency unavailable",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Metrics"
+      }
+    },
+    "/v1/estimate": {
+      "post": {
+        "operationId": "estimate",
+        "parameters": [
+          {
+            "description": "Propagated internal ID. Invalid or overlong values replaced; gateway generates public IDs.",
+            "example": "contract-example-1",
+            "in": "header",
+            "name": "X-Request-ID",
+            "required": false,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9._-]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EstimateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Estimate"
+                }
+              }
+            },
+            "description": "Successful Response",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Malformed query or JSON",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Record not found",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Snapshot or idempotency conflict",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Expired journey",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid body fields",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Rate limit; Retry-After header",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Dependency unavailable",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Estimate"
+      }
+    },
+    "/v1/journeys": {
+      "post": {
+        "operationId": "create_journey",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Propagated internal ID. Invalid or overlong values replaced; gateway generates public IDs.",
+            "example": "contract-example-1",
+            "in": "header",
+            "name": "X-Request-ID",
+            "required": false,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9._-]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EstimateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Journey"
+                }
+              }
+            },
+            "description": "Matching idempotent retry",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Journey"
+                }
+              }
+            },
+            "description": "Created immutable journey",
+            "headers": {
+              "Location": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Malformed query or JSON",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Record not found",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Snapshot or idempotency conflict",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Expired journey",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid body fields",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Rate limit; Retry-After header",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Dependency unavailable",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create Journey"
+      }
+    },
+    "/v1/journeys/{uuid}": {
+      "get": {
+        "operationId": "journey",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "uuid",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Uuid",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Propagated internal ID. Invalid or overlong values replaced; gateway generates public IDs.",
+            "example": "contract-example-1",
+            "in": "header",
+            "name": "X-Request-ID",
+            "required": false,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9._-]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Journey"
+                }
+              }
+            },
+            "description": "Successful Response",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Malformed query or JSON",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Record not found",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Snapshot or idempotency conflict",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Expired journey",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid body fields",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Rate limit; Retry-After header",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Dependency unavailable",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Journey"
+      }
+    },
+    "/v1/meta": {
+      "get": {
+        "operationId": "journey_meta",
+        "parameters": [
+          {
+            "description": "Propagated internal ID. Invalid or overlong values replaced; gateway generates public IDs.",
+            "example": "contract-example-1",
+            "in": "header",
+            "name": "X-Request-ID",
+            "required": false,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9._-]+$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Meta"
+                }
+              }
+            },
+            "description": "Successful Response",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Malformed query or JSON",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Record not found",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Snapshot or idempotency conflict",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Expired journey",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid body fields",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Rate limit; Retry-After header",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Dependency unavailable",
+            "headers": {
+              "X-Request-ID": {
+                "schema": {
+                  "maxLength": 64,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Meta"
+      }
+    }
+  },
+  "x-max-body-bytes": 4096,
+  "x-timestamp-format": "UTC RFC3339"
+}

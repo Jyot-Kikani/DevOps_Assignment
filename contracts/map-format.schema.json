@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Stellar Atlas map binary format v1 descriptor",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "endian", "record_bytes", "chunk_records", "fields", "ordering", "compression"],
+  "properties": {
+    "version": {"const": 1}, "endian": {"const": "little"},
+    "record_bytes": {"const": 24}, "chunk_records": {"const": 8192},
+    "fields": {"const": ["uint32 ordinal", "float32 x_pc", "float32 y_pc", "float32 z_pc", "float32 g_mag", "float32 bp_minus_rp"]},
+    "ordering": {"const": "distance_pc,numeric_source_id; ordinal starts at 1; 0 reserved for Sun"},
+    "compression": {"const": "gzip; mtime=0; empty filename; level=9"}
+  },
+  "description": "Only photometry may contain canonical quiet NaN 0x7fc00000. Coordinates finite; no Gaia ID in binary. Map coordinates stay Galactic pc; renderer rotation (x,z,-y)."
+}
