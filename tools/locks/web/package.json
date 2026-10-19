@@ -1,0 +1,23 @@
+{
+  "name": "stellar-atlas-p00-dependency-lock",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.22.0"
+  },
+  "dependencies": {
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "three": "0.186.1"
+  },
+  "devDependencies": {
+    "vite": "8.3.4",
+    "vitest": "5.0.5",
+    "@playwright/test": "1.64.1",
+    "typescript": "7.0.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/three": "0.186.0"
+  }
+}

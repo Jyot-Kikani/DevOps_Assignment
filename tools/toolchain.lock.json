@@ -1,0 +1,2188 @@
+{
+  "schema_version": 1,
+  "phase": "P00",
+  "status": "complete",
+  "tools": {
+    "kind": {
+      "version": "0.33.0",
+      "url": "https://github.com/kubernetes-sigs/kind/releases/download/v0.33.0/kind-windows-amd64",
+      "sha256": "4b22adaa135368c5a465d56bbd8e520cbea87272a06ca00b6078e7b81515c9fc",
+      "provenance": {
+        "mechanism": "upstream-checksum-over-https",
+        "release": "https://api.github.com/repos/kubernetes-sigs/kind/releases/tags/v0.33.0",
+        "checksum_url": "https://github.com/kubernetes-sigs/kind/releases/download/v0.33.0/kind-windows-amd64.sha256sum"
+      },
+      "verified_download": true,
+      "local_path": ".local\\tools\\kind\\0.33.0"
+    },
+    "gitleaks": {
+      "version": "8.30.1",
+      "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_windows_x64.zip",
+      "sha256": "d29144deff3a68aa93ced33dddf84b7fdc26070add4aa0f4513094c8332afc4e",
+      "provenance": {
+        "mechanism": "upstream-checksum-over-https",
+        "release": "https://api.github.com/repos/gitleaks/gitleaks/releases/tags/v8.30.1",
+        "checksum_url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_checksums.txt"
+      },
+      "verified_download": true,
+      "local_path": ".local\\tools\\gitleaks\\8.30.1"
+    },
+    "gh": {
+      "version": "2.102.0",
+      "url": "https://github.com/cli/cli/releases/download/v2.102.0/gh_2.102.0_windows_amd64.zip",
+      "sha256": "ae64e556ecc240b200f7eba60d550e4bb60d78e860e69dd88c449405b86067f4",
+      "provenance": {
+        "mechanism": "upstream-checksum-over-https",
+        "release": "https://api.github.com/repos/cli/cli/releases/latest",
+        "checksum_url": "https://github.com/cli/cli/releases/download/v2.102.0/gh_2.102.0_checksums.txt"
+      },
+      "verified_download": true,
+      "local_path": ".local\\tools\\gh\\2.102.0"
+    },
+    "terraform": {
+      "version": "1.16.6",
+      "url": "https://releases.hashicorp.com/terraform/1.16.6/terraform_1.16.6_windows_amd64.zip",
+      "sha256": "6ea2c186e0e76a113af30fbcdcf7a4b4c70756317994a04929e5c90b9e94b1df",
+      "provenance": {
+        "mechanism": "upstream-checksum-over-https",
+        "checksum_url": "https://releases.hashicorp.com/terraform/1.16.6/terraform_1.16.6_SHA256SUMS"
+      },
+      "verified_download": true,
+      "local_path": ".local\\tools\\terraform\\1.16.6"
+    },
+    "grype": {
+      "version": "0.120.1",
+      "url": "https://github.com/anchore/grype/releases/download/v0.120.1/grype_0.120.1_windows_amd64.zip",
+      "sha256": "32e3c811f31822d17592908bafdc6288aaaca3d52583c479167a8dc8399ed65d",
+      "provenance": {
+        "mechanism": "upstream-checksum-over-https",
+        "release": "https://api.github.com/repos/anchore/grype/releases/tags/v0.120.1",
+        "checksum_url": "https://github.com/anchore/grype/releases/download/v0.120.1/grype_0.120.1_checksums.txt"
+      },
+      "verified_download": true,
+      "local_path": ".local\\tools\\grype\\0.120.1"
+    },
+    "syft": {
+      "version": "1.54.1",
+      "url": "https://github.com/anchore/syft/releases/download/v1.54.1/syft_1.54.1_windows_amd64.zip",
+      "sha256": "8b56e8285e295e0bbed26eeea9b16ed51c493be97ccdf42dae6326c84fe8e19f",
+      "provenance": {
+        "mechanism": "upstream-checksum-over-https",
+        "release": "https://api.github.com/repos/anchore/syft/releases/latest",
+        "checksum_url": "https://github.com/anchore/syft/releases/download/v1.54.1/syft_1.54.1_checksums.txt"
+      },
+      "verified_download": true,
+      "local_path": ".local\\tools\\syft\\1.54.1"
+    },
+    "cosign": {
+      "version": "3.1.3",
+      "url": "https://github.com/sigstore/cosign/releases/download/v3.1.3/cosign-windows-amd64.exe",
+      "sha256": "9fe59be0eca1271873ce019061335eb1ac419b7059202e797828467ddabe33be",
+      "provenance": {
+        "mechanism": "upstream-checksum-over-https",
+        "release": "https://api.github.com/repos/sigstore/cosign/releases/tags/v3.1.3",
+        "checksum_url": "https://github.com/sigstore/cosign/releases/download/v3.1.3/cosign_checksums.txt"
+      },
+      "verified_download": true,
+      "local_path": ".local\\tools\\cosign\\3.1.3"
+    },
+    "kubectl": {
+      "version": "1.35.8",
+      "url": "https://dl.k8s.io/release/v1.35.8/bin/windows/amd64/kubectl.exe",
+      "sha256": "f675d70224b42b84e0442e8d7644efbe440e4451a4b02bdc5d95823a96316ba8",
+      "provenance": {
+        "mechanism": "upstream-checksum-over-https",
+        "checksum_url": "https://dl.k8s.io/release/v1.35.8/bin/windows/amd64/kubectl.exe.sha256"
+      },
+      "verified_download": true,
+      "local_path": ".local\\tools\\kubectl\\1.35.8"
+    },
+    "node": {
+      "version": "24.22.0",
+      "url": "https://nodejs.org/dist/v24.22.0/node-v24.22.0-win-x64.zip",
+      "sha256": "f9683a19877e12a9b167305c8db71040d812876359de21f0d2e97c3f321f80c3",
+      "provenance": {
+        "mechanism": "upstream-checksum-over-https",
+        "checksum_url": "https://nodejs.org/dist/v24.22.0/SHASUMS256.txt"
+      },
+      "verified_download": true,
+      "local_path": ".local\\tools\\node\\24.22.0"
+    },
+    "cloudflared": {
+      "version": "2026.10.1",
+      "url": "https://github.com/cloudflare/cloudflared/releases/download/2026.10.1/cloudflared-windows-amd64.exe",
+      "sha256": "4d2490e74082c5d48dbfedaf92576fa5bd1702379ab88eb7faa0cfbe8dc891b6",
+      "provenance": {
+        "mechanism": "publisher-release-body-sha256-and-github-asset-digest-over-https",
+        "release": "https://api.github.com/repos/cloudflare/cloudflared/releases/tags/2026.10.1"
+      },
+      "verified_download": true,
+      "local_path": ".local\\tools\\cloudflared\\2026.10.1"
+    }
+  },
+  "npm": {
+    "react-dom": {
+      "version": "19.3.1",
+      "url": "https://registry.npmjs.org/react-dom/-/react-dom-19.3.1.tgz",
+      "integrity": "sha512-Y0bARz53lhEC1NMCASs0/j+faB/zqt3R8hpvg1e8+61ZVJ4UL0UdC4cBbXfZMcIuhrfgeILTLe+ZeBCavQPtKQ==",
+      "engines": {},
+      "peer_dependencies": {
+        "react": "^19.3.1"
+      }
+    },
+    "vite": {
+      "version": "8.3.4",
+      "url": "https://registry.npmjs.org/vite/-/vite-8.3.4.tgz",
+      "integrity": "sha512-IftLE8phJhdNRIGNEV4JCCvfNScoZQVfcXaN8TQropWGJtOHcu+iAB9pHcuGvmEb/kddw0LBe/jS8ztdC6xdiQ==",
+      "engines": {
+        "node": "^20.19.0 || >=22.12.0"
+      },
+      "peer_dependencies": {
+        "tsx": "^4.8.1",
+        "jiti": ">=1.21.0",
+        "less": "^4.0.0",
+        "sass": "^1.70.0",
+        "yaml": "^2.4.2",
+        "stylus": ">=0.54.8",
+        "terser": "^5.16.0",
+        "esbuild": "^0.27.0 || ^0.28.0",
+        "sugarss": "^5.0.0",
+        "@types/node": "^20.19.0 || >=22.12.0",
+        "sass-embedded": "^1.70.0",
+        "@vitejs/devtools": "^0.7.1"
+      }
+    },
+    "vitest": {
+      "version": "5.0.5",
+      "url": "https://registry.npmjs.org/vitest/-/vitest-5.0.5.tgz",
+      "integrity": "sha512-cPODOMF8YnkiiYtDdHo6n4wWmBrOBBbOIYH2d33M4l3CdNn72h+qMmO6uXffUN6A5AZFXNND/d+krS9mgkXRfg==",
+      "engines": {
+        "node": "^22.12.0 || ^24.0.0 || >=26.0.0"
+      },
+      "peer_dependencies": {
+        "vite": "^6.4.0 || ^7.0.0 || ^8.0.0",
+        "jsdom": "*",
+        "happy-dom": "*",
+        "@vitest/ui": "5.0.5",
+        "@types/node": "^22.0.0 || >=24.0.0",
+        "@edge-runtime/vm": "*",
+        "@opentelemetry/api": "^1.9.0",
+        "@vitest/coverage-v8": "5.0.5",
+        "@vitest/browser-preview": "5.0.5",
+        "@vitest/coverage-istanbul": "5.0.5",
+        "@vitest/browser-playwright": "5.0.5",
+        "@vitest/browser-webdriverio": "^5.0.0-beta.5 || >=5.0.0"
+      }
+    },
+    "three": {
+      "version": "0.186.1",
+      "url": "https://registry.npmjs.org/three/-/three-0.186.1.tgz",
+      "integrity": "sha512-blFeqb49wRCSGUGj7gtpfnSGHy2lwDk94RhUmS1c/hTby70kvChbWpkJ4Pm1390LqzzvTmzgXKHPEafJwCb8jA==",
+      "engines": {},
+      "peer_dependencies": {}
+    },
+    "@playwright/test": {
+      "version": "1.64.1",
+      "url": "https://registry.npmjs.org/@playwright/test/-/test-1.64.1.tgz",
+      "integrity": "sha512-IaYGml/nSOiZWROfPtuIL7neuu9qDOZ3TNvNljUIrhDMxiGTgPjzj/g9p9RxpS2tSepPDRY+UwAaEeiKtUvIAg==",
+      "engines": {
+        "node": ">=20"
+      },
+      "peer_dependencies": {}
+    },
+    "typescript": {
+      "version": "7.0.2",
+      "url": "https://registry.npmjs.org/typescript/-/typescript-7.0.2.tgz",
+      "integrity": "sha512-8FYau96o3NKOhbjKi/qNvG/W5jhzxkbdm5sj9AbZ/5T5sWqn3hJgLfGx27sRKZWTvyzCP8dLRBTf5tBTSRVUNA==",
+      "engines": {
+        "node": ">=16.20.0"
+      },
+      "peer_dependencies": {}
+    },
+    "@types/react": {
+      "version": "19.3.0",
+      "url": "https://registry.npmjs.org/@types/react/-/react-19.3.0.tgz",
+      "integrity": "sha512-N0rFCuH9YoxG9/m61l9MfpJKfmLOVU0em7ipIz6TRgSSkvReLB9vL85GB+yr8Bs5leqpvg96JSwF4ZS1s4viQg==",
+      "engines": {},
+      "peer_dependencies": {}
+    },
+    "@types/react-dom": {
+      "version": "19.3.0",
+      "url": "https://registry.npmjs.org/@types/react-dom/-/react-dom-19.3.0.tgz",
+      "integrity": "sha512-ZI7bU42mZXXKHn/qNLEw2IrbiINU7X5+vfgdixBHkCNpYWXjKgfQ/P+uyGb5CjOLB9UcnTeg3rylQtV2hym44Q==",
+      "engines": {},
+      "peer_dependencies": {
+        "@types/react": "^19.3.0"
+      }
+    },
+    "@types/three": {
+      "version": "0.186.0",
+      "url": "https://registry.npmjs.org/@types/three/-/three-0.186.0.tgz",
+      "integrity": "sha512-mxYSBpDC+D0pLfSP6sW4WZTcT+nrtmZcimMqnVmy36Hte3XpeYSrvgg4TRdaM1GemGog1AWzI5qL2VoIfMXbJQ==",
+      "engines": {},
+      "peer_dependencies": {}
+    },
+    "react": {
+      "version": "19.3.1",
+      "url": "https://registry.npmjs.org/react/-/react-19.3.1.tgz",
+      "integrity": "sha512-QNhWdt7nrgVWWQG58QuGsAR3jv3Hbe4mb4vz7w2csnHavciZJgda1CPNaldF6eVxv90ud3jUXpKlHL69gO38yw==",
+      "engines": {
+        "node": ">=0.10.0"
+      },
+      "peer_dependencies": {}
+    }
+  },
+  "python": {
+    "fastapi": {
+      "version": "0.146.0",
+      "requires_python": ">=3.10",
+      "metadata_url": "https://pypi.org/pypi/fastapi/0.146.0/json",
+      "artifacts": [
+        {
+          "filename": "fastapi-0.146.0-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/eb/7d/f96d4bd930d52f299583ea55266990480ec0db46d2c498df716a98474e87/fastapi-0.146.0-py3-none-any.whl",
+          "sha256": "0eb9985a7d5bb11ce9a962d4b65e0cf1a2e13d6aca2e14da57bc526370e26748"
+        },
+        {
+          "filename": "fastapi-0.146.0.tar.gz",
+          "url": "https://files.pythonhosted.org/packages/cd/5b/f3b4277844c3ce66c16f62670cd2a26236489aa97115d04182171ce714a9/fastapi-0.146.0.tar.gz",
+          "sha256": "e96047fc353ff43f7fda069c3578a7d94902a762d9aca2e065f7f801abd91a49"
+        }
+      ]
+    },
+    "SQLAlchemy": {
+      "version": "2.1.5",
+      "requires_python": ">=3.11",
+      "metadata_url": "https://pypi.org/pypi/SQLAlchemy/2.1.5/json",
+      "artifacts": [
+        {
+          "filename": "sqlalchemy-2.1.5-cp311-cp311-macosx_11_0_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/f8/78/d4a0f4e7432f186d3082e5f1b8573b6776dd15bda01ea2149f540c7bceda/sqlalchemy-2.1.5-cp311-cp311-macosx_11_0_arm64.whl",
+          "sha256": "116cad2685f16398c3486e30832e07197a7e12147e465a44a187c250059f23d0"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl",
+          "url": "https://files.pythonhosted.org/packages/34/1d/628915299f551b0a4e2e2492975e39cf2688288fc9ebc4ac8c1483d89bd0/sqlalchemy-2.1.5-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl",
+          "sha256": "bac60969b1a96f8ee4db82c647a3370860f76b2a41dd7b95f578a8421c7c87bb"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/92/31/78d92c64da26adc3febcf98722426c1090be70b3ac54ff1573a5afa36aca/sqlalchemy-2.1.5-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "sha256": "926c61c589c3bebb6c540ba0b60fd9a2e8eaf6b5ae9e3ec94cb2cbb2fe10a022"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp311-cp311-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl",
+          "url": "https://files.pythonhosted.org/packages/50/57/a254f76935dfd5d15ce9e3b3cd306b26670bd9473fee1dcd80ad816790d9/sqlalchemy-2.1.5-cp311-cp311-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl",
+          "sha256": "46a50f5d226e9321970867c91252a71485301b67eaee2f76db92b2f6bea5fdcb"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp311-cp311-musllinux_1_2_aarch64.whl",
+          "url": "https://files.pythonhosted.org/packages/bd/d7/34c21248357dcbb68122d79d68126824d15a70448c5e7719266789020160/sqlalchemy-2.1.5-cp311-cp311-musllinux_1_2_aarch64.whl",
+          "sha256": "cb7afa85837f56cd07235dbb05858f5137d5fe7a1e813b12669a52462a1b6ae5"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp311-cp311-musllinux_1_2_riscv64.whl",
+          "url": "https://files.pythonhosted.org/packages/4e/11/18ee59f913c99fa5c991d621faef6f1612bb70260af98d856b80e680170a/sqlalchemy-2.1.5-cp311-cp311-musllinux_1_2_riscv64.whl",
+          "sha256": "ad305d5fed915340464441dfed47086303936288ed0a5ebc1a0b2ed41678fa41"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp311-cp311-musllinux_1_2_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/5a/aa/f45c4f56004a2596576cf02744adc9074ac945e98e49946551e07c57afac/sqlalchemy-2.1.5-cp311-cp311-musllinux_1_2_x86_64.whl",
+          "sha256": "2ca1b380f940fbd94c1df94d7b502b9c496fe9a62f5200e0c6feaa8db7175401"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp311-cp311-win32.whl",
+          "url": "https://files.pythonhosted.org/packages/53/b2/842b0416ffa5d0e0ce5c25a7b52ac31d4b1bd55e7351cfd9e7b0e32273a7/sqlalchemy-2.1.5-cp311-cp311-win32.whl",
+          "sha256": "4c4666b9884e4a807b27835ab236056278915ea9549a2405e83d86297e7ba0da"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp311-cp311-win_amd64.whl",
+          "url": "https://files.pythonhosted.org/packages/c3/a8/6efc290e861ce6fd480e5483ba0bb5af15441ca02617e09aae648b333049/sqlalchemy-2.1.5-cp311-cp311-win_amd64.whl",
+          "sha256": "9edda6c6e22113702d9603b1178f1ab16f5120b49995134b407f11ebb4446b91"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp311-cp311-win_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/df/9a/0e4241d71dc7b99aceeac0a841ae41aad24e3ede04eeed2d3c27df06cbd4/sqlalchemy-2.1.5-cp311-cp311-win_arm64.whl",
+          "sha256": "29f47da90629119646ef90c52f6185131a10b6ed811b26490b01c31a9e9b2453"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp312-cp312-macosx_11_0_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/35/a5/286dc0a04b2f2052b15785784db16c39628d3d7424b25112a306bd0e1d43/sqlalchemy-2.1.5-cp312-cp312-macosx_11_0_arm64.whl",
+          "sha256": "3eb1907fc67aacc160276e7f61c1f71a7a38c10e84ff87b74d90cae0abd137bb"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl",
+          "url": "https://files.pythonhosted.org/packages/44/80/066b7dca8250d8a6135afe692b8a80bc5239c0a0344213ba847fc3f9a46b/sqlalchemy-2.1.5-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl",
+          "sha256": "22eeeb297ced15cd7571aca242aede6a59141dcc3282c29c987fbc83f05c823b"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/4d/33/8be720a412d595fa061a9ddcff6b5340ae09d3317ba6a32207523eb239f3/sqlalchemy-2.1.5-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "sha256": "6eb2fc3c1e8d2498d944b6ff64d32a63a5c900a14892c200626e701e69187113"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp312-cp312-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl",
+          "url": "https://files.pythonhosted.org/packages/47/01/938538f2d7fa2e1ba62d07beaac3303c9ec0d21479e35320cbe5b0312ccc/sqlalchemy-2.1.5-cp312-cp312-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl",
+          "sha256": "a534a39a9247a17843d9f6e34a0877d1a2af870b273e53e1c453b3a65f93c28e"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp312-cp312-musllinux_1_2_aarch64.whl",
+          "url": "https://files.pythonhosted.org/packages/35/e4/b27d25f452994dc9acecb86f7984750c0f7891734fc1a50aee83483fd88e/sqlalchemy-2.1.5-cp312-cp312-musllinux_1_2_aarch64.whl",
+          "sha256": "3cc3292040c980e9f1a54b14da76cf938a6a04a27e8acf6cb7709e9c3a40935b"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp312-cp312-musllinux_1_2_riscv64.whl",
+          "url": "https://files.pythonhosted.org/packages/53/51/f2fae2a6bb734400aec41f3e625efcc03f1e43a26b852aa89206efce61a1/sqlalchemy-2.1.5-cp312-cp312-musllinux_1_2_riscv64.whl",
+          "sha256": "ce8d3de4e0489671fa023dea3f769360df02b2df6e482a44f8fa4421dd41c0ae"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp312-cp312-musllinux_1_2_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/0a/22/05957d18ac378d20ee048010916d3c1931442bcbd0c1c21b18e0e868ab6f/sqlalchemy-2.1.5-cp312-cp312-musllinux_1_2_x86_64.whl",
+          "sha256": "143cea634f03f9a8009fdeaeab46808031ab05bf0c50ec0aa25da51c29bdeeb8"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp312-cp312-win32.whl",
+          "url": "https://files.pythonhosted.org/packages/d5/ea/266829855add33a99f1cb59d548e563e208aea514277d2f9650b454041dc/sqlalchemy-2.1.5-cp312-cp312-win32.whl",
+          "sha256": "7133bd0ac969ba1a108508975e0c26229329cadaaa48844f0a038dafa610693b"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp312-cp312-win_amd64.whl",
+          "url": "https://files.pythonhosted.org/packages/ea/1b/3f59712d0a7e08bf3a075df43b0a3d89de051728d829d6836f546c533012/sqlalchemy-2.1.5-cp312-cp312-win_amd64.whl",
+          "sha256": "ee7267d7ffed80c370dfdd7ad1c741d0227f0e8054b83d00715fb99307bd330c"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp312-cp312-win_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/57/f6/31e94eb5403ca04d393805fe6df5470f48aabdbfb05437e93c2a7f8e3ebd/sqlalchemy-2.1.5-cp312-cp312-win_arm64.whl",
+          "sha256": "b3732a60b01560c9efee3b9ea188dc12614b2642ffce4f8235c4fbf72dd40fe8"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp313-cp313-macosx_11_0_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/f6/aa/f10fc142d2db255249107ee8b21bfbabc10b90f7fadf13c3cf898acc6179/sqlalchemy-2.1.5-cp313-cp313-macosx_11_0_arm64.whl",
+          "sha256": "dc1c86db97372e6bba18a7bcf0f6150dbdd808237f0f52802ef0bec676a94642"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl",
+          "url": "https://files.pythonhosted.org/packages/eb/0d/d395e310e36b5bd39a121cd455504aa1e9111f419efaa88be6b814b4e54d/sqlalchemy-2.1.5-cp313-cp313-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl",
+          "sha256": "6c229afac414d691d2f69a6f4e294ac5b5fd334c49da1f4fb86ab7f2a466271d"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/f3/6d/04f4ffc5038571e712c4f88f20d7022091bafab082e85ea5b37a7e8270f1/sqlalchemy-2.1.5-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "sha256": "1cf433bcb77696cc915552d7f1e8d9117a5dae5aff9fceb06a69d74b3b3c2bd1"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp313-cp313-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl",
+          "url": "https://files.pythonhosted.org/packages/11/85/08bc336576755daf087e0888e44657f4f72b6676a99522e7a612f0c2481e/sqlalchemy-2.1.5-cp313-cp313-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl",
+          "sha256": "399d3e212cb557d5bd1ca6f79981e8c3f45c0f6be60b63a9ded790396a81af08"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp313-cp313-musllinux_1_2_aarch64.whl",
+          "url": "https://files.pythonhosted.org/packages/a7/5c/476441255cc7afa25e8c75e5a61d3c5c3af7cf61c951ebed2ee9873ec4b1/sqlalchemy-2.1.5-cp313-cp313-musllinux_1_2_aarch64.whl",
+          "sha256": "6a51c56afdb880e9f83736a2e81c02dd002fe1c5ad68346a35d97a2e135b1568"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp313-cp313-musllinux_1_2_riscv64.whl",
+          "url": "https://files.pythonhosted.org/packages/63/ca/064e5e3ca7c8f256c8f9b5206eafd410a39226c2ab6fe7e8c1e70725e432/sqlalchemy-2.1.5-cp313-cp313-musllinux_1_2_riscv64.whl",
+          "sha256": "17f8c68bd35bb76b2d9ef1097941fb783ef9ef6604c1d2a72c2e276430aeffca"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp313-cp313-musllinux_1_2_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/90/8c/e38956834896e21038a67193f91b189b9a61555b92fac42368027d5a2524/sqlalchemy-2.1.5-cp313-cp313-musllinux_1_2_x86_64.whl",
+          "sha256": "59dbd7412531da0124df8667a244b5155773632e9bd79a5c2ead393b11b59de5"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp313-cp313-win32.whl",
+          "url": "https://files.pythonhosted.org/packages/14/b3/5531eb9d10d4bd38bd7e6c505776ac73be259dc117c9f07a8c46db4e9a2b/sqlalchemy-2.1.5-cp313-cp313-win32.whl",
+          "sha256": "3f566787cb3a6a25ad8c5170e90167d4e8ea103d412aa4ea95021a6df0b95964"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp313-cp313-win_amd64.whl",
+          "url": "https://files.pythonhosted.org/packages/a9/f6/c48924aafae616d59a2eb0375feeaf4bc4356327a442bda3b9205861b543/sqlalchemy-2.1.5-cp313-cp313-win_amd64.whl",
+          "sha256": "fb8dcd5e1cc12fdd4d490819ec7a56e8c02e86ca9087a472e28b422ff932bae0"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp313-cp313-win_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/51/84/0855a7d42b700b091af6f817c171c2ff97478b0d5143fe61963adbff9201/sqlalchemy-2.1.5-cp313-cp313-win_arm64.whl",
+          "sha256": "65eece9d9494e46de1eb3d49eb438acfcecf059e7a92a2f3daf72ec26d371757"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314-macosx_11_0_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/01/b0/59b26375cd618e861a9295d855b866ca85be654d20ed47e494e33c3bf26e/sqlalchemy-2.1.5-cp314-cp314-macosx_11_0_arm64.whl",
+          "sha256": "5541a110ac4bb6377c785aea1b8f0b4d6658ed0ca5061ed1115d0725062b026b"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl",
+          "url": "https://files.pythonhosted.org/packages/9e/a1/01931ba38770f169ce70e4034b0dcf2c1a776fe7d8dde93a34b6355510b1/sqlalchemy-2.1.5-cp314-cp314-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl",
+          "sha256": "f029b2f7114623c03f762596f313515a2358004c44eb18924a15940f2e27d30f"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/42/9e/fa478482503a69dfb3b0cb82f3f80fe3816026530dd34b5359e2acd9f30d/sqlalchemy-2.1.5-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "sha256": "cc44dcc80e89a006af415edffc7409b1f2976a4597065449c166987f95801ab4"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl",
+          "url": "https://files.pythonhosted.org/packages/fc/01/357ff85423013de8316316752c36a6bd1b7f3830c30dc63754afe06ba589/sqlalchemy-2.1.5-cp314-cp314-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl",
+          "sha256": "72ddd7a8ec187d02de0ef316a15aaf381ddcc594958247b02a3dcdb4c42f0b02"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314-musllinux_1_2_aarch64.whl",
+          "url": "https://files.pythonhosted.org/packages/43/53/88c5af325c81c929d0ed5b7ec15b087173bd3587d93366c5e336b9647267/sqlalchemy-2.1.5-cp314-cp314-musllinux_1_2_aarch64.whl",
+          "sha256": "f5173a6e60a15090f9e2348a8ca94cc13de72796c16733f3b62fbb22acba07b8"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314-musllinux_1_2_riscv64.whl",
+          "url": "https://files.pythonhosted.org/packages/87/29/f6f01f121d5e590c568f405f78b8eb3edace446c114126fc428536446dd6/sqlalchemy-2.1.5-cp314-cp314-musllinux_1_2_riscv64.whl",
+          "sha256": "09b10bd68223d57cce39c08947efae3f91ac40b552e07c7c869c3350a0fc4c23"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314-musllinux_1_2_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/0c/6f/14863fc9aea433645851330242823b1879cdaac71c118f7c9366e7caf4da/sqlalchemy-2.1.5-cp314-cp314-musllinux_1_2_x86_64.whl",
+          "sha256": "ea4cb5022462d9f15e7b72a52c267385aa97ac224c8503ac63ba90c0067ad0d9"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314t-macosx_11_0_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/5f/6d/d4bab269d94ed1017950873643b5bd3eb271a5b8d5b0451250f0173f90fc/sqlalchemy-2.1.5-cp314-cp314t-macosx_11_0_arm64.whl",
+          "sha256": "9bb993b1d0890a2da90589684c3d09de75df82c06aa8f7eda246c7cd0ea3e820"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314t-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl",
+          "url": "https://files.pythonhosted.org/packages/d9/80/aeab72b51fceb71b1e1d62cabc6f51c9d8f20588165aa54e0d0d6cc77c05/sqlalchemy-2.1.5-cp314-cp314t-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl",
+          "sha256": "df7e71ed051e4003e73484ef6547aacfb3a2322aac0c230d530c97e48e77b4d7"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314t-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/05/8b/7318ca0ae828fa1605dd4481f8eeecb5325a7ead6289c1206fb1ff1e2e1d/sqlalchemy-2.1.5-cp314-cp314t-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "sha256": "c76d4cb9c76a6906563133449a76d9eae6c8529ca09484b8615ca604442b442e"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314t-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl",
+          "url": "https://files.pythonhosted.org/packages/35/17/7a5a196b0af72d65cbcd3a6fb7c4128693d039faf58a682ffe2d19329420/sqlalchemy-2.1.5-cp314-cp314t-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl",
+          "sha256": "59a56be2e4e972061f9d5c1d5b01763b8b2207b48b956fbb6879c7443f5817f7"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314t-musllinux_1_2_aarch64.whl",
+          "url": "https://files.pythonhosted.org/packages/91/50/ca323ed15fc06c73a7fd85a3a339749994c560c12312ee8a53abf0f9a7ec/sqlalchemy-2.1.5-cp314-cp314t-musllinux_1_2_aarch64.whl",
+          "sha256": "bc1a61d7f42e71746b5a2e10e90a6b174b4add441b7b6cf14278f1e029b2b800"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314t-musllinux_1_2_riscv64.whl",
+          "url": "https://files.pythonhosted.org/packages/26/3d/c56a75d0a2f6af08f6bb28d0b69e129911a2fc52b24dbafd7a7e5ac5c1aa/sqlalchemy-2.1.5-cp314-cp314t-musllinux_1_2_riscv64.whl",
+          "sha256": "740e96dfb99a615c8056070d3747efe8bce4c145e5953ccc9e4b004c139de0d2"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314t-musllinux_1_2_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/7d/dd/84e0cd627bbd3e35b5f033191a4f597e611ff96e424db36a444a8d6755cc/sqlalchemy-2.1.5-cp314-cp314t-musllinux_1_2_x86_64.whl",
+          "sha256": "92a0bb0595331c8e40bc615a67cc7bca9b761487409d1bf46c598b6ba5c0754d"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314t-win32.whl",
+          "url": "https://files.pythonhosted.org/packages/b7/47/cf0a920fc40344f8a1806d661e7c702341aebd871e31e1d1d6e0fbc9d1e0/sqlalchemy-2.1.5-cp314-cp314t-win32.whl",
+          "sha256": "11185c72b5372369166cb721537943f8e1e6e42a399e9bac19e02f3ee20592a4"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314t-win_amd64.whl",
+          "url": "https://files.pythonhosted.org/packages/bc/1d/4c5dc7e30fe740a01df4ba5ab800be2d7674b87f042e4c21c7ca89b36f9d/sqlalchemy-2.1.5-cp314-cp314t-win_amd64.whl",
+          "sha256": "5173207b8fe1ddfc1d451c420a2a9cbbd0734b4a19896b8080e3744497e1c20c"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314t-win_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/5f/2f/d3e9bfb1faabea302b98ba8c9dd6252bc362c6afeabe28ffcc1eea8a6bd2/sqlalchemy-2.1.5-cp314-cp314t-win_arm64.whl",
+          "sha256": "def2f117a6ec0a25202ee36a148bbcfad3d43e2f2bb2e698e6d4448c6db5cb19"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314-win32.whl",
+          "url": "https://files.pythonhosted.org/packages/a2/e9/6907fc009d9d06e8d03d6bf286df46e878ea2a85c839dcb65ef11ceb3a39/sqlalchemy-2.1.5-cp314-cp314-win32.whl",
+          "sha256": "c3ffbe6c680c626403b7e9697d92465501078731b9e8863b1410826e66b950e1"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314-win_amd64.whl",
+          "url": "https://files.pythonhosted.org/packages/e1/d6/dea47b4b361c427d390edc10d73050e6d11d905c56ef26861ff5f94aa8fa/sqlalchemy-2.1.5-cp314-cp314-win_amd64.whl",
+          "sha256": "061d089901319463a1160e4596191e355d2a9b4cce4852dac5adc301b085ac2f"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp314-cp314-win_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/be/28/305a91768a1ca0980c6ead455dcda5a2c1e616022901898e966ccf913ba9/sqlalchemy-2.1.5-cp314-cp314-win_arm64.whl",
+          "sha256": "f5bc7fb93f1c17efefeb062bc4d2742ad1b71d56c36e6e2898a371ac6a56839a"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315-macosx_11_0_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/ad/7c/17f07378eea7ec2fac8ac60f99fe3c474ef5c19a3adede70ae9886eb82d7/sqlalchemy-2.1.5-cp315-cp315-macosx_11_0_arm64.whl",
+          "sha256": "a0b80f91d9ed92be7a134278ea2e83a693c07d9986824ca51d859af9e57e18f5"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl",
+          "url": "https://files.pythonhosted.org/packages/7f/c0/4fef29827b198937e09c40d0fa36b9738bd3914f0e5040927dfac8dfee21/sqlalchemy-2.1.5-cp315-cp315-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl",
+          "sha256": "3033ddeeeb34c6c536622c07e932a20f8c9f58d6dd76e56595a76b55a25011ff"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/eb/d8/37645f8445ac3774e18f8dc72e0fa0ac868e0dff0e987ff3bec644f55102/sqlalchemy-2.1.5-cp315-cp315-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "sha256": "f4d30723171d511ec16ac057872a38b9b395420c0aaf81b2f94dd7bf1345c5fe"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl",
+          "url": "https://files.pythonhosted.org/packages/c2/c9/15466cd08a6c329acc4f730dff7041e84122456fe38c518c93a07d6d82ca/sqlalchemy-2.1.5-cp315-cp315-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl",
+          "sha256": "5cefa5badc13df1c9082bacdfa435c8eb6dcb9b32717f51d09d1e160a599646f"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315-musllinux_1_2_aarch64.whl",
+          "url": "https://files.pythonhosted.org/packages/12/2b/a93b7c8f6886138dac91f66fccd3b42473c365408d9a4c1b69403cf206f8/sqlalchemy-2.1.5-cp315-cp315-musllinux_1_2_aarch64.whl",
+          "sha256": "2549e503185897de1fc5ca7730d5daed0d27d0b26df4a059dcdd33ebe81b7b4b"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315-musllinux_1_2_riscv64.whl",
+          "url": "https://files.pythonhosted.org/packages/b3/47/d3926cacd194be073a2053a05470f20ed7da623f399e95213c1e497954fd/sqlalchemy-2.1.5-cp315-cp315-musllinux_1_2_riscv64.whl",
+          "sha256": "5a6871ee159a943d874012de835d56d0544ee871a99dbae05bc053da315b2c23"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315-musllinux_1_2_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/ea/a8/b15ab4712342a18fb3949c77687c24d3749e86079c9905cc2cbebbd44da3/sqlalchemy-2.1.5-cp315-cp315-musllinux_1_2_x86_64.whl",
+          "sha256": "51e290080415325b66a94d20f6360e310606acb832f2bd677d4fcb95728e7ce1"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315t-macosx_11_0_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/c2/c2/4c747dcc6fe329dd07ab57233f334eca19a3ff05934e0aba4f25a0977a67/sqlalchemy-2.1.5-cp315-cp315t-macosx_11_0_arm64.whl",
+          "sha256": "7af1c92255cf8d50e87a808ce41096907332acdd09f285426a52f7c300e152db"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315t-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl",
+          "url": "https://files.pythonhosted.org/packages/07/f1/183446b1bc29484087ba7a6bb199a265c0559bf8ff201c1ee54bf1fe0936/sqlalchemy-2.1.5-cp315-cp315t-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl",
+          "sha256": "85891e0828e76a77fe912995dbc3ee949099488ba0a2ab323535d2e767446b20"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315t-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/31/0b/b24baf343461eefdecc672df1ccbb14c8c64028a11625dabc97b0bb9791b/sqlalchemy-2.1.5-cp315-cp315t-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+          "sha256": "a72e062d2d38826dd89231df692fb40f12d7d1b9d118be23bcc1cf93c6e31782"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315t-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl",
+          "url": "https://files.pythonhosted.org/packages/da/27/f688b34ea3d85b38e01b7463874f1f4b91619dfed4e6cac88c27caface73/sqlalchemy-2.1.5-cp315-cp315t-manylinux_2_31_riscv64.manylinux_2_39_riscv64.whl",
+          "sha256": "b79ee943e2e12246f873345762b83dbadd1fcfc3e832eab83272d672704dbdea"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315t-musllinux_1_2_aarch64.whl",
+          "url": "https://files.pythonhosted.org/packages/b2/04/d8e13be8d0c25ba49244a9c24579ef61d5a6b57f98e55fbb173b7923ec3a/sqlalchemy-2.1.5-cp315-cp315t-musllinux_1_2_aarch64.whl",
+          "sha256": "e9418d87b55c469c2f1328246d4533238cdc43134c695d6b9a6b7a87da49d463"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315t-musllinux_1_2_riscv64.whl",
+          "url": "https://files.pythonhosted.org/packages/86/2e/a0bd2ead949cc605ce3ad5d38e2fe84963b2aa7f89e8648c1bbad13a3679/sqlalchemy-2.1.5-cp315-cp315t-musllinux_1_2_riscv64.whl",
+          "sha256": "898d86c22640fe52ffe02b4abc043a3c6754b4875837599e739be440966dffa1"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315t-musllinux_1_2_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/b9/dd/c1ca0713a1a7d8d6eb5864edd2d11d7a6a327aaba664645733cb53662425/sqlalchemy-2.1.5-cp315-cp315t-musllinux_1_2_x86_64.whl",
+          "sha256": "b3ad20cd035392f2b91a6466e24643990c1378beda80c9bda87a3a41e841e838"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315t-win32.whl",
+          "url": "https://files.pythonhosted.org/packages/5a/dc/9dec72cea689f16bc8ecfcd62b4aa2796009a7cef6be85a9f70310ecf71b/sqlalchemy-2.1.5-cp315-cp315t-win32.whl",
+          "sha256": "db34eefaf992c84460ab26ecf2fc2bdcc68965d6becfae8182cae0efeaa3e8f8"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315t-win_amd64.whl",
+          "url": "https://files.pythonhosted.org/packages/dc/28/f44c4524ce8a68935bd6f23ee801165072fb8c1e477fc9855efd9eaa2360/sqlalchemy-2.1.5-cp315-cp315t-win_amd64.whl",
+          "sha256": "173054351d863ddada188284e309e87a9f030132c8d534e05458971ff061aa1e"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315t-win_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/b1/fc/e90c91f6c2709a431f9b75e41bd31216337859411359f4a4fc2615c989e3/sqlalchemy-2.1.5-cp315-cp315t-win_arm64.whl",
+          "sha256": "22c8d0873168a54f614e381559ea83d547b2cc5488b95b049bdc92667586bd5f"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315-win32.whl",
+          "url": "https://files.pythonhosted.org/packages/9a/ab/3b6ef6c77740d7fbf5a3eb45f95768fb809b0769bd21df81d5f8c002e5a5/sqlalchemy-2.1.5-cp315-cp315-win32.whl",
+          "sha256": "c228084025a28aa038aef9b821d842508650fe12fe51f06e9cdaa4393be7812c"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315-win_amd64.whl",
+          "url": "https://files.pythonhosted.org/packages/4b/c1/0b3256bc11487b2846a26d58946caea0ed395fd500951a16fb82d31a20ff/sqlalchemy-2.1.5-cp315-cp315-win_amd64.whl",
+          "sha256": "bc09dd22c3fc491a2df7d16ca4167de35573f40c2e82dd4d6ddae589a73e7032"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-cp315-cp315-win_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/e5/a0/09eaa7897f6f745de16220b20c63660948a95716be90d2f405af08222e57/sqlalchemy-2.1.5-cp315-cp315-win_arm64.whl",
+          "sha256": "375ef1bf78bc269a220963163d2580d5377898ed23a00bdd98a02d755421573d"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/de/e9/61176e4753f74ab5f6e72a56314ee654d25c31e6fc98c99060442998cccb/sqlalchemy-2.1.5-py3-none-any.whl",
+          "sha256": "2f77b77b716f005b2dc3cc059d56df6a919bfb5b439e4149890a9df6c36be9e3"
+        },
+        {
+          "filename": "sqlalchemy-2.1.5.tar.gz",
+          "url": "https://files.pythonhosted.org/packages/08/bb/28e3106ee586e5b2f5ecf211eec1348055f0f926314b13fe23b9cffa9039/sqlalchemy-2.1.5.tar.gz",
+          "sha256": "0df76cf1ca680ad745bd378a6299a058611a8a784eeaeb4ed78ad4a0b7ce2003"
+        }
+      ]
+    },
+    "alembic": {
+      "version": "1.20.0",
+      "requires_python": ">=3.10",
+      "metadata_url": "https://pypi.org/pypi/alembic/1.20.0/json",
+      "artifacts": [
+        {
+          "filename": "alembic-1.20.0-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/3f/27/78a89b55b0904d222183164e079b4ca56208e94eff1d35ad1f1ad5be9b06/alembic-1.20.0-py3-none-any.whl",
+          "sha256": "77eb101048d95f982c0353e9233404889dcd7a6fc244c107836c0e2fc9cf7d9d"
+        },
+        {
+          "filename": "alembic-1.20.0.tar.gz",
+          "url": "https://files.pythonhosted.org/packages/ed/aa/02910bdb8e2f1444f6654d5b296cd827d126f82209050ee7b1000f92ac4b/alembic-1.20.0.tar.gz",
+          "sha256": "db505480647bc60386c5369402f4a57a506b7539c9e9ef5e270d45cbbe4939bf"
+        }
+      ]
+    },
+    "psycopg": {
+      "version": "3.3.6",
+      "requires_python": ">=3.10",
+      "metadata_url": "https://pypi.org/pypi/psycopg/3.3.6/json",
+      "artifacts": [
+        {
+          "filename": "psycopg-3.3.6-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/4e/de/748bd7609c71cae5d737f0ba9192f19329f70180ecda8fff3cac02c5abe3/psycopg-3.3.6-py3-none-any.whl",
+          "sha256": "a1db9f7148b06a28606767efaca51fa6f9398c5c0a3810519be69d7000bdb631"
+        },
+        {
+          "filename": "psycopg-3.3.6.tar.gz",
+          "url": "https://files.pythonhosted.org/packages/76/26/3ea4ca5eaea1c0debcdf7ee7c1613fbe721dc27a03c461c0817ffd8a0601/psycopg-3.3.6.tar.gz",
+          "sha256": "c081f2250df751a943036e42db6df4571c66cd0aabe8291a7a506512b12007d2"
+        }
+      ]
+    },
+    "httpx": {
+      "version": "0.28.1",
+      "requires_python": ">=3.8",
+      "metadata_url": "https://pypi.org/pypi/httpx/json",
+      "artifacts": [
+        {
+          "filename": "httpx-0.28.1-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/2a/39/e50c7c3a983047577ee07d2a9e53faf5a69493943ec3f6a384bdc792deb2/httpx-0.28.1-py3-none-any.whl",
+          "sha256": "d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad"
+        },
+        {
+          "filename": "httpx-0.28.1.tar.gz",
+          "url": "https://files.pythonhosted.org/packages/b1/df/48c586a5fe32a0f01324ee087459e112ebb7224f646c0b5023f5e79e9956/httpx-0.28.1.tar.gz",
+          "sha256": "75e98c5f16b0f35b567856f597f06ff2270a374470a5c2392242528e3e3e42fc"
+        }
+      ]
+    },
+    "uvicorn": {
+      "version": "0.54.0",
+      "requires_python": ">=3.10",
+      "metadata_url": "https://pypi.org/pypi/uvicorn/json",
+      "artifacts": [
+        {
+          "filename": "uvicorn-0.54.0-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/38/0c/b54a4fdd7f90a3af8b02ebc9ce6712c2c208b7926a2f7bad95c33ebbe943/uvicorn-0.54.0-py3-none-any.whl",
+          "sha256": "505bdb0f318731d45f1f712071fc781a8981f6847a31c902c9f5e652d4f67faf"
+        },
+        {
+          "filename": "uvicorn-0.54.0.tar.gz",
+          "url": "https://files.pythonhosted.org/packages/da/34/30e9280707135d2cfc589dfff3cb796bd07a3aeb1a3e415ba09dd89d7bb4/uvicorn-0.54.0.tar.gz",
+          "sha256": "a2e33cbfaa0306f8e6b0c13e0cb89d7d7a2da3e62b90c66e18c33d9807b28620"
+        }
+      ]
+    },
+    "bandit": {
+      "version": "1.9.4",
+      "requires_python": ">=3.10",
+      "metadata_url": "https://pypi.org/pypi/bandit/json",
+      "artifacts": [
+        {
+          "filename": "bandit-1.9.4-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/05/a4/a26d5b25671d27e03afb5401a0be5899d94ff8fab6a698b1ac5be3ec29ef/bandit-1.9.4-py3-none-any.whl",
+          "sha256": "f89ffa663767f5a0585ea075f01020207e966a9c0f2b9ef56a57c7963a3f6f8e"
+        },
+        {
+          "filename": "bandit-1.9.4.tar.gz",
+          "url": "https://files.pythonhosted.org/packages/aa/c3/0cb80dfe0f3076e5da7e4c5ad8e57bac6ac357ff4a6406205501cade4965/bandit-1.9.4.tar.gz",
+          "sha256": "b589e5de2afe70bd4d53fa0c1da6199f4085af666fde00e8a034f152a52cd628"
+        }
+      ]
+    },
+    "pip-audit": {
+      "version": "2.10.1",
+      "requires_python": ">=3.10",
+      "metadata_url": "https://pypi.org/pypi/pip-audit/json",
+      "artifacts": [
+        {
+          "filename": "pip_audit-2.10.1-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/a3/a7/b0c504148114047bd1bc9d97447453c6850ca176bb2f3c0038835994e8b7/pip_audit-2.10.1-py3-none-any.whl",
+          "sha256": "99ef3f600a317c1945f1e89e227ef26e1c2d618429b8bd3fa6f4f7c440c4611a"
+        },
+        {
+          "filename": "pip_audit-2.10.1.tar.gz",
+          "url": "https://files.pythonhosted.org/packages/66/a4/f21d5f0a0edabcbce31560b73c7c5a6f72ae87af4236fd1069c8f59a353d/pip_audit-2.10.1.tar.gz",
+          "sha256": "1eb4565d19ebe5d48996f4b770b4d2b32887e12cb12cfa637f1a064011b55ffc"
+        }
+      ]
+    },
+    "prometheus-client": {
+      "version": "0.26.0",
+      "requires_python": ">=3.9",
+      "metadata_url": "https://pypi.org/pypi/prometheus-client/json",
+      "artifacts": [
+        {
+          "filename": "prometheus_client-0.26.0-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/eb/a3/b69efbf4143b5b9859b977770bbbabcc2796b702fa69dc40271e45cd5a56/prometheus_client-0.26.0-py3-none-any.whl",
+          "sha256": "fa93d06737aa02bacd05794768508bb97d2fbee28cb3bca04eaae92f0ca953d6"
+        },
+        {
+          "filename": "prometheus_client-0.26.0.tar.gz",
+          "url": "https://files.pythonhosted.org/packages/52/73/f1334c29c2af4cd9dba6c7817e61b611bd0215e2eb5565c6064a4de18802/prometheus_client-0.26.0.tar.gz",
+          "sha256": "04a91bcf94e2cf74a44a1a874d651a2e853ed354b6e822f3b7487751465d5c2b"
+        }
+      ]
+    },
+    "pytest": {
+      "version": "9.1.1",
+      "requires_python": ">=3.10",
+      "metadata_url": "https://pypi.org/pypi/pytest/json",
+      "artifacts": [
+        {
+          "filename": "pytest-9.1.1-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/24/25/1de2678b631f5a49215c6c96fff41ba892b0a34df68d6d80292b1b48aa7f/pytest-9.1.1-py3-none-any.whl",
+          "sha256": "37a86b45efb9a47a61a36449063e8e18d0cab3161329fc099eb21783169c4f0c"
+        },
+        {
+          "filename": "pytest-9.1.1.tar.gz",
+          "url": "https://files.pythonhosted.org/packages/e4/47/b9efed96c114afcfa3c9d3fe98a76a1d14c74a9e266d397cf6eb64be5e01/pytest-9.1.1.tar.gz",
+          "sha256": "1088fbde8f2b49d95a549a195707afa7a76a3ce9bcadc26b6d71f0ffda5fe313"
+        }
+      ]
+    },
+    "checkov": {
+      "version": "3.3.29",
+      "requires_python": ">=3.9",
+      "metadata_url": "https://pypi.org/pypi/checkov/3.3.29/json",
+      "artifacts": [
+        {
+          "filename": "checkov-3.3.29-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/63/4a/26ecbf2abac34993b7dba06379c6b8a03f078323856a917ed47370610a67/checkov-3.3.29-py3-none-any.whl",
+          "sha256": "9a8b3918788faf8e18b181d826d284744b22b9d99c53cf1b67a2e84f0596796f"
+        },
+        {
+          "filename": "checkov-3.3.29.tar.gz",
+          "url": "https://files.pythonhosted.org/packages/7b/2b/9bc703006199045a2f2b148731e563e62c97be67ef009330ed0843cccb73/checkov-3.3.29.tar.gz",
+          "sha256": "ad9f8606a6de0756be93edd5588e3365486eb53a3f68247396a68b02929353ce"
+        }
+      ]
+    },
+    "pip-tools": {
+      "version": "7.6.2",
+      "requires_python": ">=3.9",
+      "metadata_url": "https://pypi.org/pypi/pip-tools/json",
+      "artifacts": [
+        {
+          "filename": "pip_tools-7.6.2-py3-none-any.whl",
+          "url": "https://files.pythonhosted.org/packages/4b/68/f3bd09c53ed3159bb1349e1d5859ad1ea7755b8e4cd50174290e9e8cbb47/pip_tools-7.6.2-py3-none-any.whl",
+          "sha256": "f37eb4b736859c2c30230e50977312c61918b7ef931071ff7811fd067715c25f"
+        },
+        {
+          "filename": "pip_tools-7.6.2.tar.gz",
+          "url": "https://files.pythonhosted.org/packages/e4/42/59882c1f9fc3ec7529a467dd56cc8d38071ed0b7885119a872c29d57a253/pip_tools-7.6.2.tar.gz",
+          "sha256": "04dbe0e25f3b60fbdeee17d0590dac7fe20039876aa410a946fc54dc926c09ba"
+        }
+      ]
+    },
+    "ruff": {
+      "version": "0.17.1",
+      "requires_python": ">=3.7",
+      "metadata_url": "https://pypi.org/pypi/ruff/json",
+      "artifacts": [
+        {
+          "filename": "ruff-0.17.1-py3-none-linux_armv6l.whl",
+          "url": "https://files.pythonhosted.org/packages/2e/78/90c46ca6250709f7c37e397b60d06061adee8d0f7d13959ed6a8e49b14fd/ruff-0.17.1-py3-none-linux_armv6l.whl",
+          "sha256": "1796c41eafec66f4635125dd1e074a7aa27b8d20c187d484360acf11d247fc4a"
+        },
+        {
+          "filename": "ruff-0.17.1-py3-none-macosx_10_12_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/aa/d2/a2e28bc35b083ae51fa07dfba5280a667c8b01ecaee7802fc8849dcd5c46/ruff-0.17.1-py3-none-macosx_10_12_x86_64.whl",
+          "sha256": "8eadb09a788010be29c895418bdfa513e4e1c65e64b94e5b19e4cd381f6cc7fb"
+        },
+        {
+          "filename": "ruff-0.17.1-py3-none-macosx_11_0_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/8e/71/7a9029a81c8206ee01a98f6cfeeb56e6c095af86857581a37045c46d7e94/ruff-0.17.1-py3-none-macosx_11_0_arm64.whl",
+          "sha256": "29b454f18ca3eeaf37fbf140841dcf27d36109e29dee9aae8acecb68c26c6f74"
+        },
+        {
+          "filename": "ruff-0.17.1-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+          "url": "https://files.pythonhosted.org/packages/c0/8c/e075e9c917cb0575297880c96768304e881240171c870cbd8d9b7b54bec2/ruff-0.17.1-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl",
+          "sha256": "872e03dd231744d6c5ec5c8af6be52b71323fc6ee096e4c8b34d9f844ee3b978"
+        },
+        {
+          "filename": "ruff-0.17.1-py3-none-manylinux_2_17_armv7l.manylinux2014_armv7l.whl",
+          "url": "https://files.pythonhosted.org/packages/87/27/0b4bb926a49de2383f161272b4d863571a4c7ecdbf595a6bc58813a13367/ruff-0.17.1-py3-none-manylinux_2_17_armv7l.manylinux2014_armv7l.whl",
+          "sha256": "4c0d6cb5f8fbac77eec9af49f4fc0eaf856b05545e372b0694d24b4e76b1c640"
+        },
+        {
+          "filename": "ruff-0.17.1-py3-none-manylinux_2_17_i686.manylinux2014_i686.whl",
+          "url": "https://files.pythonhosted.org/packages/14/27/518d57e0e02aecb8ea4acac6b57b51a53173d25fa734952bfdd7d531e88e/ruff-0.17.1-py3-none-manylinux_2_17_i686.manylinux2014_i686.whl",
+          "sha256": "78beced4a3c94dfedbee4b999b95b6a27b35820fdc0afbacc6d37a8da26c1cd1"
+        },
+        {
+          "filename": "ruff-0.17.1-py3-none-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl",
+          "url": "https://files.pythonhosted.org/packages/01/82/d89a4e498ade59e6cee52d67f8da569019372212b87468c1fdeae884601c/ruff-0.17.1-py3-none-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl",
+          "sha256": "7feefc63921202894f0e158b0e32f45a5950d70a7fb693ccb9264816c25b1c05"
+        },
+        {
+          "filename": "ruff-0.17.1-py3-none-manylinux_2_17_s390x.manylinux2014_s390x.whl",
+          "url": "https://files.pythonhosted.org/packages/a2/7c/3b0fdef9352656317c977086fe1d802902406e4f2a0d8578da90c0e6d1c5/ruff-0.17.1-py3-none-manylinux_2_17_s390x.manylinux2014_s390x.whl",
+          "sha256": "684154861a819bf1f433669d2a0ce9c3e54677c65b8ebb866cc2a7ec86345785"
+        },
+        {
+          "filename": "ruff-0.17.1-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/62/86/5566290219708ce2928f3a29c4f843a1185b341ec6111c4631a33c5ceced/ruff-0.17.1-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+          "sha256": "a6ef98e51de8ef38082f90653ceeb84944bd7673783eea13e1647c5b9b064189"
+        },
+        {
+          "filename": "ruff-0.17.1-py3-none-manylinux_2_31_riscv64.whl",
+          "url": "https://files.pythonhosted.org/packages/ad/d2/ca8462dabb3c413990d49703ba306c30c862195a75448d080fa8fcce9775/ruff-0.17.1-py3-none-manylinux_2_31_riscv64.whl",
+          "sha256": "8f9aa5b5bd5fa1937803ea609c8f153b8de39bf3e0e149897ae34b0c5b52f467"
+        },
+        {
+          "filename": "ruff-0.17.1-py3-none-musllinux_1_2_aarch64.whl",
+          "url": "https://files.pythonhosted.org/packages/e3/ad/dd1864c1f1db17c8cfb297ce70b352388e6977620f66f7182c52855407df/ruff-0.17.1-py3-none-musllinux_1_2_aarch64.whl",
+          "sha256": "80e53b0e5faa3c5667f035daaa032893ae42b7cfe708c886d39ed131e54688ab"
+        },
+        {
+          "filename": "ruff-0.17.1-py3-none-musllinux_1_2_armv7l.whl",
+          "url": "https://files.pythonhosted.org/packages/65/45/3f56cf1d2168c2165cdd5ac6f9668aee66a4cfdd4caf2b2cc5ccb2b1d568/ruff-0.17.1-py3-none-musllinux_1_2_armv7l.whl",
+          "sha256": "056c5d5fa0ac790051ae165d7035c7bf956d02de2db557f2e9b31d877a505fca"
+        },
+        {
+          "filename": "ruff-0.17.1-py3-none-musllinux_1_2_i686.whl",
+          "url": "https://files.pythonhosted.org/packages/aa/4b/5457cb2be4c1d1ea5e919558131a0f197a4a454a0530d9e30820e8206e4c/ruff-0.17.1-py3-none-musllinux_1_2_i686.whl",
+          "sha256": "bd8f5a55b10f371642eacd0e8665a42a8b97da15c9a7187c79e697b77b5e0ce4"
+        },
+        {
+          "filename": "ruff-0.17.1-py3-none-musllinux_1_2_x86_64.whl",
+          "url": "https://files.pythonhosted.org/packages/49/fb/db15b4f8fa24a1e36b99e1401f42ef6df16ee299a48670d5d262b771e7d7/ruff-0.17.1-py3-none-musllinux_1_2_x86_64.whl",
+          "sha256": "ce05e6f3973611d9550a600e04bb531061e368baba31610eb57c1509a8f21a0a"
+        },
+        {
+          "filename": "ruff-0.17.1-py3-none-win32.whl",
+          "url": "https://files.pythonhosted.org/packages/0a/e8/1e186578076aff7a80735f625005fde678412ab609cd323ed182eb7d6b87/ruff-0.17.1-py3-none-win32.whl",
+          "sha256": "1de0030a8aa78c65c5fecb84b2e5c390ac684c0452875a02afc7c083d49a496a"
+        },
+        {
+          "filename": "ruff-0.17.1-py3-none-win_amd64.whl",
+          "url": "https://files.pythonhosted.org/packages/6a/2e/da3d9589bae8e8b58f3a48bd5bc0b980232fb14a83bf02c3be7660f87c1b/ruff-0.17.1-py3-none-win_amd64.whl",
+          "sha256": "5df76f16580fab58d0f6c98a3ac254a4abceb7b2489b8b678335869cff77b3d7"
+        },
+        {
+          "filename": "ruff-0.17.1-py3-none-win_arm64.whl",
+          "url": "https://files.pythonhosted.org/packages/df/c9/0f2a4dea06a5e12c1191ee3d96b1e1233797d0d5e18f97a2b909a95a9836/ruff-0.17.1-py3-none-win_arm64.whl",
+          "sha256": "42400b9a6ff8515ff27796f07f92e0195be011c86e81e381606f58ea5502fef4"
+        },
+        {
+          "filename": "ruff-0.17.1.tar.gz",
+          "url": "https://files.pythonhosted.org/packages/f9/e7/e6d5749983b020e6cb1055abec0a6f361a8e94f0184cdcf56d4760995f02/ruff-0.17.1.tar.gz",
+          "sha256": "5bb796c5112e9fb9527f2ef2faa0a130d6312d19de92bcfaddd70dbb2d41020f"
+        }
+      ]
+    }
+  },
+  "images": {
+    "python:3.13-slim-bookworm": {
+      "source_tag": "python:3.13-slim-bookworm",
+      "ref": "docker.io/library/python@sha256:a1165e272e578941b84abc79e4ab38a0305cd12803a5c4247979ac7655f4d641",
+      "digest": "sha256:a1165e272e578941b84abc79e4ab38a0305cd12803a5c4247979ac7655f4d641",
+      "metadata_url": "https://registry-1.docker.io/v2/library/python/manifests/3.13-slim-bookworm",
+      "platforms": [
+        {
+          "digest": "sha256:f040863673aea2570c3ff6a5c3fb4c673a016cbc5375005ad145915922b6b78a",
+          "platform": {
+            "architecture": "amd64",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:f309b3daadcdc353c160108793f6b63686b04b59ec97d12392de5f412497f2a8",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:d583c8e19a2ccd702a9a2c4e78d2c2b2c219fe4f4d6714673d79dbb4d1d420db",
+          "platform": {
+            "architecture": "arm",
+            "os": "linux",
+            "variant": "v7"
+          }
+        },
+        {
+          "digest": "sha256:c5f60c6acb7b9bdcd76ee8809a3a8acdf085e2ed776d55c19d8ce48546ad94ba",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:55432fc4ef6d07e33c10449312f0ec00071bbb310bb9bd7ba626a31fbbc2cb0d",
+          "platform": {
+            "architecture": "arm64",
+            "os": "linux",
+            "variant": "v8"
+          }
+        },
+        {
+          "digest": "sha256:bf4e177da7eb1d4aa8d6208108f3e9a1ffce6072e8815621cd3c8902816fe4d6",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:b8f3fd737519a13d037ce55f795a1a7bdb9ed226f6bb1960397e62450ada1b9f",
+          "platform": {
+            "architecture": "386",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:c6dcbaea398188d1a6fde404891e1e4f819ad3276a8c94fa7b269fe247f1863d",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:a0a3cf9ba0faa7b897b6a3e2348068e41e7b8131c39ee19f214cacd30631de94",
+          "platform": {
+            "architecture": "ppc64le",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:a55f25548b6cf1d873f7e77fa4f64d712860137ab11721f4d23c6e34e74feb44",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        }
+      ]
+    },
+    "nginxinc/nginx-unprivileged:stable-bookworm": {
+      "source_tag": "nginxinc/nginx-unprivileged:stable-bookworm",
+      "ref": "docker.io/nginxinc/nginx-unprivileged@sha256:cd33960e98e93d4d63385790ff7f8f5bf2ca95184c581b7f42ae8aea1139fbfc",
+      "digest": "sha256:cd33960e98e93d4d63385790ff7f8f5bf2ca95184c581b7f42ae8aea1139fbfc",
+      "metadata_url": "https://registry-1.docker.io/v2/nginxinc/nginx-unprivileged/manifests/stable-bookworm",
+      "platforms": [
+        {
+          "digest": "sha256:10bf30f80ce9af183b2db50a91ea59cea5eb5e4106820656bac8cd369ed14904",
+          "platform": {
+            "architecture": "amd64",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:148f8e01636541582ed33107d3c8d625220a13aed6d52e7abd86322832d51289",
+          "platform": {
+            "architecture": "arm",
+            "os": "linux",
+            "variant": "v7"
+          }
+        },
+        {
+          "digest": "sha256:f0fd64a844cafe01957042f8e850bdc0cb35e426ed71ea72897d7ea6d0808321",
+          "platform": {
+            "architecture": "arm64",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:b93e992450813b6f446f21891b3819f6e738e351096c35e53da61844647cee05",
+          "platform": {
+            "architecture": "386",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:23616cb9f0d7daa7c3aa70373d777b9892b91b0cd94cc01e9a29bcf7b8186392",
+          "platform": {
+            "architecture": "mips64le",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:5792145fa049df3dcaa54cfbb340d989559508182e51e64e5a00ee55a7d971c2",
+          "platform": {
+            "architecture": "ppc64le",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:6d15be11cafb6fca328fa3c772348d0b4e9d0c7c07efb19b2d0066c828e8a129",
+          "platform": {
+            "architecture": "s390x",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:f7ce07a9d33b2ade6cb3cb2439646eca9c73fd43e91164a3b4ea166d14477fdc",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:7c8a18e46e9bef99bfe16b55af97240736be9cc703a4180ae702e999bed04c0e",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:660cf285907c9538844d357db8c1b08f00b5c293ca3db325d5a96c08a241c7df",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:78acce2cee7297073790669949197b592570033053e0332a873551220b23b610",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:657d17d4ac3de018a56af0a1ea42701deb2d8b6502d36f1263483df97c4336d6",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:1cd5ab1f890628ff54c7cd45138cc4625a607da0c449306762f3e8d2ebad3a08",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:4cc15d4512b1539fc77da55a349c06249446b1f423e963c2bf51075aad216f0a",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        }
+      ]
+    },
+    "hello-world:linux": {
+      "source_tag": "hello-world:linux",
+      "ref": "docker.io/library/hello-world@sha256:5e22040d441e5fb3aed38368acbe8486b575d7018df38dbdfbc7311fbb2ef3a9",
+      "digest": "sha256:5e22040d441e5fb3aed38368acbe8486b575d7018df38dbdfbc7311fbb2ef3a9",
+      "metadata_url": "https://registry-1.docker.io/v2/library/hello-world/manifests/linux",
+      "platforms": [
+        {
+          "digest": "sha256:d1a8d0a4eeb63aff09f5f34d4d80505e0ba81905f36158cc3970d8e07179e59e",
+          "platform": {
+            "architecture": "amd64",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:8e752a1cddeafc02597e756f4a0ec96e29f63ac4bc4af87682daf3f1de843bb7",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:b7478cec8e46fa1689f89486b92e353e7b418235cb3cae2ad0434aac56b160aa",
+          "platform": {
+            "architecture": "arm",
+            "os": "linux",
+            "variant": "v5"
+          }
+        },
+        {
+          "digest": "sha256:d31545c149fa9010bc95ed3ad46fffd33592e64ca46222e10beeb923438f6b41",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:2e4eda00176134a56e8a94dbb1e8b76610e59fa417cf0f7841e82f21b9e6d035",
+          "platform": {
+            "architecture": "arm",
+            "os": "linux",
+            "variant": "v6"
+          }
+        },
+        {
+          "digest": "sha256:8b1c825510959225ffe94311730fe9f1eb2f14dcf5685793d0c2c4cd6d79a721",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:ecb43d43395e9cd8d97a03e497af34b5ef95e01dd046cf3323d130ba134d1eae",
+          "platform": {
+            "architecture": "arm",
+            "os": "linux",
+            "variant": "v7"
+          }
+        },
+        {
+          "digest": "sha256:86e7dd6b0bff798e475e97b81fd132adc340923877adda2dd494efa0558a7870",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:5099b89d7666cc2186cad769ddc262ddc7c335b33f5fe79f9ffe50a01282b23e",
+          "platform": {
+            "architecture": "arm64",
+            "os": "linux",
+            "variant": "v8"
+          }
+        },
+        {
+          "digest": "sha256:670045644a15cf4c09e24a61b924660c58f45c4c03c2d17d49b774c04c9bb62b",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:09538a1f51d3ec5af0449a1640937dfdf79b0e9b8c4da5b8a883086d5c1492ef",
+          "platform": {
+            "architecture": "386",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:fb038e8f2e79b9c3d69c54bcd4b57218f5aea32fc3e98855c3eb452703ba4e5a",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:5a67e54fddf89e5a311186c5d6ba534363073dab0b36e173328789637fcbf592",
+          "platform": {
+            "architecture": "ppc64le",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:3a82e85498a4772b607dafaaeedca64743f046bf6799e7907ef2f56fb276ca57",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:156fcb9ee881b4372fa9d46aad498e333b2d6e3e1caed9ad5bdb53b1c05db74f",
+          "platform": {
+            "architecture": "riscv64",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:2fcf8944aa4940a540f7faa675cea6f544a43fbd86d7098eb4dfaced960de5eb",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:0d11755bbdbe264d24b7b641325ee292db18f0b3af0b54bff6e7f7efa5271a41",
+          "platform": {
+            "architecture": "s390x",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:0ede91707e269bc8a47210bd09d3556269ce42e9619fbedc94a2a30b5b06b8b4",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        }
+      ]
+    },
+    "busybox:1.37.0": {
+      "source_tag": "busybox:1.37.0",
+      "ref": "docker.io/library/busybox@sha256:bdf57e528e45e4433820e045b29b4597825a1c9e38353532d90a01445013f82e",
+      "digest": "sha256:bdf57e528e45e4433820e045b29b4597825a1c9e38353532d90a01445013f82e",
+      "metadata_url": "https://registry-1.docker.io/v2/library/busybox/manifests/1.37.0",
+      "platforms": [
+        {
+          "digest": "sha256:66a6306db78bf2dbf3487f293aa8d6990d8e506fdffab9cc43fe422becf886e4",
+          "platform": {
+            "architecture": "amd64",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:4c1f36753ad7ca27822b3caf7fa5ecb469b9a7ac64103b1d8bb5b0f286ea78f3",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:88132f86ce62d9462471f3758c3080ee2709b782ece90f847f8c09b6fafc2bf7",
+          "platform": {
+            "architecture": "arm",
+            "os": "linux",
+            "variant": "v5"
+          }
+        },
+        {
+          "digest": "sha256:8c65029ccb063b50c7d99c3385df7a6f6ca8758c46a781c65f992576f19e75bd",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:80ddcd89e4e9e4eda71e4e5d9c9442d6a8156eb9da7b2b0c7bf91248784a17ba",
+          "platform": {
+            "architecture": "arm",
+            "os": "linux",
+            "variant": "v6"
+          }
+        },
+        {
+          "digest": "sha256:91aa2a66a996afa9821eed6758ed0489ee891c50f4b8940b7b3db500b79f029f",
+          "platform": {
+            "architecture": "arm",
+            "os": "linux",
+            "variant": "v7"
+          }
+        },
+        {
+          "digest": "sha256:279b93ed4487cad22ab549f54a184788ceff616b149fa61b84adc3b62cfd440c",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:d82c2ab94640ded77cf76514ce6a84870761105058a4a9e51b05a8a79be97a6c",
+          "platform": {
+            "architecture": "arm64",
+            "os": "linux",
+            "variant": "v8"
+          }
+        },
+        {
+          "digest": "sha256:280c63bbb0cd39cb8ec327889b13ef50050d280e8e3b34fbf39d371a626ac02b",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:a88c21a22c5ddc9dada27459a93cfa69dd1d155578f8e8664d451854accb3e79",
+          "platform": {
+            "architecture": "386",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:a0706161519106ac9e227836f0f943f02517b76505648f2c68c5c290682166d7",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:025d95c7d9b648f6202fabbd9a33182fcbac04164069078e6fe3702bd2450283",
+          "platform": {
+            "architecture": "ppc64le",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:6fb3f83a41e6d11698b0dcb4e856214fd247042f348237e3b63e698368dea448",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:be2e8702261d743f7b1ba1b1cb4499927664d7a82baedf87564306426dda680a",
+          "platform": {
+            "architecture": "riscv64",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:fedb281243849349c260d6df90fb2e4b4678e598a40119bc8aff0c63fc271b0f",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:7f0d4675ec87f3f46c04f2285079906361c789390de0917d850a9d253fffd2aa",
+          "platform": {
+            "architecture": "s390x",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:4680953cb4fcd19d321188c2d5ff6712a01124e90c6e06b21a18fcceeec54fbb",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        }
+      ]
+    },
+    "prom/prometheus:v3.15.0": {
+      "source_tag": "prom/prometheus:v3.15.0",
+      "ref": "docker.io/prom/prometheus@sha256:efd719c99d83b060d9daefdcf00360461adf279f45ef5391f8d111892118753e",
+      "digest": "sha256:efd719c99d83b060d9daefdcf00360461adf279f45ef5391f8d111892118753e",
+      "metadata_url": "https://registry-1.docker.io/v2/prom/prometheus/manifests/v3.15.0",
+      "platforms": [
+        {
+          "digest": "sha256:86b17a25c2db1d16a61b16b3c8f336679eb19e26333d03e808da387206e40faa",
+          "platform": {
+            "architecture": "amd64",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:6b41f7a45cfbd1d259a78701ee5e14fc2ad9383c9aa5d0427345a18539bc3c91",
+          "platform": {
+            "architecture": "arm64",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:d538d0d9016a0fce100a390d9c236087afe6838adb4ba5c98be53e27a6ce9976",
+          "platform": {
+            "architecture": "arm",
+            "os": "linux",
+            "variant": "v7"
+          }
+        },
+        {
+          "digest": "sha256:0afa6e41f02107413c02f150d7ac3921f78a311bf796a55e601c61b567dc7782",
+          "platform": {
+            "architecture": "ppc64le",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:eeeed5025c055e6b1ffb593119aac199f05e126e2ad29442cab7f6f12bbf5cea",
+          "platform": {
+            "architecture": "riscv64",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:e6593ff7f47a29728798623e264ee46fa006d0546771951b5ba85d30ffc605e7",
+          "platform": {
+            "architecture": "s390x",
+            "os": "linux"
+          }
+        }
+      ]
+    },
+    "kindest/node:v1.35.8": {
+      "source_tag": "kindest/node:v1.35.8",
+      "ref": "docker.io/kindest/node@sha256:07b2536e30b803ed61d1677a79df6115f798ce64c80f9e22f6ed45afd09323c0",
+      "digest": "sha256:07b2536e30b803ed61d1677a79df6115f798ce64c80f9e22f6ed45afd09323c0",
+      "metadata_url": "https://registry-1.docker.io/v2/kindest/node/manifests/v1.35.8",
+      "platforms": [
+        {
+          "digest": "sha256:0c58cebbb66d7fa5fd497235dfae1e4e722ff84104e24a6f736ce8cd607cbe7c",
+          "platform": {
+            "architecture": "amd64",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:b38a25576c835bfedc9d06368f87ec40863459a4d5dcbdbab2fd5f58ecf97466",
+          "platform": {
+            "architecture": "arm64",
+            "os": "linux"
+          }
+        }
+      ]
+    },
+    "grafana/grafana:13.2.4": {
+      "source_tag": "grafana/grafana:13.2.4",
+      "ref": "docker.io/grafana/grafana@sha256:dbbc38ea21103cefb50396340cd88afec779c7e070b0a7bf5a75b4ce46651d3f",
+      "digest": "sha256:dbbc38ea21103cefb50396340cd88afec779c7e070b0a7bf5a75b4ce46651d3f",
+      "metadata_url": "https://registry-1.docker.io/v2/grafana/grafana/manifests/13.2.4",
+      "platforms": [
+        {
+          "digest": "sha256:7b22f3edf947329d75eba7a62d9f6ea1ac1e786736813ef7a98cfb275a52e49b",
+          "platform": {
+            "architecture": "amd64",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:15254b507dd6da013d57af4fc7e902721110b70d37282ab9ae866290803bd752",
+          "platform": {
+            "architecture": "arm64",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:6641a556c000663bd3d3b7a334b4c228e6d9be17c69f3ffbe63667ab73a77d4a",
+          "platform": {
+            "architecture": "arm",
+            "os": "linux",
+            "variant": "v7"
+          }
+        }
+      ]
+    },
+    "postgres:17-bookworm": {
+      "source_tag": "postgres:17-bookworm",
+      "ref": "docker.io/library/postgres@sha256:3645570cccdfa447589da9f57dd740faa29b30938e861289a5574b6ca6b03826",
+      "digest": "sha256:3645570cccdfa447589da9f57dd740faa29b30938e861289a5574b6ca6b03826",
+      "metadata_url": "https://registry-1.docker.io/v2/library/postgres/manifests/17-bookworm",
+      "platforms": [
+        {
+          "digest": "sha256:66aafa11cf15800a3c94763f7e11d1e7b2e37e5e84bc4ce027cb6e1e4bfaf4df",
+          "platform": {
+            "architecture": "amd64",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:dcf3b8bd99dbd866da47caf4d011b519d5f68c66cfb4cdf40c0bf821166dcf17",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:e66c369088f672836e5d9f1105a7126b15b70cdb23d525efda448d658af17605",
+          "platform": {
+            "architecture": "arm",
+            "os": "linux",
+            "variant": "v7"
+          }
+        },
+        {
+          "digest": "sha256:c57511e4caf52fa4e29a8da24f6a228f76f8c17362d562fa785e3a9a412f1a11",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:a85953d6f830fd55a12929df3b7a4fa94dc96d652de62d2d714e0867ccb3670d",
+          "platform": {
+            "architecture": "arm64",
+            "os": "linux",
+            "variant": "v8"
+          }
+        },
+        {
+          "digest": "sha256:865d14b614365066d4523d6f144602ef0ac2e6c3d3b6d1c382e2cceb60d2e56c",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:2773914d5340a7367bdcc80c272169079293a33b236e04266a5aa5c7c04e00dd",
+          "platform": {
+            "architecture": "386",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:774441b6d96be1706d1cc1d8e9dd9127d08b2be31b035013c0e42b2e4d2e3891",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:8056bd8bfec3c61d24611e123c37060e29efb4a934231f0967628168f7a44305",
+          "platform": {
+            "architecture": "ppc64le",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:513ec2552d2bc72aed83579435469bdb9406e49412a2ea5bb346caf73576b552",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        }
+      ]
+    },
+    "registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.20.0": {
+      "source_tag": "registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.20.0",
+      "ref": "registry.k8s.io/kube-state-metrics/kube-state-metrics@sha256:42cfe3723a5f058171c627537fb57a3ea0f26e4380fa18555a95cb1a1b4cfc5b",
+      "digest": "sha256:42cfe3723a5f058171c627537fb57a3ea0f26e4380fa18555a95cb1a1b4cfc5b",
+      "metadata_url": "https://registry.k8s.io/v2/kube-state-metrics/kube-state-metrics/manifests/v2.20.0",
+      "platforms": [
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "size": 3233,
+          "digest": "sha256:01171220c7c059afc85034ffe687bfe7249e41c0cc46fbe9a5128503ceee3016",
+          "platform": {
+            "architecture": "amd64",
+            "os": "linux"
+          }
+        },
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "size": 3233,
+          "digest": "sha256:23ad91fc36a792f825ed520fc8b566e841e816e0f51a0e0c56b1c043f9a77460",
+          "platform": {
+            "architecture": "arm",
+            "os": "linux",
+            "variant": "v7"
+          }
+        },
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "size": 3233,
+          "digest": "sha256:92b46557c71ecac53825772e4827dbcd9fca876b1950060f8fb2f2ef0d7a27af",
+          "platform": {
+            "architecture": "arm64",
+            "os": "linux",
+            "variant": "v8"
+          }
+        },
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "size": 3233,
+          "digest": "sha256:c499f06475d4b9ec7510d61bbb95c67b55ed0136cce77863751d3820c06f8728",
+          "platform": {
+            "architecture": "ppc64le",
+            "os": "linux"
+          }
+        },
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "size": 3233,
+          "digest": "sha256:8efb8a71e907e0e9db49a86d4f377f9313647930d9d397f9214b394e342695d6",
+          "platform": {
+            "architecture": "s390x",
+            "os": "linux"
+          }
+        }
+      ]
+    },
+    "quay.io/calico/node:v3.33.0": {
+      "source_tag": "quay.io/calico/node:v3.33.0",
+      "ref": "quay.io/calico/node@sha256:565d8db3200e443955557f8f28ff44ab8a4a456754bc74a19c4f2f3444af9b1c",
+      "digest": "sha256:565d8db3200e443955557f8f28ff44ab8a4a456754bc74a19c4f2f3444af9b1c",
+      "metadata_url": "https://quay.io/v2/calico/node/manifests/v3.33.0",
+      "platforms": [
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "size": 530,
+          "digest": "sha256:224903e17a8d0588a6b9781331bd64935b0ef741a4208043f7dd9fcc834fc7cd",
+          "platform": {
+            "architecture": "amd64",
+            "os": "linux"
+          }
+        },
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "size": 530,
+          "digest": "sha256:36e735b92def60de5937ff27be4cc504214704f3eec4e69759a44cc992c6b3ba",
+          "platform": {
+            "architecture": "arm64",
+            "os": "linux"
+          }
+        },
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "size": 530,
+          "digest": "sha256:f595b5baf8c4c289f042f17e2d225ec24ac329a25727dd4fe0e439419d2ea04a",
+          "platform": {
+            "architecture": "ppc64le",
+            "os": "linux"
+          }
+        },
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "size": 530,
+          "digest": "sha256:11b5e6671e53ab91caa1993f5c133c6ad64ea9257a27e78c582b16b78f067dd5",
+          "platform": {
+            "architecture": "s390x",
+            "os": "linux"
+          }
+        }
+      ]
+    },
+    "quay.io/argoproj/argocd:v3.5.5": {
+      "source_tag": "quay.io/argoproj/argocd:v3.5.5",
+      "ref": "quay.io/argoproj/argocd@sha256:13db7b10db23283b1b36f855046602e18539a8a8204c9f6f039e8896c8897518",
+      "digest": "sha256:13db7b10db23283b1b36f855046602e18539a8a8204c9f6f039e8896c8897518",
+      "metadata_url": "https://quay.io/v2/argoproj/argocd/manifests/v3.5.5",
+      "platforms": [
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "digest": "sha256:f055c9fc40b04cbfb68010505f3f6f3a57fe656c919b9b9a6dd45feba836e521",
+          "size": 3436,
+          "platform": {
+            "architecture": "amd64",
+            "os": "linux"
+          }
+        },
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "digest": "sha256:4a9b1b8f5d57b8935c1bb6b66b305a717d826f8e241b94603f8bd79aa3f9d87b",
+          "size": 3436,
+          "platform": {
+            "architecture": "arm64",
+            "os": "linux"
+          }
+        },
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "digest": "sha256:a3431d5e3c1aeb7a91226bf8f0df6f7b26d7b6d20d5bb8ab07f72f3c506bf5d6",
+          "size": 3436,
+          "platform": {
+            "architecture": "s390x",
+            "os": "linux"
+          }
+        },
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "digest": "sha256:fa183cebbe7d129049e8981545e318a69e90b90ac20b767e167ab9d59acecafe",
+          "size": 3436,
+          "platform": {
+            "architecture": "ppc64le",
+            "os": "linux"
+          }
+        }
+      ]
+    },
+    "quay.io/calico/calico:v3.33.0": {
+      "source_tag": "quay.io/calico/calico:v3.33.0",
+      "ref": "quay.io/calico/calico@sha256:4ebc20730127bc9e8bf1db5f5a2d8b58cf37fe0e891b3c7b5471992221d213e5",
+      "digest": "sha256:4ebc20730127bc9e8bf1db5f5a2d8b58cf37fe0e891b3c7b5471992221d213e5",
+      "metadata_url": "https://quay.io/v2/calico/calico/manifests/v3.33.0",
+      "platforms": [
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "size": 740,
+          "digest": "sha256:3eba6eb95b51b337bf255ecaf5c669b4b2ba04f9f813aa89785aa6853ecf9817",
+          "platform": {
+            "architecture": "amd64",
+            "os": "linux"
+          }
+        },
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "size": 740,
+          "digest": "sha256:3d15acd9c70aba68a86678c70c45307cfd3a247001848518716fa90e18295ecf",
+          "platform": {
+            "architecture": "arm64",
+            "os": "linux"
+          }
+        },
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "size": 740,
+          "digest": "sha256:90945251e5db61413ca3626d8841d6a4625fdf7968eabf59eca2487ca95d85d6",
+          "platform": {
+            "architecture": "ppc64le",
+            "os": "linux"
+          }
+        },
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "size": 740,
+          "digest": "sha256:aed566483cf8ee36cea42ece32266b67020d4b461b74abc626af23b51ef83997",
+          "platform": {
+            "architecture": "s390x",
+            "os": "linux"
+          }
+        }
+      ]
+    },
+    "quay.io/calico/third-party-cni-plugins:v3.33.0": {
+      "source_tag": "quay.io/calico/third-party-cni-plugins:v3.33.0",
+      "ref": "quay.io/calico/third-party-cni-plugins@sha256:0f32f48279484c0d6f0e0d0e767b2d0e1a6c6ca34cb3421a61b989d992f3df41",
+      "digest": "sha256:0f32f48279484c0d6f0e0d0e767b2d0e1a6c6ca34cb3421a61b989d992f3df41",
+      "metadata_url": "https://quay.io/v2/calico/third-party-cni-plugins/manifests/v3.33.0",
+      "platforms": [
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "size": 1793,
+          "digest": "sha256:ae6464c7d8ffae03f2f26ed411a5b69e91baf31d8d538923645459f4f301a917",
+          "platform": {
+            "architecture": "amd64",
+            "os": "linux"
+          }
+        },
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "size": 1793,
+          "digest": "sha256:2cb61c84807888a601bdfbb08b98db9fdbd3d7de26f910781721eccc4e21ae78",
+          "platform": {
+            "architecture": "arm64",
+            "os": "linux"
+          }
+        },
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "size": 1793,
+          "digest": "sha256:4e6a5fb5ab256e50a5fc6a4cbf06069bd03c52069e5f502802da71fda293419c",
+          "platform": {
+            "architecture": "ppc64le",
+            "os": "linux"
+          }
+        },
+        {
+          "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+          "size": 1793,
+          "digest": "sha256:7b262d0d124a3848cd1955519efe4a317f051033a040b33bb4b20a622db09eb9",
+          "platform": {
+            "architecture": "s390x",
+            "os": "linux"
+          }
+        }
+      ]
+    },
+    "redis:8.2.3-alpine": {
+      "source_tag": "redis:8.2.3-alpine",
+      "ref": "docker.io/library/redis@sha256:08ad0b1d280850169a790dba1393ff7a90aef951fc19632cf4d3ce4f78e679ba",
+      "digest": "sha256:08ad0b1d280850169a790dba1393ff7a90aef951fc19632cf4d3ce4f78e679ba",
+      "metadata_url": "https://registry-1.docker.io/v2/library/redis/manifests/8.2.3-alpine",
+      "platforms": [
+        {
+          "digest": "sha256:e499175dfb27569cd40010c2eee346113db95fdd0efc88ab9fd70a9e807f4542",
+          "platform": {
+            "architecture": "amd64",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:a33e258610abe144a4c5d601b5f9108f9ca5ce1f98ad9e32956d38402b2c8330",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:a87fee6b560466f3a6f7bca01a2b9d8ed6eaff4a80832a05b1f989c164f9ba98",
+          "platform": {
+            "architecture": "arm",
+            "os": "linux",
+            "variant": "v6"
+          }
+        },
+        {
+          "digest": "sha256:fa11ce939cc9bfc7b939dbd8658338ec54c88ce8fe1c3042b668f74e837af242",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:325f504218c1b19a6049540e5ace386fa59f667cf532b72536787349ec033701",
+          "platform": {
+            "architecture": "arm",
+            "os": "linux",
+            "variant": "v7"
+          }
+        },
+        {
+          "digest": "sha256:5af1c3a0d09b85584fed1ba1c1f9cf72c12bc5202153bb6f898c122723f30d29",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:2fe148588d93987cea3533873195ec2450f5dbf420c78606aaacad7b78bb5489",
+          "platform": {
+            "architecture": "arm64",
+            "os": "linux",
+            "variant": "v8"
+          }
+        },
+        {
+          "digest": "sha256:a77e7210f45689da050598721450d7d5f4994d3cf21ba057262c5faaf204be6a",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:4c3b793dfd83018fdceaa502783b874cd17033cdce7ce469dbecf9ea5ac36e7e",
+          "platform": {
+            "architecture": "386",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:c37aefb6ee60695103153ca70cee9d0eceb76fac447a07e21b46369c122afd54",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:45d241998e835db163dcab575480129fcfa97a8ed12f36e4982724986456331b",
+          "platform": {
+            "architecture": "ppc64le",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:7711f624ab2947f804c9f51f67bddb41a048ba9e34749aa72bfd3dee8ec74a1e",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:5ab45c7fc8a7356445069118d98be25c0abba570f0c366bc3f5b1899d1898092",
+          "platform": {
+            "architecture": "riscv64",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:5f01760c35ecdb5c22e1dac06d6de8e0ba27e45d762efdb39f6b454a0df32099",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        },
+        {
+          "digest": "sha256:e7a3e0c3075e75bc1afd43dd5fa7dfb347cdebd88169a1456c26ff3fd959a273",
+          "platform": {
+            "architecture": "s390x",
+            "os": "linux"
+          }
+        },
+        {
+          "digest": "sha256:5e97b922a98ce6eedaebf3ac7a8f2243ba3a1a75e01e64213155a9f0c5453c60",
+          "platform": {
+            "architecture": "unknown",
+            "os": "unknown"
+          }
+        }
+      ]
+    }
+  },
+  "actions": {
+    "actions/checkout": {
+      "tag": "v7.0.1",
+      "sha": "3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "ref": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "release_url": "https://api.github.com/repos/actions/checkout/releases/latest"
+    },
+    "actions/setup-node": {
+      "tag": "v7.1.0",
+      "sha": "949feb2413d6458794dcd2491c4babbbce0c15c1",
+      "ref": "actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1",
+      "release_url": "https://api.github.com/repos/actions/setup-node/releases/latest"
+    },
+    "actions/setup-python": {
+      "tag": "v7.0.0",
+      "sha": "5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "ref": "actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "release_url": "https://api.github.com/repos/actions/setup-python/releases/latest"
+    },
+    "actions/upload-artifact": {
+      "tag": "v7.0.2",
+      "sha": "cf430e030ddbb5b0abf93d22962f4752f3646cd9",
+      "ref": "actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9",
+      "release_url": "https://api.github.com/repos/actions/upload-artifact/releases/latest"
+    },
+    "actions/cache": {
+      "tag": "v6.1.0",
+      "sha": "55cc8345863c7cc4c66a329aec7e433d2d1c52a9",
+      "ref": "actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9",
+      "release_url": "https://api.github.com/repos/actions/cache/releases/latest"
+    },
+    "actions/download-artifact": {
+      "tag": "v8.0.2",
+      "sha": "9000827ccba6bdab643e8b6fd33ac0654aef8333",
+      "ref": "actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333",
+      "release_url": "https://api.github.com/repos/actions/download-artifact/releases/latest"
+    },
+    "docker/setup-buildx-action": {
+      "tag": "v4.4.1",
+      "sha": "f87e5991a6d7451dcb8d9637bfbc97413f497069",
+      "ref": "docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069",
+      "release_url": "https://api.github.com/repos/docker/setup-buildx-action/releases/latest"
+    }
+  },
+  "vendor": {
+    "argocd-namespace-install.yaml": {
+      "url": "https://raw.githubusercontent.com/argoproj/argo-cd/v3.5.5/manifests/namespace-install.yaml",
+      "sha256": "39fa58721e9f8166bf3e63b67f27af04f2b7a08deb0b4b3db7f3d4776d840209",
+      "path": "tools\\locks\\vendor\\argocd-namespace-install.yaml",
+      "provenance": "publisher-version-tag-over-https; locally computed SHA-256"
+    },
+    "argocd-LICENSE": {
+      "url": "https://raw.githubusercontent.com/argoproj/argo-cd/v3.5.5/LICENSE",
+      "sha256": "c996fc213c94f4a4a838407d355b081226caa7b103a4f239bb87fb8f1d8e3a60",
+      "path": "tools\\locks\\vendor\\argocd-LICENSE",
+      "provenance": "publisher-version-tag-over-https; locally computed SHA-256"
+    },
+    "argocd-crds.yaml": {
+      "url": "https://raw.githubusercontent.com/argoproj/argo-cd/v3.5.5/manifests/crds/application-crd.yaml",
+      "sha256": "5dde0e229249b6b707beb98674c1deae3949d5c319a6c45b9f5a80c99618e40c",
+      "path": "tools\\locks\\vendor\\argocd-crds.yaml",
+      "provenance": "publisher-version-tag-over-https; locally computed SHA-256"
+    },
+    "argocd-appproject-crd.yaml": {
+      "url": "https://raw.githubusercontent.com/argoproj/argo-cd/v3.5.5/manifests/crds/appproject-crd.yaml",
+      "sha256": "ab225266944322750136f1198d93786e4a79a0e43c8d149abfba44da30a3eac8",
+      "path": "tools\\locks\\vendor\\argocd-appproject-crd.yaml",
+      "provenance": "publisher-version-tag-over-https; locally computed SHA-256"
+    },
+    "calico.yaml": {
+      "url": "https://raw.githubusercontent.com/projectcalico/calico/v3.33.0/manifests/calico.yaml",
+      "sha256": "2de8f47595fb9c41b3f47d7b767a1f8e72ecf84057af834738ff12689a234da5",
+      "path": "tools\\locks\\vendor\\calico.yaml",
+      "provenance": "publisher-version-tag-over-https; locally computed SHA-256"
+    },
+    "calico-LICENSE": {
+      "url": "https://raw.githubusercontent.com/projectcalico/calico/v3.33.0/LICENSE.md",
+      "sha256": "a6144479dad9ef50ace32255c853780fc14399ec11650910a7d61ec1e73efdb6",
+      "path": "tools\\locks\\vendor\\calico-LICENSE",
+      "provenance": "publisher-version-tag-over-https; locally computed SHA-256"
+    }
+  },
+  "errors": {},
+  "checked_at_utc": "2026-10-19T08:45:04.576821+00:00",
+  "remaining": [],
+  "tools_linux": {
+    "kind": {
+      "version": "0.33.0",
+      "url": "https://github.com/kubernetes-sigs/kind/releases/download/v0.33.0/kind-linux-amd64",
+      "sha256": "aee6151561422756b764a4ae28e7f44cda5af5a9eead3cc9985112b1de8d8e0d",
+      "checksum_url": "https://github.com/kubernetes-sigs/kind/releases/download/v0.33.0/kind-linux-amd64.sha256sum",
+      "downloaded": false
+    },
+    "gitleaks": {
+      "version": "8.30.1",
+      "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz",
+      "sha256": "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb",
+      "checksum_url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_checksums.txt",
+      "downloaded": false
+    },
+    "gh": {
+      "version": "2.102.0",
+      "url": "https://github.com/cli/cli/releases/download/v2.102.0/gh_2.102.0_linux_amd64.tar.gz",
+      "sha256": "bb766f710eef8ede859c18578c72c327597cd4c8a85b06001b1f3843c6019386",
+      "checksum_url": "https://github.com/cli/cli/releases/download/v2.102.0/gh_2.102.0_checksums.txt",
+      "downloaded": false
+    },
+    "terraform": {
+      "version": "1.16.6",
+      "url": "https://releases.hashicorp.com/terraform/1.16.6/terraform_1.16.6_linux_amd64.zip",
+      "sha256": "38034b38d03096399a7a1264a14561a8029b2b496fd1f169452656e53968f1b7",
+      "checksum_url": "https://releases.hashicorp.com/terraform/1.16.6/terraform_1.16.6_SHA256SUMS",
+      "downloaded": false
+    },
+    "grype": {
+      "version": "0.120.1",
+      "url": "https://github.com/anchore/grype/releases/download/v0.120.1/grype_0.120.1_linux_amd64.tar.gz",
+      "sha256": "0a9ee97ef5ae2ee953b0a80098105052e846cdbe319a57d808b519c33cd1343d",
+      "checksum_url": "https://github.com/anchore/grype/releases/download/v0.120.1/grype_0.120.1_checksums.txt",
+      "downloaded": false
+    },
+    "syft": {
+      "version": "1.54.1",
+      "url": "https://github.com/anchore/syft/releases/download/v1.54.1/syft_1.54.1_linux_amd64.tar.gz",
+      "sha256": "c069905b391cc4c20a5ba65ad5c10be2a7ba074f8ea6ad203e24d14e303dad47",
+      "checksum_url": "https://github.com/anchore/syft/releases/download/v1.54.1/syft_1.54.1_checksums.txt",
+      "downloaded": false
+    },
+    "cosign": {
+      "version": "3.1.3",
+      "url": "https://github.com/sigstore/cosign/releases/download/v3.1.3/cosign-linux-amd64",
+      "sha256": "4629c757b7618056f8ddd7e2625ae9fdd94c0372a65049520bc7d9df9efc7f71",
+      "checksum_url": "https://github.com/sigstore/cosign/releases/download/v3.1.3/cosign_checksums.txt",
+      "downloaded": false
+    },
+    "kubectl": {
+      "version": "1.35.8",
+      "url": "https://dl.k8s.io/release/v1.35.8/bin/linux/amd64/kubectl",
+      "sha256": "874d5e72dbb819f43cff16bcd1e4f8bac5b7f2361fe1e55049b0a6c676fb0cbf",
+      "checksum_url": "https://dl.k8s.io/release/v1.35.8/bin/linux/amd64/kubectl.sha256",
+      "downloaded": false
+    },
+    "node": {
+      "version": "24.22.0",
+      "url": "https://nodejs.org/dist/v24.22.0/node-v24.22.0-linux-x64.tar.xz",
+      "sha256": "cc2f601cee82d9a5a233302fe307abc600727035fd7d2c3a3571755989e95008",
+      "checksum_url": "https://nodejs.org/dist/v24.22.0/SHASUMS256.txt",
+      "downloaded": false
+    },
+    "cloudflared": {
+      "version": "2026.10.1",
+      "url": "https://github.com/cloudflare/cloudflared/releases/download/2026.10.1/cloudflared-linux-amd64",
+      "sha256": "3bfc539f45d2620c71debb7a86be0efa737ed5ccbad9eb85c787116900e5c586",
+      "checksum_url": "https://api.github.com/repos/cloudflare/cloudflared/releases/tags/2026.10.1",
+      "downloaded": false
+    }
+  },
+  "dependency_resolution": {
+    "npm": {
+      "exit_code": 0,
+      "log": ".local\\reports\\p00-npm-lock-final.log"
+    },
+    "terraform": {
+      "exit_code": 0
+    },
+    "python_resolve": {
+      "exit_code": 0
+    },
+    "hashes": {
+      "exit_code": 0,
+      "errors": {},
+      "packages": 139,
+      "provenance": "official versioned PyPI JSON artifact digests"
+    }
+  },
+  "calico_compatibility": {
+    "url": "https://docs.tigera.io/calico/3.33/getting-started/kubernetes/requirements",
+    "sha256": "24ccab776c15c225d0fd3b789266ba8df8c55a7c8e66156382d377278781e85d",
+    "published_support": "Calico 3.33 lists Kubernetes 1.35, 1.36 and 1.37",
+    "integration_tested": false
+  },
+  "lock_artifacts": {
+    "tools/locks/.gitattributes": {
+      "sha256": "8bfce6c748abdb504faab3d13660ec9d22fc42aac5ee724c19f30fa27511cf8d",
+      "bytes": 89
+    },
+    "tools/locks/catalog.in": {
+      "sha256": "99c0c98a6696ca9857dd6d0f89a05998342e874d45325dd4641eb53ded83aec3",
+      "bytes": 122
+    },
+    "tools/locks/catalog.txt": {
+      "sha256": "4d72160069b8e75794bc2d61cc9d22ea23e9b900f081637bcdec041b8bff15ea",
+      "bytes": 40128
+    },
+    "tools/locks/checkov.in": {
+      "sha256": "ce24c89ca05955bc5982d81da07e546fcf3827bcd50beaebc104ddedd9005e4d",
+      "bytes": 17
+    },
+    "tools/locks/checkov.txt": {
+      "sha256": "0892df4d3c2b54a60fbb61210477f80bc454a1020a769f73c9ce02803caad9e3",
+      "bytes": 178487
+    },
+    "tools/locks/importer.in": {
+      "sha256": "775a515f8ba2fb7da5c675188f83907dab3d87c248fc7ba137498329fa36f87d",
+      "bytes": 75
+    },
+    "tools/locks/importer.txt": {
+      "sha256": "a1547ad46328f7956c2a4f16acf23a94c3890fc023ebbfbdf0de7fe4ffc9be0e",
+      "bytes": 26961
+    },
+    "tools/locks/journey.in": {
+      "sha256": "06e60a7a6c508b500a464a6965e152bbcd68569347b6bf1876d60c2ec928cbb7",
+      "bytes": 137
+    },
+    "tools/locks/journey.txt": {
+      "sha256": "468d04ce0ba6af0f7bf75a4bcd1f8734368dc394e4691c75c0771e5c017917ec",
+      "bytes": 40697
+    },
+    "tools/locks/ops.in": {
+      "sha256": "dac2d6ec7146f8dddf166c00fce7f51286644f398e83629763dc8a79594de137",
+      "bytes": 18
+    },
+    "tools/locks/ops.txt": {
+      "sha256": "cebbd734ed8d9e77f1710fe8518a4c480105c39c5aba62e48b6a2d764304c6be",
+      "bytes": 1671
+    },
+    "tools/locks/quality.in": {
+      "sha256": "197e9abfd5109b46944be5f40039b5abca75d216838e430ab8ccf278bb534229",
+      "bytes": 63
+    },
+    "tools/locks/quality.txt": {
+      "sha256": "6ad4ee923c77f601d9b328199fb7ae4b4029ae2a783317900ed891550381a10f",
+      "bytes": 42022
+    },
+    "tools/locks/README.md": {
+      "sha256": "b456fc9da6a64a96db7a1b9d8e7819231abca5aef14842add5be52a997c929cb",
+      "bytes": 2352
+    },
+    "tools/locks/terraform/.terraform.lock.hcl": {
+      "sha256": "2459a8ecefd491891de51373d6c6a12b8d52d3b979aaa5761e9e115f68f14d67",
+      "bytes": 1317
+    },
+    "tools/locks/terraform/providers.tf": {
+      "sha256": "aa17a6724d51f0fc6c77ec3a9f8328a9a0e1069816362ef9f65dc46f25c210b7",
+      "bytes": 170
+    },
+    "tools/locks/vendor/argocd-appproject-crd.yaml": {
+      "sha256": "ab225266944322750136f1198d93786e4a79a0e43c8d149abfba44da30a3eac8",
+      "bytes": 19431
+    },
+    "tools/locks/vendor/argocd-crds.yaml": {
+      "sha256": "5dde0e229249b6b707beb98674c1deae3949d5c319a6c45b9f5a80c99618e40c",
+      "bytes": 405924
+    },
+    "tools/locks/vendor/argocd-LICENSE": {
+      "sha256": "c996fc213c94f4a4a838407d355b081226caa7b103a4f239bb87fb8f1d8e3a60",
+      "bytes": 11352
+    },
+    "tools/locks/vendor/argocd-namespace-install.yaml": {
+      "sha256": "39fa58721e9f8166bf3e63b67f27af04f2b7a08deb0b4b3db7f3d4776d840209",
+      "bytes": 94019
+    },
+    "tools/locks/vendor/calico-LICENSE": {
+      "sha256": "a6144479dad9ef50ace32255c853780fc14399ec11650910a7d61ec1e73efdb6",
+      "bytes": 10713
+    },
+    "tools/locks/vendor/calico.yaml": {
+      "sha256": "2de8f47595fb9c41b3f47d7b767a1f8e72ecf84057af834738ff12689a234da5",
+      "bytes": 729395
+    },
+    "tools/locks/vendor/SHA256SUMS": {
+      "sha256": "060e9aecd21926acf949225279578dc87adf3f8344f0e4f0eb6a50a36c1bad5b",
+      "bytes": 518
+    },
+    "tools/locks/web/package-lock.json": {
+      "sha256": "2ac099e3e8b50507b3ad8a647f1a0d753c9fd7d261a32c20a555a9c209188eea",
+      "bytes": 55893
+    },
+    "tools/locks/web/package.json": {
+      "sha256": "5e74a4bba0257a96c205816df088273364cd6e5cce247705dfd3a513cd2747d5",
+      "bytes": 501
+    }
+  },
+  "retired_downloads": {
+    "tailscale_installer": {
+      "version": "1.104.1",
+      "url": "https://pkgs.tailscale.com/stable/tailscale-setup-1.104.1-amd64.msi",
+      "sha256": "6da8bcdb0d45a214cae0e8a88c2987ad48dec134bf04dffb9c05f1354c02b0b4",
+      "path": ".local\\tools\\downloads\\tailscale-setup-1.104.1-amd64.msi",
+      "checksum_url": "https://pkgs.tailscale.com/stable/tailscale-setup-1.104.1-amd64.msi.sha256",
+      "installed": false,
+      "required": false,
+      "reason": "User selected accountless Cloudflare Quick Tunnel on 2026-10-19"
+    }
+  },
+  "public_access": {
+    "provider": "cloudflare-quick-tunnel",
+    "account_required": false,
+    "domain_purchase_required": false,
+    "origin": "http://127.0.0.1:8080",
+    "hostname_changes_on_restart": true,
+    "uptime_guarantee": false,
+    "source": "https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/",
+    "decision": "docs/adr/0001-public-access-quick-tunnel.md"
+  }
+}
