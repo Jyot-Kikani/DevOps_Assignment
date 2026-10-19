@@ -1,0 +1,30 @@
+{
+  "inaf_csv": {
+    "url": "https://gucds.inaf.it/GCNS/v2forpublication/GCNS_cat.csv",
+    "status": 206,
+    "content_type": "text/csv",
+    "content_length": "32768",
+    "content_range": "bytes 0-32767/176795093",
+    "bytes_read": 32768,
+    "seconds": 1.7,
+    "first_lines": [
+      "source_id,ra,ra_error,dec,dec_error,parallax,parallax_error,pmra,pmra_error,pmdec,pmdec_error,astrometry_source,phot_g_mean_mag,phot_g_mean_flux_over_error,phot_bp_mean_mag,phot_bp_mean_flux_over_error,phot_rp_mean_mag,phot_rp_mean_flux_over_error,Photometry_source,phot_bp_rp_excess_factor,ruwe,ipd_frac_multi_peak,adoptedRV,adoptedRV_error,GCNS_prob,dist_1,dist_16,dist_50,dist_84,name_gunn,Angdist_gunn,gmag_GUNN,e_gmag_GUNN,rmag_GUNN,e_rmag_GUNN,imag_GUNN,e_imag_GUNN,zmag_GUNN,e_zmag_GUNN,NAME_2MASS,Angdist_2MASS,j_m_2MASS,j_msig_2MASS,h_m_2MASS,h_msig_2MASS,k_m_2MASS,k_msig_2MASS,NAME_WISE,Angdist_WISE,w1mpro_pm_WISE,w1sigmpro_pm_WISE,w2mpro_pm_WISE,w2sigmpro_pm_WISE,w3mpro_WISE,w3sigmpro_WISE,w4mpro_WISE,w4sigmpro_WISE",
+      "  2334666126716440064,    0.00256498,0.03305,  -26.36534953,0.02500,   14.697,0.03698,   23.497,0.03680,  -62.339,0.02981, 0, 15.7779,  1586.04, 17.4299,   150.54, 14.5407,   689.37, 0,  1.4738, 1.01,  0,  61.151, 10.5376,1.000,     0.06765,     0.06786,     0.06803,     0.06821,PSO J000000.599-2621,  0.1, 17.796,  0.010, 16.549,  0.004, 15.059,  0.003, 14.396,  0.003,   00000058-2621542 ,  0.0, 12.833,  0.024, 12.267,  0.022, 11.977,  0.026, J000000.60-262154.9,  0.0, 11.785,  0.024, 11.593,  0.022, 11.100,  0.128,  9.074,*******",
+      "  2341871673090078592,    0.00512097,0.42837,  -19.49884063,0.34734,   24.626,0.02958,  181.303,0.02545,   -0.420,0.01873, 3,  8.9429,  8395.61,  9.4761,  3027.36,  8.2513,  5889.20, 0,  1.2397,29.39,  0,   6.830,  2.0049,0.998,     0.04055,     0.04061,     0.04066,     0.04071,                    ,  0.0,*******,*******,*******,*******,*******,*******,*******,*******,   00000099-1929557 ,  0.2,  7.402,  0.021,  6.975,  0.042,  6.807,  0.018, J000001.15-192955.8,  0.0,  6.691,  0.073,  6.735,  0.021,  6.722,  0.016,  6.704,  0.077"
+    ]
+  },
+  "gavo_tap": {
+    "url": "https://dc.g-vo.org/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+TOP+100+source_id%2Cxcoord_50%2Cycoord_50%2Czcoord_50%2Cdist_50%2Cdist_16%2Cdist_84%2Cphot_g_mean_mag%2Cphot_bp_mean_mag%2Cphot_rp_mean_mag+FROM+gcns.main+ORDER+BY+dist_50",
+    "status": 200,
+    "content_type": "text/csv;header=present",
+    "content_length": null,
+    "content_range": null,
+    "bytes_read": 11960,
+    "seconds": 1.64,
+    "first_lines": [
+      "source_id,xcoord_50,ycoord_50,zcoord_50,dist_50,dist_16,dist_84,phot_g_mean_mag,phot_bp_mean_mag,phot_rp_mean_mag",
+      "5853498713190525696,0.9026826,-0.93719095,-0.043569434,0.0013019451,0.0012770584,0.0013020444,8.984749,11.373116,7.5685353",
+      "4472832130942575872,1.527305,0.91949123,0.4473476,0.0018380001,0.0018281857,0.0018475229,8.1939745,9.791788,6.9580913"
+    ]
+  }
+}

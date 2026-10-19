@@ -2066,6 +2066,10 @@
       "sha256": "8bfce6c748abdb504faab3d13660ec9d22fc42aac5ee724c19f30fa27511cf8d",
       "bytes": 89
     },
+    "tools/locks/catalog-windows.txt": {
+      "sha256": "7b457499382360bbe1ada090c9717cb368b2467f451bd24800a8c2bd1b2868cb",
+      "bytes": 40336
+    },
     "tools/locks/catalog.in": {
       "sha256": "99c0c98a6696ca9857dd6d0f89a05998342e874d45325dd4641eb53ded83aec3",
       "bytes": 122
@@ -2082,6 +2086,10 @@
       "sha256": "0892df4d3c2b54a60fbb61210477f80bc454a1020a769f73c9ce02803caad9e3",
       "bytes": 178487
     },
+    "tools/locks/importer-windows.txt": {
+      "sha256": "20293c35b2d279b8dd722802bd707f198dc14b512c30844718c9e42520f2e45e",
+      "bytes": 27169
+    },
     "tools/locks/importer.in": {
       "sha256": "775a515f8ba2fb7da5c675188f83907dab3d87c248fc7ba137498329fa36f87d",
       "bytes": 75
@@ -2089,6 +2097,10 @@
     "tools/locks/importer.txt": {
       "sha256": "a1547ad46328f7956c2a4f16acf23a94c3890fc023ebbfbdf0de7fe4ffc9be0e",
       "bytes": 26961
+    },
+    "tools/locks/journey-windows.txt": {
+      "sha256": "e9fd7daef028728da85dab0aabc1653395cea5496be24f9b53758e0dd813441a",
+      "bytes": 40905
     },
     "tools/locks/journey.in": {
       "sha256": "06e60a7a6c508b500a464a6965e152bbcd68569347b6bf1876d60c2ec928cbb7",
@@ -2098,6 +2110,10 @@
       "sha256": "468d04ce0ba6af0f7bf75a4bcd1f8734368dc394e4691c75c0771e5c017917ec",
       "bytes": 40697
     },
+    "tools/locks/ops-windows.txt": {
+      "sha256": "2afb253ef4926d49fe04050b7f237229219c9d4095f1824fa054a41b74e80f22",
+      "bytes": 1880
+    },
     "tools/locks/ops.in": {
       "sha256": "dac2d6ec7146f8dddf166c00fce7f51286644f398e83629763dc8a79594de137",
       "bytes": 18
@@ -2105,6 +2121,10 @@
     "tools/locks/ops.txt": {
       "sha256": "cebbd734ed8d9e77f1710fe8518a4c480105c39c5aba62e48b6a2d764304c6be",
       "bytes": 1671
+    },
+    "tools/locks/quality-windows.txt": {
+      "sha256": "041ff2534c237efdb8c1eb51fc309e8e0fe37ae02d023b8e377387038b461fe7",
+      "bytes": 42231
     },
     "tools/locks/quality.in": {
       "sha256": "197e9abfd5109b46944be5f40039b5abca75d216838e430ab8ccf278bb534229",
@@ -2161,6 +2181,86 @@
     "tools/locks/web/package.json": {
       "sha256": "5e74a4bba0257a96c205816df088273364cd6e5cce247705dfd3a513cd2747d5",
       "bytes": 501
+    },
+    "services/catalog/requirements-dev-windows.txt": {
+      "sha256": "545c9e71dcbced7756766b82efb543722effb18d5f94b7fa1bd997689fab4991",
+      "bytes": 71
+    },
+    "services/catalog/requirements-dev.txt": {
+      "sha256": "e1b085b7fb8a0d3c762a69e41b34801510c03cff49749cc421fcf65593e350ab",
+      "bytes": 55
+    },
+    "services/catalog/requirements-windows.txt": {
+      "sha256": "7b457499382360bbe1ada090c9717cb368b2467f451bd24800a8c2bd1b2868cb",
+      "bytes": 40336
+    },
+    "services/catalog/requirements.txt": {
+      "sha256": "4d72160069b8e75794bc2d61cc9d22ea23e9b900f081637bcdec041b8bff15ea",
+      "bytes": 40128
+    },
+    "services/journey/requirements-dev-windows.txt": {
+      "sha256": "545c9e71dcbced7756766b82efb543722effb18d5f94b7fa1bd997689fab4991",
+      "bytes": 71
+    },
+    "services/journey/requirements-dev.txt": {
+      "sha256": "e1b085b7fb8a0d3c762a69e41b34801510c03cff49749cc421fcf65593e350ab",
+      "bytes": 55
+    },
+    "services/journey/requirements-windows.txt": {
+      "sha256": "e9fd7daef028728da85dab0aabc1653395cea5496be24f9b53758e0dd813441a",
+      "bytes": 40905
+    },
+    "services/journey/requirements.txt": {
+      "sha256": "468d04ce0ba6af0f7bf75a4bcd1f8734368dc394e4691c75c0771e5c017917ec",
+      "bytes": 40697
+    },
+    "jobs/catalog-importer/requirements-dev-windows.txt": {
+      "sha256": "545c9e71dcbced7756766b82efb543722effb18d5f94b7fa1bd997689fab4991",
+      "bytes": 71
+    },
+    "jobs/catalog-importer/requirements-dev.txt": {
+      "sha256": "e1b085b7fb8a0d3c762a69e41b34801510c03cff49749cc421fcf65593e350ab",
+      "bytes": 55
+    },
+    "jobs/catalog-importer/requirements-windows.txt": {
+      "sha256": "20293c35b2d279b8dd722802bd707f198dc14b512c30844718c9e42520f2e45e",
+      "bytes": 27169
+    },
+    "jobs/catalog-importer/requirements.txt": {
+      "sha256": "a1547ad46328f7956c2a4f16acf23a94c3890fc023ebbfbdf0de7fe4ffc9be0e",
+      "bytes": 26961
+    },
+    "tools/requirements-ops-windows.txt": {
+      "sha256": "af5dadac165a1f464eff11a18d54db274fa68d798a17bd84ae224ffc61050d0e",
+      "bytes": 86
+    },
+    "tools/requirements-ops.txt": {
+      "sha256": "1395ec98eb4b0b8cd576391a213c28234d85e8e020e8dcec619af5b63e47b515",
+      "bytes": 62
+    },
+    "apps/web/package.json": {
+      "sha256": "7c1590cb3128abe157e99bf36f94439fda51ca5c0699b51525997e46e1585d4a",
+      "bytes": 752
+    },
+    "apps/web/package-lock.json": {
+      "sha256": "635398e184d5bad9390bac97fa173ecc3080f1c7f1de395f122593aadde90375",
+      "bytes": 55863
+    },
+    "package.json": {
+      "sha256": "196a69d9bfd82b75f0212a536a50e2300458ee7c06b5f1092a30c83b79f6e065",
+      "bytes": 440
+    },
+    "package-lock.json": {
+      "sha256": "cb9a71df27d04f00ad24426e0221dae010a6d94c7fd7aa718d8e2cf75b18ba04",
+      "bytes": 258
+    },
+    "infra/terraform/foundation/.terraform.lock.hcl": {
+      "sha256": "2459a8ecefd491891de51373d6c6a12b8d52d3b979aaa5761e9e115f68f14d67",
+      "bytes": 1317
+    },
+    "infra/terraform/runtime/.terraform.lock.hcl": {
+      "sha256": "2459a8ecefd491891de51373d6c6a12b8d52d3b979aaa5761e9e115f68f14d67",
+      "bytes": 1317
     }
   },
   "retired_downloads": {
@@ -2184,5 +2284,29 @@
     "uptime_guarantee": false,
     "source": "https://developers.cloudflare.com/tunnel/get-started/quick-tunnels/",
     "decision": "docs/adr/0001-public-access-quick-tunnel.md"
+  },
+  "platform_locks": {
+    "windows_amd64": {
+      "python": "3.13",
+      "groups": [
+        "catalog",
+        "journey",
+        "importer",
+        "ops",
+        "quality"
+      ],
+      "constraint": "existing P00 Linux pins; additional Windows dependencies resolved from official PyPI"
+    },
+    "linux_amd64": {
+      "python": "3.13",
+      "groups": [
+        "catalog",
+        "journey",
+        "importer",
+        "ops",
+        "quality",
+        "checkov"
+      ]
+    }
   }
 }

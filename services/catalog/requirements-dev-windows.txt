@@ -1,0 +1,2 @@
+-r requirements-windows.txt
+-r ../../tools/locks/quality-windows.txt

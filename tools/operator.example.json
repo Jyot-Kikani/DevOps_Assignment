@@ -1,0 +1,8 @@
+{
+  "github_owner": "",
+  "repository": "stellar-atlas",
+  "public_base_url": null,
+  "public_access_provider": "cloudflare-quick-tunnel",
+  "tools": {},
+  "kubernetes_context": "kind-stellar-atlas-demo"
+}

@@ -1,0 +1,3 @@
+-r locks/ops-windows.txt
+-r locks/quality-windows.txt
+-r locks/journey-windows.txt

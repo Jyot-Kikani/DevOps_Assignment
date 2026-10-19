@@ -1,0 +1,3 @@
+-r locks/ops.txt
+-r locks/quality.txt
+-r locks/journey.txt

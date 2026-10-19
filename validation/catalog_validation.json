@@ -1,0 +1,89 @@
+{
+  "checked_at_utc": "2026-10-13T07:09:18.479267+00:00",
+  "source_url": "https://dc.g-vo.org/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&MAXREC=400000&QUERY=SELECT+source_id%2Cra%2Cdec%2Cxcoord_50%2Cycoord_50%2Czcoord_50%2Cdist_50%2Cdist_16%2Cdist_84%2Cphot_g_mean_mag%2Cphot_bp_mean_mag%2Cphot_rp_mean_mag+FROM+gcns.main",
+  "http_status": 200,
+  "csv_bytes": 50104120,
+  "csv_sha256": "20271720bc7b5038f05df0c25d17a5e1cc51158eed74ee1b27472c7faf4ede94",
+  "counts": {
+    "rows": 331312,
+    "duplicate_ids": 0,
+    "missing_xyz": 0,
+    "missing_distance": 0,
+    "valid_brightness": 330881,
+    "valid_color": 324310,
+    "valid_distance_interval": 331312,
+    "within_100pc": 300526,
+    "within_50ly": 1151,
+    "within_25ly": 142,
+    "renderable": 331312
+  },
+  "coordinate_relative_error_max": 1.9915076192555503e-07,
+  "coordinate_relative_error_median": 2.8048467904462913e-08,
+  "radius_pc_min": 1.3019451020237922,
+  "radius_pc_max": 119.31340592368659,
+  "packed_render_bytes": 7951488,
+  "nearest_five": [
+    {
+      "source_id": "5853498713190525696",
+      "xyz_pc": [
+        0.9026826,
+        -0.93719095,
+        -0.043569434
+      ],
+      "distance_ly": 4.24637698440337,
+      "g_magnitude": 8.984749
+    },
+    {
+      "source_id": "4472832130942575872",
+      "xyz_pc": [
+        1.527305,
+        0.91949123,
+        0.4473476
+      ],
+      "distance_ly": 5.994754719255086,
+      "g_magnitude": 8.1939745
+    },
+    {
+      "source_id": "3864972938605115520",
+      "xyz_pc": [
+        -0.5877903,
+        -1.2078844,
+        1.9989699
+      ],
+      "distance_ly": 7.855131418238334,
+      "g_magnitude": 11.038391
+    },
+    {
+      "source_id": "762815470562110464",
+      "xyz_pc": [
+        -1.0541981,
+        -0.09537393,
+        2.3156004
+      ],
+      "distance_ly": 8.304145723026794,
+      "g_magnitude": 6.551172
+    },
+    {
+      "source_id": "2947050466531873024",
+      "xyz_pc": [
+        -1.7914286,
+        -1.9369018,
+        -0.412814
+      ],
+      "distance_ly": 8.709792428888996,
+      "g_magnitude": 8.524133
+    }
+  ],
+  "calculation_example": {
+    "from": "5853498713190525696",
+    "to": "4472832130942575872",
+    "separation_ly": 6.586761272382793,
+    "travel_years_at_0_1c": 65.86761272382792
+  },
+  "checks_passed": [
+    "full_catalog_row_count",
+    "unique_source_ids",
+    "finite_xyz",
+    "xyz_norm_matches_distance_units"
+  ]
+}

@@ -1,0 +1,7 @@
+* text=auto eol=lf
+*.png -text
+*.bin -text
+*.gz -text
+**/requirements*.txt -text
+package*.json -text
+tools/locks/** -text

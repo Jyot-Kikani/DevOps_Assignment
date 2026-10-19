@@ -1,0 +1,16 @@
+{
+  "name": "stellar-atlas",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": "24.22.0"
+  },
+  "scripts": {
+    "doctor": "python tools/run.py doctor",
+    "tools-lock": "python tools/run.py tools-lock",
+    "test": "python tools/run.py test",
+    "data-seal": "python tools/run.py data-seal",
+    "data-publish": "python tools/run.py data-publish",
+    "contracts": "python tools/run.py contracts"
+  }
+}

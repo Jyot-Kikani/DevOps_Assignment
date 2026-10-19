@@ -1,0 +1,2 @@
+-r requirements.txt
+-r ../../tools/locks/quality.txt

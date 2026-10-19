@@ -1,6 +1,6 @@
 # Acceptance status
 
-**P00 prerequisite checks passed on 19 October 2026. P01 has not started.** The user selected accountless Cloudflare Quick Tunnel, its pinned binary passed provenance/execution checks, and all 26 normal-session doctor checks passed. GitHub credential reuse, the Free plan and account-scoped $0 Actions/Packages budgets displaying Usage blocked are verified. No Tailscale setup or additional human authentication is required for the selected tunnel.
+**Batch 1 (P01–P03) is in progress. P01 is complete; P02/P03 are not yet complete.** See [P01 foundation checks](P01_FOUNDATION.md). The fresh host doctor correctly flags an unrelated Practical 8 container on port 9090; it was preserved and does not block contracts/data preparation. No database or public deployment is claimed.
 
 See [P00 prerequisite results](P00_PREREQUISITES.md) for passed checks, access-boundary findings, remaining human actions and exact changes. The detailed machine report is `.local/reports/phases/P00.json` and is intentionally excluded from Git.
 
