@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "alias": "Proxima Centauri",
+      "source_id": "5853498713190525696",
+      "status": "verified",
+      "url": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Proxima+Centauri&output.format=ASCII",
+      "checked_at_utc": "2026-10-19T09:22:56.071820+00:00",
+      "response_sha256": "a5def2281548a6dce4e8bd7bf7a20d43b6ed9184cf6854b431548250d391dfe2",
+      "matched_identifier": "Gaia DR3 5853498713190525696",
+      "basis": "SIMBAD object/name and exact Gaia DR3 identifier; ESA states EDR3/DR3 source lists identical; exact ID also present in frozen GCNS CSV"
+    },
+    {
+      "alias": "Barnard's Star",
+      "source_id": "4472832130942575872",
+      "status": "verified",
+      "url": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Barnard%27s+Star&output.format=ASCII",
+      "checked_at_utc": "2026-10-19T09:22:56.071820+00:00",
+      "response_sha256": "415cc021cdfab207cb559a4eb3078e7a4959240dcabff64281ac91f81098eb87",
+      "matched_identifier": "Gaia DR3 4472832130942575872",
+      "basis": "SIMBAD object/name and exact Gaia DR3 identifier; ESA states EDR3/DR3 source lists identical; exact ID also present in frozen GCNS CSV"
+    }
+  ],
+  "edr3_dr3_source_list": {
+    "url": "https://www.cosmos.esa.int/web/gaia/dr3",
+    "checked_date_utc": "2026-10-19",
+    "statement": "The source list for Gaia EDR3 and Gaia DR3 is identical."
+  },
+  "access_note": "Python local SIMBAD trust chain failed; Windows curl with normal verified Schannel TLS succeeded outside sandbox. No TLS validation disabled.",
+  "policy": "If future verification fails/conflicts, omit alias and retain source ID search."
+}

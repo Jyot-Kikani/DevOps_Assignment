@@ -81,3 +81,10 @@ astronomical coordinate input.
 
 Software licensing is MIT for original code; Gaia/GCNS data retains its upstream
 license and attribution. See [data notice](data/LICENSE-NOTICE.md).
+
+P03 operations: `python tools/run.py data-seal --json` verifies and seals the
+existing baseline; `python tools/run.py data-publish --json` stages the immutable
+release locally. The full-data check is
+`.local/venvs/ops/Scripts/python.exe tools/check_sealed_data.py` (Windows).
+See [sealed data and publication scope](docs/P03_DATA.md). Actual GitHub release
+publication is deferred to P15; no public URL is claimed by these local checks.

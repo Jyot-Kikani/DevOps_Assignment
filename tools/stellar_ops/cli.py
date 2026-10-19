@@ -18,6 +18,13 @@ def parser():
     action.add_argument("--json", action="store_true")
     action = commands.add_parser("test", help="Run implemented phase gates; integration gates grow with their phase")
     action.add_argument("--json", action="store_true")
+    action = commands.add_parser("data-seal", help="Validate preserved baseline and create/reuse immutable local archive")
+    action.add_argument("--json", action="store_true")
+    action = commands.add_parser("data-publish", help="Stage immutable data locally; explicit --github publication belongs to P15")
+    action.add_argument("--stage", help="Existing/new directory strictly beneath .local")
+    action.add_argument("--github", action="store_true", help="Publish exact immutable assets after public repository setup in P15")
+    action.add_argument("--repository", help="Explicit owner/stellar-atlas; required with --github")
+    action.add_argument("--json", action="store_true")
     action = commands.add_parser("tools-lock", help="Verify locks or restore frozen tools; never select moving versions")
     action.add_argument("--verify-only", action="store_true")
     action.add_argument("--json", action="store_true")
@@ -42,6 +49,12 @@ def main(argv=None):
         elif arguments.action == "test":
             from .quality import tests
             report = tests()
+        elif arguments.action == "data-seal":
+            from .data import seal
+            report = seal()
+        elif arguments.action == "data-publish":
+            from .data import publish
+            report = publish(stage=arguments.stage, github=arguments.github, repository=arguments.repository)
     except Exception as exc:
         report = {"status": "failed", "error": str(exc), "action": arguments.action}
     report["action"] = arguments.action

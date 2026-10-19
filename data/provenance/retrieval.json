@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "sources": {
+    "license": {
+      "url": "https://www.cosmos.esa.int/web/gaia-users/license",
+      "retrieved_at_utc": "2026-10-19T09:22:56.071820+00:00",
+      "http_status": 200,
+      "raw_html_sha256": "d81760c7c0d40fea6a37e1f2166be674701a5911df8553379f113979cd43588f",
+      "archive": "provenance/gaia-license-notice.txt",
+      "extraction": "Article text only; HTML markup removed. Original fetched HTML retained locally."
+    },
+    "edr3-credits": {
+      "url": "https://gea.esac.esa.int/archive/documentation/GEDR3/Miscellaneous/sec_credit_and_citation_instructions/",
+      "retrieved_at_utc": "2026-10-19T09:22:56.071820+00:00",
+      "http_status": 200,
+      "raw_html_sha256": "c227eb7886cf3abe1bc9e4060ed9c563380a522d3f48defe9b7fba2d1d38f090",
+      "archive": "provenance/edr3-credit-instructions.txt",
+      "extraction": "Article text only; HTML markup removed. Original fetched HTML retained locally."
+    }
+  }
+}

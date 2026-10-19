@@ -1,0 +1,128 @@
+Source: https://gea.esac.esa.int/archive/documentation/GEDR3/Miscellaneous/sec_credit_and_citation_instructions/
+Retrieved: 2026-10-19T09:22:56.071820+00:00
+Raw HTML SHA256: c227eb7886cf3abe1bc9e4060ed9c563380a522d3f48defe9b7fba2d1d38f090
+
+Credit and citation instructions
+If you have used Gaia EDR3 data in your research, please use the following acknowledgement:
+This work has made use of data from the European Space Agency (ESA) mission Gaia (
+https://www.cosmos.esa.int/gaia
+), processed by the Gaia Data Processing and Analysis Consortium (DPAC,
+https://www.cosmos.esa.int/web/gaia/dpac/consortium
+). Funding for the DPAC has been provided by national institutions, in particular the institutions participating in the Gaia Multilateral Agreement.
+The LaTeX version is:
+This work has made use of data from the European Space Agency (ESA) mission
+{\it Gaia} (\url{https://www.cosmos.esa.int/gaia}), processed by the {\it Gaia}
+Data Processing and Analysis Consortium (DPAC,
+\url{https://www.cosmos.esa.int/web/gaia/dpac/consortium}). Funding for the DPAC
+has been provided by national institutions, in particular the institutions
+participating in the {\it Gaia} Multilateral Agreement.
+If you have used Gaia EDR3 data in your research, please cite both the Gaia mission paper and the Gaia EDR3 release paper:
+•
+Gaia Collaboration
+et al.
+(
+2016b
+)
+: The Gaia mission (provides a description of the Gaia mission including spacecraft, instruments, survey and measurement principles, and operations);
+•
+Gaia Collaboration
+et al.
+(
+2020a
+)
+: Gaia EDR3: Summary of the contents and survey properties.
+In addition, please cite (some of) the following papers that describe the data release contents and DPAC data processing and validation in more detail, as appropriate:
+•
+Riello
+et al.
+(
+2020
+)
+: Gaia EDR3: Photometric content and validation;
+•
+Seabroke
+et al.
+(
+2020
+)
+: Gaia EDR3: Updated radial velocities from Gaia DR2;
+•
+Torra
+et al.
+(
+2020
+)
+: Gaia EDR3: Building the Gaia DR3 source list - Cross-match of Gaia observations;
+•
+Fabricius
+et al.
+(
+2021
+)
+: Gaia EDR3: Catalogue validation;
+•
+Lindegren
+et al.
+(
+2021
+)
+: Gaia EDR3: The astrometric solution;
+•
+Klioner et al. (
+2020
+)
+: Gaia EDR3: The celestial reference frame (Gaia-CRF3);
+•
+Lindegren
+et al.
+(
+2020
+)
+: Gaia EDR3: Parallax bias versus magnitude, colour, and position;
+•
+Rowell
+et al.
+(
+2020
+)
+: Gaia EDR3: Modelling and calibration of Gaia’s point and line spread functions;
+•
+Marrese
+et al.
+(
+2021
+)
+: Gaia EDR3: Cross-match with external catalogues - Algorithm and results.
+For reference, the following papers describe the performance verification that DPAC has performed on Gaia EDR3:
+•
+Gaia Collaboration
+et al.
+(
+2020d
+)
+: Gaia EDR3: The Gaia Catalogue of Nearby Stars;
+•
+Gaia Collaboration
+et al.
+(
+2020c
+)
+: Gaia EDR3: Structure and properties of the Magellanic Clouds;
+•
+Gaia Collaboration
+et al.
+(
+2021
+)
+: Gaia EDR3: The Galactic anticentre;
+•
+Gaia Collaboration
+et al.
+(
+2020b
+)
+: Gaia EDR3: Acceleration of the solar system from Gaia astrometry.
+This on-line documentation has been
+indexed at ADS
+and BibTeX entries for citing individual chapters or the full documentation package as a whole can be retrieved from there.
+The Gaia data are open and free to use, provided credit is given to ‘ESA/Gaia/DPAC’. In general, access to, and use of, ESA’s Gaia archive (hereafter called ‘the website’) constitutes acceptance of the following, general terms and conditions. Neither ESA nor any other party involved in creating, producing, or delivering the website shall be liable for any direct, incidental, consequential, indirect, or punitive damages arising out of user access to, or use of, the website. The website does not guarantee the accuracy of information provided by external sources and accepts no responsibility or liability for any consequences arising from the use of such data.

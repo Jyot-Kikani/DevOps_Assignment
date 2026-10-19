@@ -1,0 +1,85 @@
+{
+  "archive_bytes": 22743798,
+  "archive_name": "gcns-required-fields.csv.gz",
+  "archive_sha256": "284a83d490d701d7aaff1fb3825d0fc093a56a8ffe1869c5987ccf1f55ce46cf",
+  "catalog": "Gaia EDR3 Catalogue of Nearby Stars (GCNS)",
+  "catalog_schema_version": 1,
+  "changes": [
+    "Select the frozen 12 source columns; archive exact raw CSV bytes with deterministic gzip",
+    "Normalize optional missing photometry to null in validator; source CSV stays unchanged",
+    "Curated aliases verified separately; calculated distances use published Cartesian positions"
+  ],
+  "counts": {
+    "rows": 331312,
+    "valid_brightness": 330881,
+    "valid_color": 324310,
+    "valid_distance_interval": 331312,
+    "within_100pc": 300526,
+    "within_25ly": 142,
+    "within_50ly": 1151
+  },
+  "epoch": 2016.0,
+  "fixture": false,
+  "header": [
+    "source_id",
+    "ra",
+    "dec",
+    "xcoord_50",
+    "ycoord_50",
+    "zcoord_50",
+    "dist_50",
+    "dist_16",
+    "dist_84",
+    "phot_g_mean_mag",
+    "phot_bp_mean_mag",
+    "phot_rp_mean_mag"
+  ],
+  "license": "CC BY-NC 3.0 IGO",
+  "license_url": "https://www.cosmos.esa.int/web/gaia-users/license",
+  "notices": {
+    "LICENSE-NOTICE.md": {
+      "sha256": "7f38b3373d9670a8b3f0f0ca9c8920d44f2e0d6a63dcd731a9ec3618fbb637ae"
+    },
+    "aliases.csv": {
+      "sha256": "c3ce9ab66f45fb5cc17b72f6c4122c38c29deeac32ff412e2e279a374370aa7b"
+    },
+    "aliases.sources.json": {
+      "sha256": "237e94b7f71539e14cc93e729023105d327cf18d5b72011dff1bb9a6474dd99c"
+    },
+    "provenance/edr3-credit-instructions.txt": {
+      "sha256": "4a7f4b9aea137fde37ffc358a8e1fe8d8fbcc12dc54acb613dbabbf80502b922"
+    },
+    "provenance/gaia-license-notice.txt": {
+      "sha256": "67628066ccb5a702721890aee49dacc3139cc7f0c264411e1bf121160fe5bae9"
+    },
+    "provenance/retrieval.json": {
+      "sha256": "c362f753a6d3c90a777a528e1531dd2f7a195353b3ea6e5dc2a3fc5bcb28bb90"
+    }
+  },
+  "papers": [
+    "https://doi.org/10.1051/0004-6361/202039498",
+    "https://doi.org/10.1051/0004-6361/202039657",
+    "https://doi.org/10.1051/0004-6361/201629272"
+  ],
+  "publication": {
+    "resolved_url": null,
+    "state": "local_only",
+    "url_template": "https://github.com/<owner>/stellar-atlas/releases/download/data-gcns-edr3-20261013/gcns-required-fields.csv.gz"
+  },
+  "raw_bytes": 50104120,
+  "raw_sha256": "20271720bc7b5038f05df0c25d17a5e1cc51158eed74ee1b27472c7faf4ede94",
+  "release_tag": "data-gcns-edr3-20261013",
+  "schema_version": 1,
+  "sealed_validation_date_utc": "2026-10-19",
+  "snapshot_id": "gcns-edr3-20261013-20271720",
+  "source_fetched_at_precision": "date only retained; exact time is not independently known",
+  "source_fetched_date_utc": "2026-10-13",
+  "source_url": "https://dc.g-vo.org/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&MAXREC=400000&QUERY=SELECT+source_id%2Cra%2Cdec%2Cxcoord_50%2Cycoord_50%2Czcoord_50%2Cdist_50%2Cdist_16%2Cdist_84%2Cphot_g_mean_mag%2Cphot_bp_mean_mag%2Cphot_rp_mean_mag+FROM+gcns.main",
+  "source_validated_at_utc": "2026-10-13T07:09:18.479267+00:00",
+  "transform_version": "1",
+  "units": {
+    "calculation": "float64 pc/ly",
+    "coordinates": "Galactic Cartesian pc",
+    "distance_columns": "kpc"
+  }
+}

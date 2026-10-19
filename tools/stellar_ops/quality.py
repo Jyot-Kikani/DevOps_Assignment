@@ -51,5 +51,5 @@ def tests():
              [npm, "--prefix", "apps/web", "run", "lint"], [npm, "--prefix", "apps/web", "run", "build"]]
     follow = run_calls(calls, env)
     follow["commands"] = report["commands"] + follow["commands"]
-    follow["scope"] = "P02 primitives, fixtures, API contract boundaries and frontend build; database/E2E gates pending their phases"
+    follow["scope"] = "P02/P03 primitives, data fixtures, API boundaries, local publication integrity and frontend build; full-data gate is tools/check_sealed_data.py; database/E2E gates pending their phases"
     return follow

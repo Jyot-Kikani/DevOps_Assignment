@@ -1,0 +1,86 @@
+{
+  "coordinate_relative_error_max": 1.9915076192555503e-07,
+  "counts": {
+    "rows": 331312,
+    "valid_brightness": 330881,
+    "valid_color": 324310,
+    "valid_distance_interval": 331312,
+    "within_100pc": 300526,
+    "within_25ly": 142,
+    "within_50ly": 1151
+  },
+  "fixture": false,
+  "header": [
+    "source_id",
+    "ra",
+    "dec",
+    "xcoord_50",
+    "ycoord_50",
+    "zcoord_50",
+    "dist_50",
+    "dist_16",
+    "dist_84",
+    "phot_g_mean_mag",
+    "phot_bp_mean_mag",
+    "phot_rp_mean_mag"
+  ],
+  "nearest_five": [
+    {
+      "distance_ly": 4.24637698440337,
+      "distance_pc": 1.3019451020237922,
+      "position_pc": [
+        0.9026826,
+        -0.93719095,
+        -0.043569434
+      ],
+      "source_id": "5853498713190525696"
+    },
+    {
+      "distance_ly": 5.994754719255086,
+      "distance_pc": 1.8380001524204705,
+      "position_pc": [
+        1.527305,
+        0.91949123,
+        0.4473476
+      ],
+      "source_id": "4472832130942575872"
+    },
+    {
+      "distance_ly": 7.855131418238334,
+      "distance_pc": 2.4083942413241775,
+      "position_pc": [
+        -0.5877903,
+        -1.2078844,
+        1.9989699
+      ],
+      "source_id": "3864972938605115520"
+    },
+    {
+      "distance_ly": 8.304145723026796,
+      "distance_pc": 2.546062653009037,
+      "position_pc": [
+        -1.0541981,
+        -0.09537393,
+        2.3156004
+      ],
+      "source_id": "762815470562110464"
+    },
+    {
+      "distance_ly": 8.709792428888996,
+      "distance_pc": 2.6704344984172894,
+      "position_pc": [
+        -1.7914286,
+        -1.9369018,
+        -0.412814
+      ],
+      "source_id": "2947050466531873024"
+    }
+  ],
+  "optional_photometry": "Missing G/BP/RP normalized to null; no missing row rejected or replaced with zero",
+  "radius_pc_max": 119.31340592368659,
+  "radius_pc_min": 1.3019451020237922,
+  "raw_bytes": 50104120,
+  "raw_sha256": "20271720bc7b5038f05df0c25d17a5e1cc51158eed74ee1b27472c7faf4ede94",
+  "status": "passed",
+  "unique_ids": 331312
+}

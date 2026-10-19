@@ -1,0 +1,10 @@
+Source: https://www.cosmos.esa.int/web/gaia-users/license
+Retrieved: 2026-10-19T09:22:56.071820+00:00
+Raw HTML SHA256: d81760c7c0d40fea6a37e1f2166be674701a5911df8553379f113979cd43588f
+
+GAIA DATA LICENSE
+Gaia data are distributed under the
+CC BY-NC 3.0 IGO
+license. For details and guidelines concerning commercial use of the Gaia data, please see the
+Terms and Conditions
+for the use of data in the ESA space science archives.
