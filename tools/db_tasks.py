@@ -77,14 +77,20 @@ def main():
         os.environ["STELLAR_DB_TESTS"] = "1"
         cases = {"P04": "tests/integration/test_database.py", "P05": "tests/integration/test_import.py",
                  "P06": "tests/integration/test_catalog.py", "P07": "tests/integration/test_journey.py"}
-        command = [sys.executable, "-m", "pytest", cases.get(args.phase, "tests/integration"), "-q", "-rA",
+        command = [sys.executable, "-m", "pytest", cases.get(args.phase, "tests/integration"), "-q", "-ra",
                    "--basetemp=/tmp/stellar-pytest", "-o", "cache_dir=/tmp/stellar-cache",
                    "--junitxml=.local/reports/batch2-integration.xml"]
         if args.full:
             os.environ["STELLAR_FULL_DATA"] = "1"
-            if args.phase == "P05":
+            if args.phase:
                 command.append("tests/integration/test_full_data.py")
         raise SystemExit(subprocess.call(command))
+    elif args.action == "catalog-probe":
+        os.environ.update(CATALOG_SNAPSHOT_ID="gcns-edr3-20261013-20271720",APP_ENV="dev")
+        for key in tuple(os.environ):
+            if (key.endswith("_DSN") or key.endswith("_DSN_FILE")) and key != "CATALOG_READER_DSN":
+                del os.environ[key]
+        raise SystemExit(subprocess.call([sys.executable,"-m","uvicorn","stellar_catalog.app:app","--host","0.0.0.0","--port","18000","--no-access-log","--log-level","warning"]))
     else:
         from stellar_importer.pipeline import load_catalog, report
         if args.action == "catalog-import":

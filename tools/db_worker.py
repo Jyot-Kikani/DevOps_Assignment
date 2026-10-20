@@ -12,7 +12,7 @@ VENV = Path("/opt/stellar/venv")
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("action", choices=["db-bootstrap", "db-check", "catalog-import", "catalog-report"])
+    parser.add_argument("action", choices=["db-bootstrap", "db-check", "catalog-import", "catalog-report", "catalog-probe"])
     parser.add_argument("--full", action="store_true")
     parser.add_argument("--phase", choices=["P04", "P05", "P06", "P07"])
     args = parser.parse_args()

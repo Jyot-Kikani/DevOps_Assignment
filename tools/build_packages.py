@@ -2,8 +2,10 @@
 from pathlib import Path
 import argparse
 import os
+import shutil
 import subprocess
 import sys
+import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -23,7 +25,12 @@ def main():
                        ("journey", "services/journey"), ("importer", "jobs/importer")]:
         if args.only and name not in args.only:
             continue
-        subprocess.run([str(python_for("ops")), "-m", "build", "--wheel", "--no-isolation", "--outdir", str(wheels), path], cwd=ROOT, check=True, timeout=120)
+        # Fresh build trees prevent deleted source modules surviving in a reused build/lib.
+        staging = ROOT / ".local/build-sources"
+        staging.mkdir(parents=True, exist_ok=True)
+        source = Path(tempfile.mkdtemp(prefix=name + "-", dir=staging)) / "source"
+        shutil.copytree(ROOT / path, source, ignore=shutil.ignore_patterns("build", "dist", "*.egg-info", "__pycache__"))
+        subprocess.run([str(python_for("ops")), "-m", "build", "--wheel", "--no-isolation", "--outdir", str(wheels), str(source)], cwd=ROOT, check=True, timeout=120)
         wheel = wheels / f"stellar_{name}-0.1.0-py3-none-any.whl"
         roles = ("catalog", "journey", "importer", "ops") if name == "common" else (name, "ops")
         for role in roles:

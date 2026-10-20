@@ -6,7 +6,7 @@ from .bootstrap import ROOT, LOCAL
 
 
 def run(args, timeout=600):
-    result = subprocess.run(args, cwd=ROOT, capture_output=True, text=True, timeout=timeout)
+    result = subprocess.run(args, cwd=ROOT, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=timeout)
     attempts = LOCAL / "reports/db-attempts"
     attempts.mkdir(parents=True, exist_ok=True)
     (attempts / f"{time.time_ns()}.log").write_text(f"exit_code={result.returncode}\n" + result.stdout + result.stderr, encoding="utf-8")
@@ -29,8 +29,10 @@ def action(name, full=False, phase=None):
     lock = json.loads((ROOT / "tools/toolchain.lock.json").read_text())
     image = lock["images"]["python:3.13-slim-bookworm"]["ref"]
     report = LOCAL / "reports" / (name + "-worker.log")
+    source_sha = run(["git", "rev-parse", "HEAD"], timeout=30)
     args = ["docker", "run", "--rm", "--network", "stellar-atlas-db_default",
             "--label", "org.stellar-atlas.scope=maintenance",
+            "--env", "SOURCE_SHA=" + source_sha, "--env", "RELEASE_ID=local-" + source_sha[:12],
             "--mount", f"type=bind,source={ROOT},target=/workspace",
             "--mount", "type=volume,source=stellar-atlas-db-check-env,target=/opt/stellar",
             "--workdir", "/workspace", "--memory", "512m", "--cpus", "1", image,
