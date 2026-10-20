@@ -80,7 +80,7 @@ Windows account, as described in [P04 databases](docs/P04_DATABASES.md). The dat
 has no host port; `db-stop` preserves its volume. The required CI quality job also
 runs the database integration suite.
 
-Batch 2 implements P04â€“P07 only: [atomic importer](docs/P05_IMPORT.md),
+Batch 2 implements P04–P07 only: [atomic importer](docs/P05_IMPORT.md),
 [Catalog API](docs/P06_CATALOG.md) and [Journey API](docs/P07_JOURNEYS.md).
 Run `python tools/run.py db-check --json` for mandatory fixture-backed PostgreSQL
 and real service HTTP tests; add `--full` for the preserved sealed catalog and
