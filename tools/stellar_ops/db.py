@@ -1,11 +1,15 @@
 """Database-only operations; no application deployment or public listener."""
 import json
 import subprocess
+import time
 from .bootstrap import ROOT, LOCAL
 
 
 def run(args, timeout=600):
     result = subprocess.run(args, cwd=ROOT, capture_output=True, text=True, timeout=timeout)
+    attempts = LOCAL / "reports/db-attempts"
+    attempts.mkdir(parents=True, exist_ok=True)
+    (attempts / f"{time.time_ns()}.log").write_text(f"exit_code={result.returncode}\n" + result.stdout + result.stderr, encoding="utf-8")
     if result.returncode:
         # Commands/outputs contain no secret values. Workers sanitize DB exceptions.
         raise ValueError("Database command failed: " + (result.stdout + result.stderr)[-6000:])
@@ -26,6 +30,7 @@ def action(name, full=False, phase=None):
     image = lock["images"]["python:3.13-slim-bookworm"]["ref"]
     report = LOCAL / "reports" / (name + "-worker.log")
     args = ["docker", "run", "--rm", "--network", "stellar-atlas-db_default",
+            "--label", "org.stellar-atlas.scope=maintenance",
             "--mount", f"type=bind,source={ROOT},target=/workspace",
             "--mount", "type=volume,source=stellar-atlas-db-check-env,target=/opt/stellar",
             "--workdir", "/workspace", "--memory", "512m", "--cpus", "1", image,

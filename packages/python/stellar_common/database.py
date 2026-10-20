@@ -17,9 +17,10 @@ def engine_for(name, role, database):
     url = make_url(value)
     if url.drivername != "postgresql+psycopg" or url.username != role or url.database != database:
         raise ValueError(f"{name} must use its designated PostgreSQL role and database")
+    timeout = 600000 if role in ("catalog_writer", "journey_owner") else 5000
     return create_engine(url, pool_size=5, max_overflow=2, pool_timeout=3, pool_pre_ping=True,
                          hide_parameters=True, connect_args={"connect_timeout": 3,
-                         "options": "-c statement_timeout=5000 -c timezone=UTC"})
+                         "options": f"-c statement_timeout={timeout} -c lock_timeout=30000 -c timezone=UTC"})
 
 
 def migrate(package, schema, engine, revision="head"):

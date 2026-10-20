@@ -82,12 +82,14 @@ def main():
                    "--junitxml=.local/reports/batch2-integration.xml"]
         if args.full:
             os.environ["STELLAR_FULL_DATA"] = "1"
+            if args.phase == "P05":
+                command.append("tests/integration/test_full_data.py")
         raise SystemExit(subprocess.call(command))
     else:
         from stellar_importer.pipeline import load_catalog, report
         if args.action == "catalog-import":
             result = load_catalog(ROOT / "validation/gcns_required_fields.csv", ROOT / "data/snapshot.lock.json",
-                                  archive=ROOT / ".local/data/gcns-edr3-20261013-20271720/gcns-required-fields.csv.gz",
+                                  archive=ROOT / ".local/data/sealed/gcns-edr3-20261013-20271720/gcns-required-fields.csv.gz",
                                   aliases_path=ROOT / "data/aliases.csv", activate=True)
         else:
             result = report()

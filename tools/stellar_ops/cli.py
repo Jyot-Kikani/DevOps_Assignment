@@ -15,6 +15,8 @@ def parser():
                             ("db-start", "Start only PostgreSQL with no host port"),
                             ("db-stop", "Stop only PostgreSQL, preserving its volume"),
                             ("db-bootstrap", "Bootstrap isolated roles/databases and explicitly migrate"),
+                            ("catalog-import", "Verify and atomically activate the sealed full catalog"),
+                            ("catalog-report", "Report imported and active snapshots"),
                             ("db-check", "Run real PostgreSQL/HTTP integration checks")):
         action = commands.add_parser(name, help=help_text)
         action.add_argument("--json", action="store_true")
@@ -51,7 +53,7 @@ def main(argv=None):
         if arguments.action == "secrets-init":
             from .secrets import initialize
             report = initialize()
-        elif arguments.action.startswith("db-"):
+        elif arguments.action.startswith("db-") or arguments.action in ("catalog-import", "catalog-report"):
             from .db import action
             report = action(arguments.action, full=getattr(arguments, "full", False), phase=getattr(arguments, "phase", None))
         elif arguments.action == "doctor":
