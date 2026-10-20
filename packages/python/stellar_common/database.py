@@ -14,7 +14,10 @@ def engine_for(name, role, database):
     value = secret_value(name)
     if not value:
         raise ValueError(f"Configure {name} or {name}_FILE")
-    url = make_url(value)
+    try:
+        url = make_url(value)
+    except Exception:
+        raise ValueError(f"{name} is not a valid database URL") from None
     if url.drivername != "postgresql+psycopg" or url.username != role or url.database != database:
         raise ValueError(f"{name} must use its designated PostgreSQL role and database")
     timeout = 600000 if role in ("catalog_writer", "journey_owner") else 5000

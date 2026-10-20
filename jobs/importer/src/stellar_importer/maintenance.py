@@ -12,7 +12,7 @@ def retention():
         while True:
             with engine.begin() as c:
                 result = c.execute(text("""WITH expired AS (
-                    SELECT id FROM journey.journeys WHERE expires_at + interval '7 days' <= now()
+                    SELECT id FROM journey.journeys WHERE expires_at <= now() - interval '7 days'
                     ORDER BY expires_at,id LIMIT 1000)
                     DELETE FROM journey.journeys WHERE id IN (SELECT id FROM expired) RETURNING id"""))
                 count = len(result.all())

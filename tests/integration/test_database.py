@@ -14,11 +14,12 @@ def test_migrations_repeat_and_real_postgres():
         migrate(package, schema, engine)
         with engine.connect() as c:
             assert c.execute(text("SHOW server_version_num")).scalar().startswith("17")
-            assert c.execute(text(f"SELECT version_num FROM {schema}.alembic_version")).scalar().endswith("0002")
+            head = "catalog_0002" if schema == "catalog" else "journey_0003"
+            assert c.execute(text(f"SELECT version_num FROM {schema}.alembic_version")).scalar() == head
         with pytest.raises(Exception):
             migrate(package, schema, engine, "nonexistent_revision")
         with engine.connect() as c:
-            assert c.execute(text(f"SELECT version_num FROM {schema}.alembic_version")).scalar().endswith("0002")
+            assert c.execute(text(f"SELECT version_num FROM {schema}.alembic_version")).scalar() == head
         assert engine.pool.size() == 5 and engine.pool._max_overflow == 2
         engine.dispose()
 
@@ -77,6 +78,7 @@ def test_fresh_previous_revision_upgrade_and_failed_ddl_preserve_rows(tmp_path):
                 c.exec_driver_sql(f"INSERT INTO {schema}.upgrade_sentinel VALUES (7)")
             migrate(package, schema, engine)
             migrate(package, schema, engine)
+            head = "catalog_0002" if schema == "catalog" else "journey_0003"
             from importlib.resources import files
             import shutil
             from alembic import command
@@ -84,7 +86,7 @@ def test_fresh_previous_revision_upgrade_and_failed_ddl_preserve_rows(tmp_path):
             scripts = tmp_path / schema
             shutil.copytree(str(files(package) / "migrations"), scripts)
             (scripts / "versions/0003_bad.py").write_text(
-                "from alembic import op\nrevision='bad_0003'\ndown_revision='" + schema + "_0002'\n"
+                "from alembic import op\nrevision='bad_9999'\ndown_revision='" + head + "'\n"
                 "def upgrade():\n    op.execute('ALTER TABLE " + schema + ".upgrade_sentinel ADD COLUMN incomplete text')\n"
                 "    op.execute('SELECT missing_migration_function()')\n")
             config = Config()
@@ -96,7 +98,7 @@ def test_fresh_previous_revision_upgrade_and_failed_ddl_preserve_rows(tmp_path):
                     command.upgrade(config, "head")
             with engine.connect() as c:
                 assert c.exec_driver_sql(f"SELECT id FROM {schema}.upgrade_sentinel").scalar() == 7
-                assert c.exec_driver_sql(f"SELECT version_num FROM {schema}.alembic_version").scalar() == schema + "_0002"
+                assert c.exec_driver_sql(f"SELECT version_num FROM {schema}.alembic_version").scalar() == head
                 assert c.execute(text("SELECT count(*) FROM information_schema.columns WHERE table_schema=:s AND table_name='upgrade_sentinel' AND column_name='incomplete'"), {"s": schema}).scalar() == 0
         finally:
             engine.dispose()

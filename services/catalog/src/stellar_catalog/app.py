@@ -15,7 +15,9 @@ def connection():
     engine = getattr(app.state,"engine",None)
     if engine is None:
         raise HTTPException(503,"Service is not configured")
-    return engine.connect()
+    c = engine.connect()
+    c.info["app_env"] = app.state.settings.app_env
+    return c
 
 
 @app.get("/v1/snapshots/active",response_model=Snapshot,operation_id="active_snapshot")

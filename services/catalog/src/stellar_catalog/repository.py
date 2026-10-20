@@ -15,6 +15,8 @@ def snapshot(c, sid):
     if row is None:
         raise HTTPException(404,"Ready snapshot not found")
     p = row["provenance"]
+    if c.info.get("app_env") == "demo" and p.get("fixture"):
+        raise HTTPException(409,"Fixture snapshots are not available in demo mode")
     return {"snapshot_id":row["id"],"epoch":row["epoch"],"raw_sha256":row["raw_sha256"],"source_url":row["source_url"],
             "citation_urls":p["papers"],"license_url":p["license_url"],
             "counts":{"total":row["total_rows"],"within_100pc":row["in_scope_rows"],"within_50ly":p["counts"]["within_50ly"],

@@ -150,3 +150,17 @@ def test_catalog_errors_metrics_and_request_ids(catalog):
     finally:
         app.state.engine.dispose()
         app.state.engine = engine
+
+
+def test_demo_never_serves_retained_ci_fixtures(catalog):
+    from dataclasses import replace
+    client,sid = catalog
+    settings = app.state.settings
+    app.state.settings = replace(settings,app_env="demo")
+    try:
+        assert client.get("/health/ready").status_code==503
+        assert client.get("/v1/snapshots/active").status_code==409
+        assert client.get(f"/v1/snapshots/{sid}/stars").status_code==409
+        assert client.get(f"/v1/snapshots/{sid}/chunks/000000.bin").status_code==409
+    finally:
+        app.state.settings = settings

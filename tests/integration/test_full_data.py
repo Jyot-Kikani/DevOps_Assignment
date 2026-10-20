@@ -70,3 +70,42 @@ def test_full_catalog_http_read_timings(tmp_path):
             timings["default_manifest_bytes"] = len(json.dumps(manifest,separators=(",",":")).encode())
             timings["scope"] = "20 sequential warm requests per endpoint over worker loopback HTTP; P22 concurrency/reference-host/public-path performance remains pending"
     (ROOT / ".local/reports/p06-full-http.json").write_text(json.dumps(timings,indent=2))
+
+
+def test_full_journey_http_oracle_and_frozen_share_survives_restart(tmp_path):
+    import httpx
+    import pytest
+    from uuid import uuid4
+    from http_support import live_service
+    sid = "gcns-edr3-20261013-20271720"
+    with live_service("catalog",sid,tmp_path) as (catalog_base,catalog_log):
+        with httpx.Client(base_url=catalog_base,timeout=5,trust_env=False) as catalog:
+            nearest = catalog.get(f"/v1/snapshots/{sid}/stars?radius_ly=50&limit=2").json()["items"]
+        request = {"snapshot_id":sid,"origin_id":nearest[0]["source_id"],"destination_id":nearest[1]["source_id"],"speed_fraction_c":0.1}
+        key = str(uuid4())
+        with live_service("journey",sid,tmp_path,catalog_url=catalog_base) as (journey_base,journey_log):
+            with httpx.Client(base_url=journey_base,timeout=5,trust_env=False) as client:
+                result = client.post("/v1/estimate",json=request,headers={"X-Request-ID":"full-journey-proof"})
+                assert result.status_code==200,result.text
+                estimate = result.json()
+                assert estimate["distance_ly"]==pytest.approx(6.5867612724,abs=1e-8)
+                assert estimate["duration_julian_years"]==pytest.approx(65.867612724,abs=1e-7)
+                record = client.post("/v1/journeys",json=request,headers={"Idempotency-Key":key})
+                assert record.status_code==201,record.text
+                frozen = record.json()
+                assert client.get("/v1/journeys/"+frozen["id"]).json()==frozen
+                assert "full-journey-proof" in catalog_log.read_text() and "full-journey-proof" in journey_log.read_text()
+    # Both services stopped. A new Journey process can return the frozen result with Catalog offline.
+    with live_service("journey",sid,tmp_path,catalog_url="http://127.0.0.1:1") as (base,_):
+        with httpx.Client(base_url=base,timeout=5,trust_env=False) as client:
+            assert client.get("/health/ready").status_code==200
+            assert client.get("/v1/journeys/"+frozen["id"]).json()==frozen
+            retried = client.post("/v1/journeys",json=request,headers={"Idempotency-Key":key})
+            assert retried.status_code==200 and retried.json()==frozen
+            assert client.post("/v1/estimate",json=request).status_code==503
+            assert client.get("/health/live").status_code==200
+            assert client.get("/health/ready").status_code==200
+    report = {"status":"passed","snapshot_id":sid,"origin_id":request["origin_id"],"destination_id":request["destination_id"],
+              "distance_ly":estimate["distance_ly"],"duration_julian_years":estimate["duration_julian_years"],
+              "share_round_trip":"passed","restart_and_catalog_offline_read":"passed","request_id_propagation":"passed"}
+    (ROOT/".local/reports/p07-full-http.json").write_text(json.dumps(report,indent=2))

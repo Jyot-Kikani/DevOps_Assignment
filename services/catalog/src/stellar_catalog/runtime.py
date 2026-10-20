@@ -24,9 +24,11 @@ def readiness(app):
     try:
         with engine.connect() as c:
             version = c.execute(text("SELECT version_num FROM catalog.alembic_version")).scalar()
-            active = c.execute(text("SELECT a.snapshot_id FROM catalog.active_snapshot a JOIN catalog.snapshots s ON s.id=a.snapshot_id WHERE s.status='ready'")).scalar()
+            active_row = c.execute(text("SELECT a.snapshot_id,s.provenance FROM catalog.active_snapshot a JOIN catalog.snapshots s ON s.id=a.snapshot_id WHERE s.status='ready'")).first()
+            active = active_row[0] if active_row else None
             required = c.execute(text("SELECT provenance FROM catalog.snapshots WHERE id=:s AND status='ready'"),{"s":app.state.settings.snapshot_id}).scalar()
-            safe = required is not None and not (app.state.settings.app_env == "demo" and required.get("fixture"))
+            safe = required is not None and not (app.state.settings.app_env == "demo" and
+                    (required.get("fixture") or (active_row and active_row[1].get("fixture"))))
             return version == "catalog_0002" and active is not None and safe,active
     except SQLAlchemyError:
         app.state.query_failures.labels("catalog").inc()
