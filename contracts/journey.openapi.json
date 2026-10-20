@@ -423,7 +423,7 @@
             "type": "boolean"
           },
           "release_id": {
-            "pattern": "^r[0-9]+-a[0-9]+-[a-f0-9]{12}$",
+            "pattern": "^(r[0-9]+-a[0-9]+-[a-f0-9]{12}|local-[a-f0-9]{12})$",
             "title": "Release Id",
             "type": "string"
           },
@@ -460,7 +460,7 @@
     }
   },
   "info": {
-    "description": "Contract scaffold. Data handlers deliberately return 503 until their implementation phase.",
+    "description": "Versioned local-catalog API. Immutable snapshots and anonymous constant-speed journeys.",
     "title": "Stellar Atlas Journey",
     "version": "1.0.0"
   },

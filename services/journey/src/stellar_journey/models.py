@@ -29,7 +29,7 @@ class Health(Model):
 class Meta(Model):
     service: Literal["catalog", "journey"]
     source_sha: Annotated[str, Field(pattern=r"^[a-f0-9]{40}$")]
-    release_id: Annotated[str, Field(pattern=r"^r[0-9]+-a[0-9]+-[a-f0-9]{12}$")]
+    release_id: Annotated[str, Field(pattern=r"^(r[0-9]+-a[0-9]+-[a-f0-9]{12}|local-[a-f0-9]{12})$")]
     schema_version: Literal[1]
     readiness: bool
     active_snapshot: SnapshotID | None
@@ -67,3 +67,13 @@ class Journey(Estimate):
     id: UUID
     created_at: AwareDatetime
     expires_at: AwareDatetime
+
+
+class CatalogPosition(Model):
+    source_id: ObjectID
+    position_pc: Position
+
+
+class CatalogPositions(Model):
+    snapshot_id: SnapshotID
+    items: Annotated[list[CatalogPosition],Field(min_length=2,max_length=2)]

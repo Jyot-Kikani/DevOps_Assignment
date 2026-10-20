@@ -11,6 +11,18 @@ from .bootstrap import ROOT, LOCAL, doctor, write_json
 def parser():
     result = argparse.ArgumentParser(description="Stellar Atlas host operations")
     commands = result.add_subparsers(dest="action", required=True)
+    for name, help_text in (("secrets-init", "Generate/reuse private local credentials"),
+                            ("db-start", "Start only PostgreSQL with no host port"),
+                            ("db-stop", "Stop only PostgreSQL, preserving its volume"),
+                            ("db-bootstrap", "Bootstrap isolated roles/databases and explicitly migrate"),
+                            ("catalog-import", "Verify and atomically activate the sealed full catalog"),
+                            ("catalog-report", "Report imported and active snapshots"),
+                            ("db-check", "Run real PostgreSQL/HTTP integration checks")):
+        action = commands.add_parser(name, help=help_text)
+        action.add_argument("--json", action="store_true")
+        if name == "db-check":
+            action.add_argument("--full", action="store_true")
+            action.add_argument("--phase", choices=["P04", "P05", "P06", "P07"])
     action = commands.add_parser("doctor", help="Read-only prerequisites and GitHub/port checks")
     action.add_argument("--json", action="store_true")
     action = commands.add_parser("contracts", help="Regenerate API/schema contracts and pinned TypeScript types")
@@ -38,7 +50,13 @@ def main(argv=None):
     LOCAL.mkdir(exist_ok=True)
     (LOCAL / "reports").mkdir(exist_ok=True)
     try:
-        if arguments.action == "doctor":
+        if arguments.action == "secrets-init":
+            from .secrets import initialize
+            report = initialize()
+        elif arguments.action.startswith("db-") or arguments.action in ("catalog-import", "catalog-report"):
+            from .db import action
+            report = action(arguments.action, full=getattr(arguments, "full", False), phase=getattr(arguments, "phase", None))
+        elif arguments.action == "doctor":
             report = doctor()
         elif arguments.action == "tools-lock":
             from .locks import verify_locks, restore_tools

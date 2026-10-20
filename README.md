@@ -61,8 +61,8 @@ stubs for future deployment or security checks.
 Frontend scripts are in `apps/web/package.json`. With the pinned Node directory
 on the current process PATH, use `npm.cmd --prefix apps/web run build`, `typecheck`,
 `lint`, `test`, `test:e2e`, or `dev`. Tests without implemented cases must fail;
-frontend build/tooling checks do not establish a usable atlas. Dockerfiles,
-Compose, database persistence and running services belong to later phases.
+frontend build/tooling checks do not establish a usable atlas. P04 provides the
+database-only Compose prerequisite; complete application Compose/images remain P09.
 
 After installing the locked Python environments, build/install the first-party
 packages with `python tools/build_packages.py`. With the pinned Node directory
@@ -73,6 +73,22 @@ Run `python tools/run.py contracts --check --json` to check generated schemas/ty
 or omit `--check` to regenerate. `python tools/run.py test --json` runs the implemented
 unit/contract/frontend gates and records their exact scope; it does not claim
 database, deployment or browser E2E acceptance.
+
+P04 adds a database-only Compose profile, protected local credentials, explicit
+bootstrap/migrations and real PostgreSQL checks. Run those commands in your normal
+Windows account, as described in [P04 databases](docs/P04_DATABASES.md). The database
+has no host port; `db-stop` preserves its volume. The required CI quality job also
+runs the database integration suite.
+
+Batch 2 implements P04–P07 only: [atomic importer](docs/P05_IMPORT.md),
+[Catalog API](docs/P06_CATALOG.md) and [Journey API](docs/P07_JOURNEYS.md).
+Run `python tools/run.py db-check --json` for mandatory fixture-backed PostgreSQL
+and real service HTTP tests; add `--full` for the preserved sealed catalog and
+the real-object journey oracle. Missing databases/dependencies fail the check.
+`python tools/run.py catalog-import --json` verifies/reuses and activates the sealed
+baseline after tests; `catalog-report` reads its current state. All these database
+commands run in the normal user session. Detailed results are in
+[the Batch 2 report](docs/BATCH2_REPORT.md). P08 frontend implementation has not started.
 
 ## Data and evidence
 

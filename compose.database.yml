@@ -1,0 +1,24 @@
+name: stellar-atlas-db
+services:
+  postgres:
+    profiles: [database]
+    image: docker.io/library/postgres@sha256:3645570cccdfa447589da9f57dd740faa29b30938e861289a5574b6ca6b03826
+    command: [postgres, -c, max_connections=60, -c, timezone=UTC, -c, log_statement=none]
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_admin
+      PGDATA: /var/lib/postgresql/data/pgdata
+    secrets: [postgres_admin]
+    volumes: [postgres-data:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U postgres -d postgres]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    labels:
+      org.stellar-atlas.scope: database-only
+    # Deliberately no host ports. Maintenance joins the private Docker network.
+secrets:
+  postgres_admin:
+    file: .local/secrets/postgres_admin
+volumes:
+  postgres-data:

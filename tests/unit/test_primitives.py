@@ -75,3 +75,12 @@ def test_redacted_logs():
     value = stream.getvalue()
     assert "do-not-retain" not in value and "fixture-only" not in value and "hidden" not in value
     assert "test-1" in value
+
+
+def test_malformed_database_configuration_never_echoes_secret(monkeypatch):
+    from stellar_common.database import engine_for
+    value = "invalid-dsn-with-fixture-only-secret"
+    monkeypatch.setenv("CATALOG_READER_DSN",value)
+    with pytest.raises(ValueError) as error:
+        engine_for("CATALOG_READER_DSN","catalog_reader","stellar_catalog")
+    assert value not in str(error.value)

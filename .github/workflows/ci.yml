@@ -45,6 +45,17 @@ jobs:
           npm ci --prefix tools/codegen --ignore-scripts --engine-strict --no-audit --no-fund --cache=.local/npm-cache
       - name: Run implemented quality gates
         run: python tools/run.py test --json
+      - name: Generate private ephemeral DB credentials
+        run: python tools/run.py secrets-init --json
+      - name: Start PostgreSQL 17 without host ports
+        run: python tools/run.py db-start --json
+      - name: Bootstrap roles and explicitly migrate both databases
+        run: python tools/run.py db-bootstrap --json
+      - name: Run real PostgreSQL integration gates
+        run: python tools/run.py db-check --json
+      - name: Stop database, preserving volume
+        if: always()
+        run: python tools/run.py db-stop --json
 
   security:
     name: ci / security

@@ -17,7 +17,7 @@ BODY = {"snapshot_id": SNAPSHOT, "origin_id": "sun", "destination_id": "58534987
 
 def test_all_routes_and_internal_boundary():
     cat = TestClient(catalog)
-    for url in ["/v1/meta", "/health/ready", "/metrics", "/v1/snapshots/active", f"/v1/snapshots/{SNAPSHOT}",
+    for url in ["/v1/meta", "/health/ready", "/v1/snapshots/active", f"/v1/snapshots/{SNAPSHOT}",
                 f"/v1/snapshots/{SNAPSHOT}/stars", f"/v1/snapshots/{SNAPSHOT}/stars/sun",
                 f"/v1/snapshots/{SNAPSHOT}/ordinals/1", f"/v1/snapshots/{SNAPSHOT}/stars/sun/neighbors",
                 f"/v1/snapshots/{SNAPSHOT}/map", f"/v1/snapshots/{SNAPSHOT}/chunks/000000.bin"]:
@@ -26,6 +26,7 @@ def test_all_routes_and_internal_boundary():
         assert response.json()["error"]["request_id"] == "contract-test"
         assert response.headers["X-Request-ID"] == "contract-test"
     assert cat.get("/health/live").json() == {"status": "live"}
+    assert cat.get("/metrics").status_code == 200
     assert cat.post(f"/v1/snapshots/{SNAPSHOT}/positions", json={"ids": ["sun"]}).status_code == 503
     schema = catalog.openapi()
     assert schema["paths"][f"/v1/snapshots/{{snapshot}}/positions"]["post"]["x-internal"] is True

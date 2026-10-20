@@ -29,7 +29,7 @@ class Health(Model):
 class Meta(Model):
     service: Literal["catalog", "journey"]
     source_sha: Annotated[str, Field(pattern=r"^[a-f0-9]{40}$")]
-    release_id: Annotated[str, Field(pattern=r"^r[0-9]+-a[0-9]+-[a-f0-9]{12}$")]
+    release_id: Annotated[str, Field(pattern=r"^(r[0-9]+-a[0-9]+-[a-f0-9]{12}|local-[a-f0-9]{12})$")]
     schema_version: Literal[1]
     readiness: bool
     active_snapshot: SnapshotID | None
