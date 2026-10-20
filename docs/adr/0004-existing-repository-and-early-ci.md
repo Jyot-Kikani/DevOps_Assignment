@@ -8,13 +8,18 @@ remains the application name; namespaces, cluster and image prefixes keep that n
 Release source repository, signer identity, data-release URLs and Argo Git source
 must use `DevOps_Assignment`.
 
-The inspected repository is private. Keep that visibility while setting up early
-CI; changing visibility is a separate explicit decision. Use included free private
-Actions allowance and retain the reviewed account zero-paid-usage hard stops.
-Never purchase credits or change budgets to make a run succeed. A quota restriction
-or unavailable private-repository protection feature is an explicit limitation.
-Final public distribution in P15 must use this same repository after the visibility
-decision. No public repository, anonymous data URL or enforced rule is assumed.
+The repository was initially private during early CI. Later on 2026-10-20 the
+user explicitly made this same repository public; live API verification confirmed
+that change. Public source access is now enabled. Standard hosted runners are
+free for public repositories; retain reviewed zero-paid-usage hard stops and
+bounded artifact/cache use. Never purchase credits or change budgets for a run.
+
+Main protection was then applied and read back: PR required, branch up to date,
+`ci / quality` and `ci / security` required from the observed GitHub Actions app,
+admins included, force pushes/deletion disabled, conversations resolved. Required
+human approval count is zero; code-owner and last-push approvals are not mandatory
+for this solo project. Normal development must use branches/PRs. Data/image
+publication and full P15 enforcement demonstrations remain later gates.
 
 Bring basic GitHub CI forward to after P03/before P04: existing tests, schema/type
 drift, frontend lint/type/build and secret/exclusion checks on pushes and PRs.

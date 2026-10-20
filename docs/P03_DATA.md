@@ -49,8 +49,8 @@ asset's provenance bytes remain immutable.
 
 Repository amendment (2026-10-20): ADR 0004 supersedes the historical `stellar-atlas`
 URL template in the sealed lock. Actual publication uses only `DevOps_Assignment`;
-the frozen archive/lock/notice bytes remain unchanged. The existing repository
-currently remains private; public release availability is a separate P15 gate.
+the frozen archive/lock/notice bytes remain unchanged. The user made the existing
+repository public on 2026-10-20; data-release availability is a separate P15 gate.
 
 P03 exercised local staging and a fresh loopback HTTP download/extraction with
 both archive and raw checksum verification. Actual GitHub publication and a public

@@ -5,8 +5,9 @@ sequence and repository identity, leaving P04–P07 for another chat.
 
 Use only [Jyot-Kikani/DevOps_Assignment](https://github.com/Jyot-Kikani/DevOps_Assignment),
 existing `origin`. Its inspected state was an empty private repository with working
-personal-owner authentication, admin permission and Actions enabled. Preserve
-private visibility and account-level zero paid-usage hard stops. No new repository,
+personal-owner authentication, admin permission and Actions enabled. The user then
+made this same repository public on 2026-10-20; live verification confirmed it.
+Preserve this public choice and account-level zero paid-usage hard stops. No new repository,
 account, paid runner, cache/artifact upload or deployment is part of this checkpoint.
 
 `.github/workflows/ci.yml` runs on all main pushes and PRs to main, and manual
@@ -28,19 +29,26 @@ HTTPX deprecation warning. Actual hosted-run evidence is separate: see
 [GitHub Actions](https://github.com/Jyot-Kikani/DevOps_Assignment/actions) and ignored
 `.local/reports/early-ci-github.json`. Local results alone do not prove a hosted run.
 
-No artifacts or caches are uploaded by this initial workflow. Private runner use
-must stay within included account allowance; reviewed zero-budget hard stops
-remain unchanged. If allowance/rights block a run, report the actual failure and
-leave account visibility/budgets alone. This is not an unlimited-free-runner claim.
+No artifacts or caches are uploaded by this initial workflow. Standard hosted
+runner execution is free for this public repository. Artifact/cache limits and
+reviewed zero-budget hard stops remain unchanged. Report actual rights/quota
+failures; never change account visibility/budgets to bypass them.
 Current billing rules: [GitHub Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions).
 
 This early scope is not the complete P10/P15 security/integration suite. Database
 integration, browser E2E, dependency/SAST/image/IaC scans, detector self-tests,
-coverage gates, branch protection, data/image publication, signing, delivery and
-public app verification remain in their implementation phases. On 2026-10-20,
-the main branch-protection API returned HTTP 403: GitHub requires Pro or public
-visibility for this feature. Neither was changed. Checks run, but GitHub does not
-technically enforce merge blocking on this private Free repository.
+coverage gates, full P15 enforcement demonstrations, data/image publication,
+signing, delivery and public app verification remain in their phases. The initial
+private-repository protection request returned HTTP 403. After the user made the
+repository public, free protection was applied and read back successfully:
+
+- `main` requires PRs and both named checks from GitHub Actions, with the branch up to date.
+- Rules include admins; force pushes and branch deletion are disabled.
+- Conversations must be resolved; mandatory human approval count is zero.
+
+The API request uses `checks` only; combining it with legacy `contexts` was rejected
+with HTTP 422. Correcting the request format retained all intended rules. Saved
+readback: ignored `.local/reports/main-protection.json`.
 
 Hosted verification caught a Linux `Text file busy` error in the first main-push
 run during concurrent `venv.EnvBuilder` creation. `tools/setup_envs.py` now prepares
