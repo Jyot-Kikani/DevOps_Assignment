@@ -35,6 +35,8 @@ revokes public database/schema access, and applies matching default privileges.
 It reuses existing roles/passwords and databases. It does not rotate credentials.
 Catalog runtime has SELECT only. Journey runtime has SELECT/INSERT/DELETE only;
 triggers prevent updates and premature deletion of shared records.
+Journey's Alembic history is SELECT-only at runtime; the migration wrapper revokes
+its inherited INSERT/UPDATE/DELETE grants after every upgrade/repeat bootstrap.
 
 Each service has a packaged Alembic revision chain: v1 tables then additive
 indexes/guards. Migration upgrades hold a transaction-level advisory lock and

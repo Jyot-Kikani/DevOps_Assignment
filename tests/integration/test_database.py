@@ -42,6 +42,13 @@ def test_reader_and_cross_database_denials():
                 pass
         engine.dispose()
     reader.dispose()
+    journey = create_engine(os.environ["JOURNEY_DSN"], hide_parameters=True)
+    with journey.connect() as c:
+        assert c.execute(text("SELECT version_num FROM journey.alembic_version")).scalar() == "journey_0003"
+    with pytest.raises(DBAPIError):
+        with journey.begin() as c:
+            c.execute(text("DELETE FROM journey.alembic_version"))
+    journey.dispose()
 
 
 def test_constraints_and_transaction_rollback():

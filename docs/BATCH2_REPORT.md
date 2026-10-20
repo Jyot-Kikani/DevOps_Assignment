@@ -18,10 +18,11 @@ Development uses `codex/batch2-p04-p07`; delivery uses the normal protected PR
 workflow. Main protection was read back: both required checks, up-to-date branch,
 admins included, zero mandatory human approvals. No protections were changed.
 
-Hosted P04, P05 and P06 checkpoints both passed quality/security:
+Hosted phase checkpoints passed both quality/security checks:
 [P04](https://github.com/Jyot-Kikani/DevOps_Assignment/actions/runs/39441274603),
 [P05](https://github.com/Jyot-Kikani/DevOps_Assignment/actions/runs/39442909429),
-[P06](https://github.com/Jyot-Kikani/DevOps_Assignment/actions/runs/39445942736).
+[P06](https://github.com/Jyot-Kikani/DevOps_Assignment/actions/runs/39445942736),
+[P07](https://github.com/Jyot-Kikani/DevOps_Assignment/actions/runs/39448105511).
 The PR checks show the final reviewed head; the final handoff separately records
 its protected merge and the resulting main-push run. A historical phase pass is
 not substituted for checks on the final head.
@@ -31,6 +32,7 @@ not substituted for checks on the final head.
 - **55 unit/contract tests**, **28 PostgreSQL/HTTP integration tests**, **3 frontend tests** passed; no skipped cases in either Python result.
 - Contract/schema/TypeScript drift, frontend typecheck, lint and build passed.
 - Frozen tool/dependency/action locks, publication exclusions and full-history pinned Gitleaks passed before every phase push.
+- Final privilege review also denies Journey runtime DML on Alembic history, while retaining SELECT for readiness and DML only for application records.
 - The required `ci / quality` now runs PostgreSQL fixture and real service HTTP checks. Its 25 integration cases exclude the three explicit full-data cases, because CI never downloads or publishes the sealed catalog. Both required check names remain unchanged.
 - Native pinned Playwright Chromium 156.0.8078.4 decoded the gzip response to **196,608 bytes**, matched SHA-256 `c29e50e54d901a9002716e3637e6121b8c75f08346ddb6f3abeaf29016129b43`, and resolved ordinal 1 to string ID `5853498713190525696`. Its temporary loopback listener was stopped.
 

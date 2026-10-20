@@ -37,6 +37,10 @@ def migrate(package, schema, engine, revision="head"):
         connection.execute(text("SELECT pg_advisory_xact_lock(hashtext(:key))"), {"key": schema + "-migration"})
         config.attributes.update(connection=connection, schema=schema)
         command.upgrade(config, revision)
+        if schema == "journey":
+            # Default DML grants apply to future app tables, but migration history
+            # is owned by the migration role and must stay read-only at runtime.
+            connection.exec_driver_sql("REVOKE INSERT, UPDATE, DELETE ON journey.alembic_version FROM journey_app")
 
 
 def alembic_environment():
