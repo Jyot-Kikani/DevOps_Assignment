@@ -61,8 +61,8 @@ stubs for future deployment or security checks.
 Frontend scripts are in `apps/web/package.json`. With the pinned Node directory
 on the current process PATH, use `npm.cmd --prefix apps/web run build`, `typecheck`,
 `lint`, `test`, `test:e2e`, or `dev`. Tests without implemented cases must fail;
-frontend build/tooling checks do not establish a usable atlas. P04 provides the
-database-only Compose prerequisite; complete application Compose/images remain P09.
+frontend build/tooling checks alone do not establish application acceptance.
+Batch 3 now provides the real atlas and complete local Compose application.
 
 After installing the locked Python environments, build/install the first-party
 packages with `python tools/build_packages.py`. With the pinned Node directory
@@ -80,7 +80,7 @@ Windows account, as described in [P04 databases](docs/P04_DATABASES.md). The dat
 has no host port; `db-stop` preserves its volume. The required CI quality job also
 runs the database integration suite.
 
-Batch 2 implements P04–P07 only: [atomic importer](docs/P05_IMPORT.md),
+Batch 2 implements P04â€“P07 only: [atomic importer](docs/P05_IMPORT.md),
 [Catalog API](docs/P06_CATALOG.md) and [Journey API](docs/P07_JOURNEYS.md).
 Run `python tools/run.py db-check --json` for mandatory fixture-backed PostgreSQL
 and real service HTTP tests; add `--full` for the preserved sealed catalog and
@@ -88,7 +88,7 @@ the real-object journey oracle. Missing databases/dependencies fail the check.
 `python tools/run.py catalog-import --json` verifies/reuses and activates the sealed
 baseline after tests; `catalog-report` reads its current state. All these database
 commands run in the normal user session. Detailed results are in
-[the Batch 2 report](docs/BATCH2_REPORT.md). P08 frontend implementation has not started.
+[the Batch 2 report](docs/BATCH2_REPORT.md). Batch 3 adds the application described below.
 
 ## Data and evidence
 
@@ -120,3 +120,29 @@ quality gates and full-history secrets/publication exclusions. It does not deplo
 or publish data/images. See [CI scope and Batch 2 handoff](docs/EARLY_CI.md).
 
 Future implementation follows the [course-scope amendment](docs/adr/0005-course-assignment-scope.md): focused checks and simple DevOps demonstrations. Advanced hardening is optional; existing CI and completed backend checks stay intact.
+
+## Batch 3 local application (P08–P11)
+
+```powershell
+python tools/run.py dev-up --json
+# Open http://127.0.0.1:8080/explore
+python tools/run.py smoke --target local --json
+python tools/run.py dev-down --json
+```
+
+Explore, Journeys, Saved and About use the real Catalog/Journey APIs. The atlas
+uses measured positions; saves are local to the browser and shares last 30 days.
+The gateway is loopback-only. Stop preserves PostgreSQL data. No Kubernetes,
+public tunnel, image/data publication or paid service is started by these commands.
+
+See [Batch 3 report](docs/BATCH3_REPORT.md), [web](docs/P08_WEB.md),
+[Compose](docs/P09_COMPOSE.md), [focused checks](docs/P10_CHECKS.md) and
+[local release images](docs/P11_RELEASE_IMAGES.md). `images-build` requires a
+clean commit; `dev-up --no-build` reuses its exact prepared local image set.
+
+**Known image-security limitation:** pinned Grype scans complete but the strict
+high-severity gate still fails on base-image findings, even after the documented
+runtime update. This is not a clean-scan release. No findings are hidden and no
+image is published; review [the actual findings](docs/P10_IMAGE_REVIEW.md) before
+the separate P15 publication decision. Existing required CI checks remain intact.
+P12 is the next infrastructure phase and has not been started.

@@ -1,6 +1,6 @@
-# Stellar Atlas — Product Requirements Document
+# Stellar Atlas â€” Product Requirements Document
 
-Version: 1.2 | Decision date: 18 October 2026 | Course-scope revision: 20 October 2026 | Status: P00–P07 complete; later phases planned
+Version: 1.2 | Decision date: 18 October 2026 | Course-scope revision: 20 October 2026 | Status: P00â€“P07 complete; later phases planned
 
 Read with [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md). That document specifies the implementation sequence and operational contracts. This document specifies required user-visible behavior and acceptance criteria.
 
@@ -43,19 +43,19 @@ Priority order:
 | Evaluator | Verify the entire DevOps process | Open public link, inspect running version, witness pipeline/security/recovery demonstrations. |
 | Maintainer | Operate the application reliably | Start the environment, import data, deploy, monitor, back up, restore, and stop it using the runbook. |
 
-### J01 — Explore
+### J01 â€” Explore
 
 Open `/explore`. Load the 50-light-year neighborhood with the Sun highlighted. Rotate and zoom the view, change radius, toggle labels/reference plane/rings, select a star, and return the camera to the Sun. The selected object is reflected in the URL.
 
-### J02 — Inspect and measure
+### J02 â€” Inspect and measure
 
 Search by exact catalog ID or curated name. Select a result and inspect distance, available magnitudes, color index, uncertainty, identifiers, source, and epoch. Select another object to measure their three-dimensional separation. Unknown values display `Not available`.
 
-### J03 — Plan and share
+### J03 â€” Plan and share
 
 Open `/journeys`. Choose an origin and destination, set speed, calculate a constant-speed journey, and use play/pause/scrub controls to illustrate progress. Copy a share URL. Opening that URL reconstructs the persisted journey and its frozen calculation assumptions.
 
-### J04 — Save
+### J04 â€” Save
 
 Bookmark a star or save a journey in this browser. Open `/saved`, revisit an item, remove an individual saved item, or clear local saved items after explicit UI confirmation. No sign-in is required and the UI explains that saved lists do not sync across devices.
 
@@ -84,7 +84,7 @@ Sources: [GCNS service and schema](https://dc.g-vo.org/gcns/q/cone/info), [GCNS 
 - The default map is Sun-centered. The Sun is a special application object at the origin, not an invented Gaia row.
 - The catalog is probabilistic and incomplete. Some candidates lie beyond a median distance of 100 pc; the principal map caps its radius at 100 pc.
 - Real positions determine placement. Point sizes are enlarged for visibility; photometric color styling is approximate.
-- BP−RP increases toward redder colors. It is not presented as a temperature measurement.
+- BPâˆ’RP increases toward redder colors. It is not presented as a temperature measurement.
 - Full physical star radius, mass, temperature, spectral classification, habitability, planets, and photographic surfaces are not inferred from this snapshot.
 - A changed camera position does not simulate stellar evolution, light-cone effects, aberration, or a scientifically complete sky image.
 - The hypothetical journey assumes a straight path at constant speed in the Sun/catalog frame. It excludes acceleration, gravity, relativity, and spacecraft engineering.
@@ -103,10 +103,10 @@ All requirements in this section are required for the final submission. There is
 | FR03 | **Map layers:** independently toggle reference plane, distance rings, and labels. Preserve settings during a session and in shareable view links. |
 | FR04 | **Selection:** clicking a point selects the appropriate object; selection remains visible when labels are off. Dense views must not create thousands of HTML labels. |
 | FR05 | **Search:** debounced search for catalog IDs and curated aliases; keyboard navigation; clear empty/error states; maximum 20 results. Include only names whose source-ID mapping has been checked and recorded. |
-| FR06 | **Profile:** show identifier, verified name if present, distance in ly/pc, available G/BP/RP magnitudes, BP−RP, 16th/50th/84th distance percentiles, catalog version, reference epoch, and source links. |
+| FR06 | **Profile:** show identifier, verified name if present, distance in ly/pc, available G/BP/RP magnitudes, BPâˆ’RP, 16th/50th/84th distance percentiles, catalog version, reference epoch, and source links. |
 | FR07 | **Neighbors:** show the five closest catalog objects to the selected object within the loaded Sun-centered neighborhood, with separation explicitly labeled as distance from the selected object. Never label their Sun distances as neighbor separations. |
 | FR08 | **Distance tool:** select two different objects, draw a straight measurement line, and show their three-dimensional separation in ly and pc. Values agree with server calculations within display-rounding tolerance. |
-| FR09 | **Journey calculator:** origin/destination selectors include the Sun; speed range 0.001c–0.5c; default 0.1c. Show distance, speed in c and km/s, and travel time in Julian years. Reject identical endpoints and invalid speeds. |
+| FR09 | **Journey calculator:** origin/destination selectors include the Sun; speed range 0.001câ€“0.5c; default 0.1c. Show distance, speed in c and km/s, and travel time in Julian years. Reject identical endpoints and invalid speeds. |
 | FR10 | **Playback:** play, pause, restart, and scrub a journey. Playback duration is 20 real seconds by default, clearly labeled as illustrative. Camera controls remain available. |
 | FR11 | **Share journeys:** create an immutable public journey record with an unguessable identifier. Shared records contain only chosen objects and calculation data, not user identity. Explain their 30-day retention before creation. |
 | FR12 | **Share views:** copy URL state for selected snapshot/object, radius, layers, camera/target, and observer. Validate untrusted URL values and use safe defaults for invalid state. |
@@ -125,7 +125,7 @@ Reference files: `design/mockups/01-explore.png`, `02-star-profile.png`, `03-jou
 - `/journeys`: input/result panel and map, with playback controls beneath the map.
 - `/saved`: compact cards/rows that reopen a star or journey, with remove controls and empty state.
 - `/about`: product explanation, data provenance, attribution/license notices, simplifications, release identifiers, and public-host availability.
-- Desktop reference sizes: 1440×900 and 1920×1080. Mobile acceptance size: 390×844. No horizontal page overflow.
+- Desktop reference sizes: 1440Ã—900 and 1920Ã—1080. Mobile acceptance size: 390Ã—844. No horizontal page overflow.
 - Colors: background `#080d18`, panels `#101925`, active cyan `#58cfe5`, warm amber Sun, off-white body text. Use local/system fonts, no paid assets or external font requests.
 - Initial opening animation is at most one second; no continuous automatic camera rotation. Respect reduced motion.
 - Display rounded values while retaining float64 calculations. The real catalog's Proxima distance is approximately 4.2464 ly; do not substitute the mockup's rounded labels into the database.
@@ -147,7 +147,7 @@ Reference files: `design/mockups/01-explore.png`, `02-star-profile.png`, `03-jou
 | NF11 | Journey retention | Shared journeys expire after 30 days; after expiry return 410 for 7 days, then purge. Saved local journeys retain enough frozen calculation data to display their summary. |
 | NF12 | Honest availability | Public availability is conditional on the local host, Docker, Kubernetes, tunnel, and internet. No 24/7 or high-availability claim. |
 
-NF03–NF05 require simple usability observations; their original numeric benchmarks are advisory, not submission gates. NF06 transfer limits remain required. Record actual results and any material usability problems; never label unrun checks as passed.
+NF03â€“NF05 require simple usability observations; their original numeric benchmarks are advisory, not submission gates. NF06 transfer limits remain required. Record actual results and any material usability problems; never label unrun checks as passed.
 
 ## 8. DevOps acceptance requirements
 
@@ -170,7 +170,7 @@ Use CI fixtures and the local demo cluster. Disposable clusters in CI, a custom 
 
 ## 10. Definition of complete
 
-The release is complete when FR01–FR17, NF01–NF12 and DV01–DV08 have course-sized acceptance evidence under ADR 0005. Focused automated checks and recorded manual demonstrations are both valid; reuse unchanged earlier evidence. The runbook must cover setup, routine startup/shutdown, public access, release, rollback, import, backup, restore, common failures, and guarded teardown. The repository must contain a final architecture diagram, dependency/data attribution, actual measurements, a course-topic evidence matrix, and an assessment script.
+The release is complete when FR01â€“FR17, NF01â€“NF12 and DV01â€“DV08 have course-sized acceptance evidence under ADR 0005. Focused automated checks and recorded manual demonstrations are both valid; reuse unchanged earlier evidence. The runbook must cover setup, routine startup/shutdown, public access, release, rollback, import, backup, restore, common failures, and guarded teardown. The repository must contain a final architecture diagram, dependency/data attribution, actual measurements, a course-topic evidence matrix, and an assessment script.
 
 Any unmet required behavior is recorded as failed or blocked with its concrete cause. Unselected optional checks are recorded as optional, not failed. A polished mockup, passing build, or planned demonstration is not completion evidence.
 

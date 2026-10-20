@@ -33,3 +33,17 @@ ADR 0005 requires a real scan, review and relevant fixes; it does not prescribe
 zero scanner findings. The newly introduced strict local threshold is a separate
 implementation choice, not an existing required CI check. Its failed result must
 remain visible. No unsafe image, data release or public app is published.
+
+Final clean-source scan at `96a6c03e5b357d6eb4947d5c4021e6bb46ee62de`:
+
+| Updated image | High | Critical | Scan exit |
+|---|---:|---:|---:|
+| web | 131 | 27 | 2 |
+| catalog | 73 | 2 | 2 |
+| journey | 73 | 2 | 2 |
+| importer | 73 | 2 | 2 |
+
+Actual package/non-root/health/source/data checks and the local browser/persistence
+flows pass on these images. The strict vulnerability gate still fails. Detailed
+per-image reports retain their immutable ID in `.local/reports/image-scans/`.
+No zero-findings release-readiness claim is made.

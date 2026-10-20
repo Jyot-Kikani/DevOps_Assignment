@@ -38,3 +38,9 @@ invented. These are local preparations for P15. Publication and public app
 access remain later phases. Known base-image scan findings must not be described
 as a passing high-threshold scan or silently carried into a publication decision.
 Kubernetes starts in P12 and is not created here.
+
+Actual preparation: clean commit `96a6c03e5b357d6eb4947d5c4021e6bb46ee62de`
+built once; schema, packages/modules, all image/source/digest/user identities,
+running health, local API/browser smoke and restart persistence passed. The
+Grype threshold failed with the counts recorded in BATCH3_REPORT.md. Local image
+preparation is complete; clean-scan publication readiness remains unresolved.
