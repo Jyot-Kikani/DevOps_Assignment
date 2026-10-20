@@ -1884,6 +1884,18 @@
       "ref": "docker.io/library/node@sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5",
       "digest": "sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5",
       "metadata_url": "https://registry-1.docker.io/v2/library/node/manifests/24.22.0-bookworm-slim"
+    },
+    "python:3.13-slim-trixie": {
+      "source_tag": "python:3.13-slim-trixie",
+      "ref": "docker.io/library/python@sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f",
+      "digest": "sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f",
+      "metadata_url": "https://registry-1.docker.io/v2/library/python/manifests/3.13-slim-trixie"
+    },
+    "ghcr.io/nginx/nginx-unprivileged:stable-trixie": {
+      "source_tag": "ghcr.io/nginx/nginx-unprivileged:stable-trixie",
+      "ref": "ghcr.io/nginx/nginx-unprivileged@sha256:ec0f7ecb1fbd84959ac114e65fb36074ffc97d4d51db0f18ee925162d889dcef",
+      "digest": "sha256:ec0f7ecb1fbd84959ac114e65fb36074ffc97d4d51db0f18ee925162d889dcef",
+      "metadata_url": "https://ghcr.io/v2/nginx/nginx-unprivileged/manifests/stable-trixie"
     }
   },
   "actions": {
@@ -2287,8 +2299,8 @@
       "sha256": "189892b011ab72c28541eb32bcfa8aaffdee6b8a03ce9cf242913c94fea0505a"
     },
     "tools/locks/image-build.txt": {
-      "sha256": "41fdf034a80eb8f3f1a87b8da3ff0a61286895c9ecea8a286da5f78a725119ec",
-      "bytes": 1006
+      "sha256": "3ae72ff4a32c9748c97ca6599f9ac48bfb3d704a0e8f3366263ad6e8721fa15b",
+      "bytes": 1005
     }
   },
   "retired_downloads": {

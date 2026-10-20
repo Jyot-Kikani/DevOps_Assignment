@@ -64,5 +64,5 @@ def tests():
              [npm, "--prefix", "apps/web", "run", "lint"], [npm, "--prefix", "apps/web", "run", "build"]]
     follow = run_calls(calls, env)
     follow["commands"] = report["commands"] + follow["commands"]
-    follow["scope"] = "Unit/contract/data-fixture and frontend toolchain gates. Required P04-P07 PostgreSQL/HTTP checks run separately with db-check inside ci / quality; --full adds the sealed catalog. Frontend feature/E2E acceptance remains pending P08/P10."
+    follow["scope"] = "Unit/contract/data-fixture and frontend unit/type/lint/build gates. Required PostgreSQL/HTTP checks run separately with db-check and two real-API browser flows with check_web_ci.py inside ci / quality. --full adds the sealed catalog; ordinary CI never downloads it."
     return follow

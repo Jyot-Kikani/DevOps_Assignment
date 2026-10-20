@@ -3,7 +3,7 @@ import { Atlas } from './Atlas';
 import type { CameraState } from './Atlas';
 import { Search } from './Search';
 import { catalog, label, number, post, request } from './lib/api';
-import type { Estimate, JourneyInput, Neighbors, SharedJourney, Snapshot, Star } from './lib/api';
+import type { Estimate, JourneyInput, Manifest, Neighbors, SharedJourney, Snapshot, Star } from './lib/api';
 import { addSaved, EMPTY, journeyKey, objectId, RADII, readSaved, readView, viewUrl } from './lib/state';
 import type { Saved, View } from './lib/state';
 
@@ -46,6 +46,7 @@ export function App() {
     <span className="edition">OUR STELLAR NEIGHBORHOOD</span></header>
     {notice && <div className="notice" role="status">{notice}<button aria-label="Dismiss notification" onClick={() => setNotice('')}>×</button></div>}
     <main id="content">{page === 'saved' ? <SavedPage saved={saved} store={store} /> : page === 'about' ? <About snapshot={snapshot} /> :
+      page === 'journeys' && (params.has('id') || params.has('local')) ? <Journeys snapshot={snapshot} view={view} save={save} copy={copy} saved={saved} /> :
       error ? <div className="empty" role="alert"><h1>Catalog unavailable</h1><p>{error}</p><button onClick={() => setAttempt(a => a + 1)}>Retry catalog</button></div> : !snapshot ? <p className="empty" role="status">Connecting to the catalog…</p> :
         page === 'journeys' ? <Journeys snapshot={snapshot} view={view} save={save} copy={copy} saved={saved} /> :
           <Explore snapshot={snapshot} view={view} setView={setView} save={save} copy={copy} />}</main>
@@ -65,6 +66,12 @@ function Explore({ snapshot, view, setView, save, copy }: { snapshot: Snapshot; 
   const [attempt, setAttempt] = useState(0);
   const cameraRef = useRef<CameraState | undefined>(undefined);
   useEffect(() => { history.replaceState(null, '', viewUrl(view, cameraRef.current)); }, [view]);
+  useEffect(() => {
+    const abort = new AbortController();
+    request<Manifest>(`${catalog(snapshot.snapshot_id)}/map?radius_ly=${view.radius}`, { signal: abort.signal })
+      .then(m => setCount(m.total_count)).catch(() => {});
+    return () => abort.abort();
+  }, [snapshot.snapshot_id, view.radius]);
   useEffect(() => {
     const abort = new AbortController(); setSelected(undefined); setError('');
     request<Star>(`${catalog(snapshot.snapshot_id)}/stars/${view.selected}`, { signal: abort.signal }).then(setSelected).catch(e => { if (!abort.signal.aborted) setError(message(e)); });
@@ -127,7 +134,8 @@ function Explore({ snapshot, view, setView, save, copy }: { snapshot: Snapshot; 
     </aside><button className="mobile-switch" onClick={() => setMobileMap(v => !v)}>{mobileMap ? 'Show list and details' : 'Show 3D map'}</button></div>;
 }
 
-function Journeys({ snapshot, view, save, copy, saved }: { snapshot: Snapshot; view: View; save: (item: Estimate) => void; copy: (url: string) => void; saved: Saved }) {
+function Journeys({ snapshot, view, save, copy, saved }: { snapshot?: Snapshot; view: View; save: (item: Estimate) => void; copy: (url: string) => void; saved: Saved }) {
+  const snapshotKey = snapshot?.snapshot_id ?? view.snapshot ?? '';
   const [origin, setOrigin] = useState(objectId(params.get('origin')));
   const [destination, setDestination] = useState(objectId(params.get('destination')));
   const [speed, setSpeed] = useState(.1);
@@ -168,7 +176,7 @@ function Journeys({ snapshot, view, save, copy, saved }: { snapshot: Snapshot; v
   }, [playing]);
   useEffect(() => { if (progress >= 1) setPlaying(false); }, [progress]);
   function invalidate() { setResult(undefined); setError(''); setPlaying(false); setProgress(0); setShareUrl(''); }
-  const body = (): JourneyInput => ({ snapshot_id: snapshot.snapshot_id, origin_id: origin, destination_id: destination, speed_fraction_c: speed });
+  const body = (): JourneyInput => ({ snapshot_id: snapshotKey, origin_id: origin, destination_id: destination, speed_fraction_c: speed });
   async function calculate() {
     setBusy(true); setError(''); setPlaying(false); setProgress(0);
     try { setResult(await request<Estimate>('/api/journey/v1/estimate', post(body()))); }
@@ -186,12 +194,12 @@ function Journeys({ snapshot, view, save, copy, saved }: { snapshot: Snapshot; v
       const url = new URL(`/journeys?snapshot=${j.snapshot_id}&id=${j.id}`, location.origin).href; setShareUrl(url); copy(url);
     } catch (e) { setError(message(e)); } finally { setBusy(false); }
   }
-  const actualSnapshot = result?.snapshot_id ?? snapshot.snapshot_id;
+  const actualSnapshot = result?.snapshot_id ?? snapshotKey;
   return <div className="journey-workspace"><aside className="panel planner"><p className="eyebrow">CONSTANT-SPEED SCENARIO</p><h1>Plan an interstellar journey</h1>
     <p>Straight lines. Extraordinary distances.</p>
     {frozen ? <><p>Frozen journey · {origin} → {destination}</p><a href={`/journeys?snapshot=${actualSnapshot}&origin=${origin}&destination=${destination}`}>Start a new calculation</a></> : <>
-      <details open><summary>Origin: {origin === 'sun' ? 'Sun' : origin}</summary><Search title="Choose origin" snapshot={snapshot.snapshot_id} includeSun onSelect={s => { setOrigin(s.source_id); invalidate(); }} /></details>
-      <details><summary>Destination: {destination === 'sun' ? 'Sun' : destination}</summary><Search title="Choose destination" snapshot={snapshot.snapshot_id} includeSun onSelect={s => { setDestination(s.source_id); invalidate(); }} /></details>
+      <details open><summary>Origin: {origin === 'sun' ? 'Sun' : origin}</summary><Search title="Choose origin" snapshot={snapshotKey} includeSun onSelect={s => { setOrigin(s.source_id); invalidate(); }} /></details>
+      <details><summary>Destination: {destination === 'sun' ? 'Sun' : destination}</summary><Search title="Choose destination" snapshot={snapshotKey} includeSun onSelect={s => { setDestination(s.source_id); invalidate(); }} /></details>
       <label>Speed (fraction of c)<input type="number" min={.001} max={.5} step={.001} value={speed} onChange={e => { setSpeed(e.target.valueAsNumber); invalidate(); }} /></label>
       <input aria-label="Cruise speed" type="range" min={.001} max={.5} step={.001} value={Number.isFinite(speed) ? speed : .1} onChange={e => { setSpeed(Number(e.target.value)); invalidate(); }} />
       <small>0.001c to 0.5c · default 0.1c</small><button className="primary" disabled={busy || origin === destination || !Number.isFinite(speed) || speed < .001 || speed > .5} onClick={calculate}>Calculate journey</button>

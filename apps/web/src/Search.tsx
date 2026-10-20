@@ -12,7 +12,7 @@ export function Search({ snapshot, radius, onSelect, title = 'Search stars', inc
   const resultRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const controller = new AbortController();
-    setStatus('Loading stars…');
+    setStatus('Loading stars…'); setItems([]);
     const timer = setTimeout(async () => {
       try {
         const params = new URLSearchParams({ q: query, limit: '20' });

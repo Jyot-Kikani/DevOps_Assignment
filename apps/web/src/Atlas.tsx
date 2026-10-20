@@ -26,6 +26,7 @@ export function Atlas(props: Props) {
     let disposed = false;
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
     renderer.domElement.setAttribute('aria-label', 'Interactive 3D star atlas. Drag to orbit, scroll to zoom. Use the list to select with a keyboard.');
+    renderer.domElement.tabIndex = 0;
     element.appendChild(renderer.domElement);
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(50, 1, .001, 6000);
@@ -34,6 +35,7 @@ export function Atlas(props: Props) {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.target.fromArray(props.view.target ?? [0, 0, 0]);
     controls.minDistance = .05; controls.maxDistance = 1000; controls.enableDamping = false;
+    controls.listenToKeyEvents(renderer.domElement);
     if (camera.position.distanceTo(controls.target) < .001) camera.position.z += 1;
     const geometry = new THREE.BufferGeometry();
     const material = new THREE.PointsMaterial({ size: 3, sizeAttenuation: false, vertexColors: true });
@@ -151,7 +153,7 @@ export function Atlas(props: Props) {
     };
   }, [props.snapshot, props.view.radius, attempt]);
   return <div className="atlas-shell"><div className="atlas" ref={host} />
-    <div className="map-caption">Galactic X → right · Z → up · Y → depth<br />Reference rings in light-years · enlarged points · J2016.0</div>
+    <div className="map-caption">Axes: Galactic X (red), Z (green), −Y (blue)<br />Rings: {[10, 25, 50, 100, 200, 326.16].filter(r => r <= props.view.radius).join(' / ')} ly · enlarged points · J2016.0</div>
     {status && <div className="map-status" role="status">{status}<button onClick={() => setAttempt(a => a + 1)}>Retry map</button></div>}
   </div>;
 }

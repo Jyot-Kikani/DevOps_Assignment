@@ -16,6 +16,7 @@ try {
   await page.getByRole('searchbox').fill('Proxima');
   await page.locator('.star-list button').first().click();
   await page.waitForFunction(() => document.querySelector('.inspector h2')?.textContent === 'Proxima Centauri');
+  await page.locator('.neighbor').first().waitFor();
   await page.screenshot({ path: fileURLToPath(new URL('explore-desktop.png', out)), fullPage: true });
   await page.getByRole('button', { name: 'Save star', exact: true }).click();
   await page.getByRole('link', { name: 'Saved', exact: true }).click();
@@ -32,6 +33,7 @@ try {
   for (const route of ['/explore', '/journeys?destination=5853498713190525696', '/saved', '/about']) {
     await page.goto(base + route);
     await page.locator('h1').waitFor();
+    if (route === '/explore') await page.locator('.star-list button').first().waitFor();
     if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)) throw new Error('Mobile overflow: ' + route);
     const file = route.split('?')[0].slice(1);
     await page.screenshot({ path: fileURLToPath(new URL(`${file}-mobile.png`, out)), fullPage: true });

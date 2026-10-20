@@ -4,8 +4,8 @@ import type { Position } from './map-format';
 export const RADII = [25, 50, 100, 200, 326.16];
 export const PC_LY = 3.261563777;
 export const radiusPc = (radius: number) => radius === 326.16 ? 100 : radius / PC_LY;
-export const objectId = (id: string | null): string => id && /^(sun|[0-9]{1,20})$/.test(id) ? id : 'sun';
-export const snapshotId = (id: string | null) => id && /^[a-z0-9][a-z0-9-]{0,95}$/.test(id) ? id : null;
+export const objectId = (id: string | null): string => typeof id === 'string' && /^(sun|[0-9]{1,20})$/.test(id) ? id : 'sun';
+export const snapshotId = (id: string | null) => typeof id === 'string' && /^[a-z0-9][a-z0-9-]{0,95}$/.test(id) ? id : null;
 const vector = (text: string | null): Position | undefined => {
   if (!text) return;
   const values = text.split(',').map(Number);

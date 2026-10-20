@@ -6,7 +6,7 @@ COPY apps/web/ ./
 ARG SOURCE_SHA
 RUN npm run build && node -e 'const fs=require("fs"); const sha=process.argv[1]; if(!/^[a-f0-9]{40}$/.test(sha)) throw Error("SOURCE_SHA required"); fs.writeFileSync("dist/version.json",JSON.stringify({source_sha:sha}));' "$SOURCE_SHA"
 
-FROM docker.io/nginxinc/nginx-unprivileged@sha256:cd33960e98e93d4d63385790ff7f8f5bf2ca95184c581b7f42ae8aea1139fbfc
+FROM ghcr.io/nginx/nginx-unprivileged@sha256:ec0f7ecb1fbd84959ac114e65fb36074ffc97d4d51db0f18ee925162d889dcef
 ARG SOURCE_SHA
 LABEL org.opencontainers.image.source="https://github.com/Jyot-Kikani/DevOps_Assignment" org.opencontainers.image.revision=$SOURCE_SHA
 COPY --from=build /build/dist /usr/share/nginx/html

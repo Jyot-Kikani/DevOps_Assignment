@@ -1,4 +1,4 @@
-FROM docker.io/library/python@sha256:a1165e272e578941b84abc79e4ab38a0305cd12803a5c4247979ac7655f4d641 AS build
+FROM docker.io/library/python@sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f AS build
 WORKDIR /build
 COPY tools/locks/image-build.txt /build/build.txt
 RUN pip install --no-cache-dir --require-hashes -r build.txt
@@ -8,7 +8,7 @@ COPY packages/python /build/common
 COPY services/catalog /build/catalog
 RUN python -m build --wheel --no-isolation --outdir /wheels common && python -m build --wheel --no-isolation --outdir /wheels catalog && pip install --no-deps --no-cache-dir --prefix=/install /wheels/*.whl
 
-FROM docker.io/library/python@sha256:a1165e272e578941b84abc79e4ab38a0305cd12803a5c4247979ac7655f4d641
+FROM docker.io/library/python@sha256:70729b46c69b4f1e97c4822c1af3df53a1476cf5ddc6c087c0c10bc3a5678c2f
 ARG SOURCE_SHA
 LABEL org.opencontainers.image.source="https://github.com/Jyot-Kikani/DevOps_Assignment" org.opencontainers.image.revision=$SOURCE_SHA
 ENV SOURCE_SHA=$SOURCE_SHA PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1

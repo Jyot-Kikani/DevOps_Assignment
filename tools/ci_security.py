@@ -1,6 +1,7 @@
 """Early CI: publication exclusions, action pins and full-history Gitleaks.
 
-This is not the complete P10/P15 security suite. No cache/artifact upload or login.
+Grype image checks are implemented separately by the security host action.
+No cache/artifact upload, publication or login is performed by this script.
 """
 import argparse
 import json
@@ -115,7 +116,7 @@ def main():
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
     (LOCAL / "reports").mkdir(parents=True, exist_ok=True)
-    report = {"status": "failed", "scope": "Early CI secrets, publication exclusions and action pins; remaining P10/P15 gates pending"}
+    report = {"status": "failed", "scope": "Secrets, publication exclusions and action pins; local security action separately runs Grype"}
     try:
         report["locks"] = verify_locks()
         report["publication_boundaries"] = publication_boundaries()

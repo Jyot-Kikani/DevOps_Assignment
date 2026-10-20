@@ -38,6 +38,8 @@ test('calculate, illustrate, save and reopen an immutable share', async ({ page,
   await page.getByRole('button', { name: 'Create 30-day share' }).click();
   const sharedLink = page.getByRole('link', { name: 'Open shared journey' });
   await expect(sharedLink).toBeVisible();
+  // Frozen summaries remain usable even when new catalog reads fail.
+  await page.route('**/api/catalog/**', route => route.abort('failed'));
   await sharedLink.click();
   await expect(page.getByText('Frozen journey', { exact: false })).toBeVisible();
   await expect(page.getByTestId('journey-result')).toContainText((star.distance_ly / .1).toLocaleString(undefined, { maximumFractionDigits: 4 }));

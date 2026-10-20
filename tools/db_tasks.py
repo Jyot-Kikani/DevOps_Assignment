@@ -88,6 +88,21 @@ def main():
     elif args.action == "web-probe":
         # Local P08 development only. Each subprocess receives only its runtime DSN.
         os.environ.update(CATALOG_SNAPSHOT_ID="gcns-edr3-20261013-20271720", APP_ENV="dev")
+        if os.environ.get('STELLAR_WEB_FIXTURE') == '1':
+            import tempfile
+            from uuid import uuid4
+            from stellar_importer.validation import validate
+            from stellar_importer.pipeline import load_catalog
+            os.environ['APP_ENV'] = 'ci'
+            with tempfile.TemporaryDirectory(prefix='stellar-web-fixture-') as scratch:
+                csv = ROOT / 'tests/fixtures/catalog/catalog.csv'
+                checked = validate(csv, fixture=True)
+                data = json.loads((ROOT / 'data/snapshot.lock.json').read_text())
+                data.update(snapshot_id='fixture-' + uuid4().hex, fixture=True, raw_sha256=checked['raw_sha256'], raw_bytes=checked['raw_bytes'], counts=checked['counts'])
+                manifest = Path(scratch) / 'manifest.json'
+                manifest.write_text(json.dumps(data))
+                load_catalog(csv, manifest, aliases_path=ROOT / 'data/aliases.csv', activate=True)
+                os.environ['CATALOG_SNAPSHOT_ID'] = json.loads(manifest.read_text())['snapshot_id']
         processes = []
         try:
             for role, port, dsn in (("catalog", "18000", "CATALOG_READER_DSN"), ("journey", "18001", "JOURNEY_DSN")):

@@ -22,6 +22,7 @@ describe('public view and local saves', () => {
     const full = { stars: [], journeys: Array.from({ length: 50 }, (_, i) => ({ ...journey, destination_id: String(i + 1) })) };
     expect(() => addSaved(full, journey)).toThrow('50 saved journeys');
     expect(validEstimate({ ...journey, speed_fraction_c: Infinity })).toBe(false);
+    expect(validEstimate({ ...journey, destination_id: 5853498713190525696 })).toBe(false);
     expect(readSaved({ getItem: () => '{"stars":[{}],"journeys":[{}]}' })).toEqual(EMPTY);
   });
 });
