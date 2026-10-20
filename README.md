@@ -74,6 +74,12 @@ or omit `--check` to regenerate. `python tools/run.py test --json` runs the impl
 unit/contract/frontend gates and records their exact scope; it does not claim
 database, deployment or browser E2E acceptance.
 
+P04 adds a database-only Compose profile, protected local credentials, explicit
+bootstrap/migrations and real PostgreSQL checks. Run those commands in your normal
+Windows account, as described in [P04 databases](docs/P04_DATABASES.md). The database
+has no host port; `db-stop` preserves its volume. The required CI quality job also
+runs the database integration suite.
+
 ## Data and evidence
 
 Preserve `validation/` and `design/mockups/`. The existing validation scripts
