@@ -21,7 +21,7 @@ are verified before installation; no moving version selection or remote caching.
 | `ci / quality` | Hashed Linux dependency installs into four isolated environments; dependency consistency; first-party wheel build/install; npm frozen installs; schema/TypeScript drift; unit and contract tests; frontend tests, typecheck, lint and build |
 | `ci / security` | Committed lock integrity; action SHA allowlist; complete Git-history raw/private-file exclusion policy; checksum/version-pinned Gitleaks full-history scan |
 
-Local pre-push validation passed 53 Python tests and 3 frontend tests, plus the
+Local validation passed 54 Python tests and 3 frontend tests, plus the
 quality/build/drift/lock/security checks. The original full catalog resealed to
 the same archive SHA-256. The existing FastAPI test client emits one nonblocking
 HTTPX deprecation warning. Actual hosted-run evidence is separate: see
@@ -37,9 +37,10 @@ Current billing rules: [GitHub Actions billing](https://docs.github.com/en/billi
 This early scope is not the complete P10/P15 security/integration suite. Database
 integration, browser E2E, dependency/SAST/image/IaC scans, detector self-tests,
 coverage gates, branch protection, data/image publication, signing, delivery and
-public app verification remain in their implementation phases. Private Free
-repository merge-rule availability must be checked separately; no enforcement is
-claimed merely because workflow checks exist.
+public app verification remain in their implementation phases. On 2026-10-20,
+the main branch-protection API returned HTTP 403: GitHub requires Pro or public
+visibility for this feature. Neither was changed. Checks run, but GitHub does not
+technically enforce merge blocking on this private Free repository.
 
 For Batch 2, read PRD/implementation plan and the P01–P03 reports plus ADR 0004.
 Create `codex/` branches, keep logical phase commits, open PRs to `main`, and wait

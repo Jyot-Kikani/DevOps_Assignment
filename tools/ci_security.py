@@ -46,8 +46,15 @@ def publication_boundaries():
         paths.add(path)
         if excluded(path) or (path.startswith("tests/fixtures/") and path.endswith((".csv", ".bin")) and int(size) > 65536):
             violations.add(path)
+    # rev-list deduplicates blobs, so identical bytes under two historical names
+    # can lose a path. Inspect changed names independently, including deleted files.
+    historical_names = subprocess.check_output(["git", "log", "--all", "--format=", "--name-only", "--no-renames"],
+                                               cwd=ROOT, text=True, timeout=30).splitlines()
     # Include newly staged/uncommitted tracked files during the local pre-push check.
-    for path in subprocess.check_output(["git", "ls-files"], cwd=ROOT, text=True, timeout=30).splitlines():
+    tracked_names = subprocess.check_output(["git", "ls-files"], cwd=ROOT, text=True, timeout=30).splitlines()
+    for path in historical_names + tracked_names:
+        if not path:
+            continue
         paths.add(path)
         if excluded(path):
             violations.add(path)
