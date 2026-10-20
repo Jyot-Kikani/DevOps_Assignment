@@ -11,8 +11,10 @@ in order and consult [acceptance status](docs/ACCEPTANCE.md) for actual progress
 Windows, Python 3.13, Git, Docker Desktop with Linux containers/WSL2, at least
 16 GiB RAM/4 logical CPUs/40 GiB free disk. Use existing hardware only. P00's
 reference host and actual checks are recorded in docs/P00_PREREQUISITES.md.
-GitHub Free and account-level zero paid-usage budgets were reviewed. The public
-repository/CI and temporary HTTPS application URL are created in later phases.
+GitHub Free and account-level zero paid-usage budgets were reviewed. The source
+repository is the existing `Jyot-Kikani/DevOps_Assignment`. Basic GitHub CI is being
+introduced before P04; public distribution and the temporary HTTPS app URL remain
+later gates. Current private visibility is preserved.
 No AWS, purchased domain, paid hosting or expiring credit is required.
 
 ## Bootstrap
@@ -42,8 +44,9 @@ account evidence; it cannot inherit another checkout's credentials or readiness.
 
 Copy `tools/operator.example.json` into ignored `.local/operator.json` and supply
 the authenticated personal owner and local paths. The repository name is
-`stellar-atlas`; do not replace an existing repository or change the original
-remote without inspection. `PUBLIC_BASE_URL` is null until the Kubernetes app's
+`DevOps_Assignment`; preserve existing contents/history and `origin`. Do not create
+a new `stellar-atlas` repository. See ADR 0004 for early CI and the separate visibility
+decision. `PUBLIC_BASE_URL` is null until the Kubernetes app's
 Quick Tunnel exists. No auth key or tunnel account is required.
 
 ## Commands and phase boundary
@@ -88,3 +91,11 @@ release locally. The full-data check is
 `.local/venvs/ops/Scripts/python.exe tools/check_sealed_data.py` (Windows).
 See [sealed data and publication scope](docs/P03_DATA.md). Actual GitHub release
 publication is deferred to P15; no public URL is claimed by these local checks.
+
+## Early GitHub CI
+
+Use only [Jyot-Kikani/DevOps_Assignment](https://github.com/Jyot-Kikani/DevOps_Assignment).
+Its existing `origin` and private visibility are preserved. The early workflow runs
+on main pushes, PRs targeting main, and manual dispatch. It checks implemented
+quality gates and full-history secrets/publication exclusions. It does not deploy
+or publish data/images. See [CI scope and Batch 2 handoff](docs/EARLY_CI.md).

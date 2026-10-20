@@ -75,6 +75,11 @@ def seal():
     notice_names = ["LICENSE-NOTICE.md", "provenance/gaia-license-notice.txt", "provenance/edr3-credit-instructions.txt",
                     "provenance/retrieval.json", "aliases.csv", "aliases.sources.json"]
     notices = {name: {"sha256": digest(ROOT / "data" / name)} for name in notice_names}
+    # Preserve the sealed historical planned destination; ADR 0004 changes actual publication,
+    # not the already frozen dataset metadata. The explicit publisher validates the new repo.
+    prior_lock = ROOT / "data/snapshot.lock.json"
+    publication = (json.loads(prior_lock.read_text())["publication"] if prior_lock.exists() else
+                   {"state": "local_only", "url_template": f"https://github.com/<owner>/DevOps_Assignment/releases/download/{RELEASE}/{ARCHIVE}", "resolved_url": None})
     lock = {"schema_version": 1, "snapshot_id": SNAPSHOT_ID, "transform_version": "1", "catalog_schema_version": 1,
             "fixture": False, "release_tag": RELEASE, "archive_name": ARCHIVE,
             "raw_sha256": EXPECTED_SHA, "raw_bytes": raw.stat().st_size,
@@ -87,7 +92,7 @@ def seal():
             "license": "CC BY-NC 3.0 IGO", "license_url": "https://www.cosmos.esa.int/web/gaia-users/license",
             "header": report["header"], "units": {"coordinates": "Galactic Cartesian pc", "distance_columns": "kpc", "calculation": "float64 pc/ly"},
             "counts": report["counts"], "notices": notices,
-            "publication": {"state": "local_only", "url_template": f"https://github.com/<owner>/stellar-atlas/releases/download/{RELEASE}/{ARCHIVE}", "resolved_url": None},
+            "publication": publication,
             "changes": ["Select the frozen 12 source columns; archive exact raw CSV bytes with deterministic gzip", "Normalize optional missing photometry to null in validator; source CSV stays unchanged", "Curated aliases verified separately; calculated distances use published Cartesian positions"]}
     # P03 output includes a committed provenance lock; immutable snapshots never auto-update it.
     immutable_bytes(ROOT / "data/snapshot.lock.json", json_bytes(lock))
@@ -133,8 +138,8 @@ def publish(stage=None, github=False, repository=None):
 
 
 def publish_github(target, assets, repository, lock):
-    if not repository or not re.fullmatch(r"[A-Za-z0-9-]+/stellar-atlas", repository):
-        raise ValueError("Explicit --repository <owner>/stellar-atlas required")
+    if not repository or not re.fullmatch(r"[A-Za-z0-9-]+/DevOps_Assignment", repository):
+        raise ValueError("Explicit --repository <owner>/DevOps_Assignment required")
     gh = find_tool("gh")
     if not gh:
         raise ValueError("Restore pinned gh first")
