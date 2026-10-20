@@ -85,6 +85,20 @@ def main():
             if args.phase:
                 command.append("tests/integration/test_full_data.py")
         raise SystemExit(subprocess.call(command))
+    elif args.action == "web-probe":
+        # Local P08 development only. Each subprocess receives only its runtime DSN.
+        os.environ.update(CATALOG_SNAPSHOT_ID="gcns-edr3-20261013-20271720", APP_ENV="dev")
+        processes = []
+        try:
+            for role, port, dsn in (("catalog", "18000", "CATALOG_READER_DSN"), ("journey", "18001", "JOURNEY_DSN")):
+                env = {k: v for k, v in os.environ.items() if not k.endswith(("_DSN", "_DSN_FILE")) or k == dsn}
+                env["CATALOG_INTERNAL_URL"] = "http://127.0.0.1:18000"
+                processes.append(subprocess.Popen([sys.executable, "-m", "uvicorn", f"stellar_{role}.app:app", "--host", "0.0.0.0", "--port", port, "--no-access-log"], env=env))
+            processes[0].wait()
+        finally:
+            for process in processes:
+                process.terminate()
+                process.wait(timeout=10)
     elif args.action == "catalog-probe":
         os.environ.update(CATALOG_SNAPSHOT_ID="gcns-edr3-20261013-20271720",APP_ENV="dev")
         for key in tuple(os.environ):

@@ -1,0 +1,60 @@
+// Supplemental course-sized visual/resilience review. Uses real APIs except one explicit 410 UI fixture.
+import { createRequire } from 'node:module';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+const require = createRequire(new URL('../apps/web/package.json', import.meta.url));
+const { chromium } = require('@playwright/test');
+const base = process.argv[2] ?? 'http://127.0.0.1:5173';
+const out = new URL('../.local/reports/web-review/', import.meta.url);
+await mkdir(out, { recursive: true });
+const browser = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+const results = { browser: browser.version(), renderer: 'software Chromium; no hardware/FPS claim', checks: [] };
+try {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, locale: 'en-US' });
+  await page.goto(base + '/explore');
+  await page.waitForFunction(() => document.querySelector('.count')?.textContent?.includes('catalog objects'));
+  await page.getByRole('searchbox').fill('Proxima');
+  await page.locator('.star-list button').first().click();
+  await page.waitForFunction(() => document.querySelector('.inspector h2')?.textContent === 'Proxima Centauri');
+  await page.screenshot({ path: fileURLToPath(new URL('explore-desktop.png', out)), fullPage: true });
+  await page.getByRole('button', { name: 'Save star', exact: true }).click();
+  await page.getByRole('link', { name: 'Saved', exact: true }).click();
+  await page.getByRole('heading', { name: 'Stars (1)', exact: true }).waitFor();
+  await page.reload();
+  await page.getByRole('heading', { name: 'Stars (1)', exact: true }).waitFor();
+  page.once('dialog', dialog => dialog.dismiss());
+  await page.getByRole('button', { name: 'Clear all saved items' }).click();
+  await page.getByRole('heading', { name: 'Stars (1)', exact: true }).waitFor();
+  await page.getByRole('button', { name: 'Remove Proxima Centauri' }).click();
+  await page.getByRole('heading', { name: 'Stars (0)', exact: true }).waitFor();
+  results.checks.push('real star save survives reload; clear cancellation preserves; individual remove works');
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const route of ['/explore', '/journeys?destination=5853498713190525696', '/saved', '/about']) {
+    await page.goto(base + route);
+    await page.locator('h1').waitFor();
+    if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)) throw new Error('Mobile overflow: ' + route);
+    const file = route.split('?')[0].slice(1);
+    await page.screenshot({ path: fileURLToPath(new URL(`${file}-mobile.png`, out)), fullPage: true });
+  }
+  results.checks.push('390x844 four routes without horizontal overflow; screenshots recorded');
+  await page.route('**/api/journey/v1/journeys/*', route => route.fulfill({ status: 410, contentType: 'application/json', body: JSON.stringify({ error: { message: 'Expired' } }) }));
+  await page.goto(base + '/journeys?id=00000000-0000-4000-8000-000000000001');
+  await page.getByRole('alert').filter({ hasText: 'expired' }).waitFor();
+  results.checks.push('explicit mocked 410 renders expired message and retry; backend expiry evidence reused from P07');
+  await page.unrouteAll();
+  await page.route('**/api/catalog/**', route => route.abort('failed'));
+  await page.goto(base + '/explore');
+  await page.getByRole('heading', { name: 'Catalog unavailable' }).waitFor();
+  results.checks.push('aborted catalog request renders unavailable and retry');
+  const fallback = await browser.newPage();
+  await fallback.addInitScript(() => { HTMLCanvasElement.prototype.getContext = () => null; });
+  await fallback.goto(base + '/explore');
+  await fallback.getByText('3D is unavailable.', { exact: false }).waitFor();
+  await fallback.getByRole('searchbox').fill('Proxima');
+  await fallback.locator('.star-list button').first().click();
+  await fallback.getByRole('heading', { name: 'Proxima Centauri', exact: true }).waitFor();
+  results.checks.push('WebGL unavailable: real search and profile remain usable');
+  results.status = 'passed';
+  await writeFile(new URL('review.json', out), JSON.stringify(results, null, 2));
+  console.log(JSON.stringify(results, null, 2));
+} finally { await browser.close(); }

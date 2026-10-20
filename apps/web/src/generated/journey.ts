@@ -160,22 +160,10 @@ export interface components {
              */
             readonly destination_id: string;
             /** Destination Position Pc */
-            readonly destination_position_pc: [
-                [
-                    number,
-                    number,
-                    number
-                ],
-                [
-                    number,
-                    number,
-                    number
-                ],
-                [
-                    number,
-                    number,
-                    number
-                ]
+            readonly destination_position_pc: readonly [
+                number,
+                number,
+                number
             ];
             /** Distance Ly */
             readonly distance_ly: number;
@@ -195,22 +183,10 @@ export interface components {
              */
             readonly origin_id: string;
             /** Origin Position Pc */
-            readonly origin_position_pc: [
-                [
-                    number,
-                    number,
-                    number
-                ],
-                [
-                    number,
-                    number,
-                    number
-                ],
-                [
-                    number,
-                    number,
-                    number
-                ]
+            readonly origin_position_pc: readonly [
+                number,
+                number,
+                number
             ];
             /**
              * Snapshot Id
@@ -271,22 +247,10 @@ export interface components {
              */
             readonly destination_id: string;
             /** Destination Position Pc */
-            readonly destination_position_pc: [
-                [
-                    number,
-                    number,
-                    number
-                ],
-                [
-                    number,
-                    number,
-                    number
-                ],
-                [
-                    number,
-                    number,
-                    number
-                ]
+            readonly destination_position_pc: readonly [
+                number,
+                number,
+                number
             ];
             /** Distance Ly */
             readonly distance_ly: number;
@@ -316,22 +280,10 @@ export interface components {
              */
             readonly origin_id: string;
             /** Origin Position Pc */
-            readonly origin_position_pc: [
-                [
-                    number,
-                    number,
-                    number
-                ],
-                [
-                    number,
-                    number,
-                    number
-                ],
-                [
-                    number,
-                    number,
-                    number
-                ]
+            readonly origin_position_pc: readonly [
+                number,
+                number,
+                number
             ];
             /**
              * Snapshot Id

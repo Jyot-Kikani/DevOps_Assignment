@@ -31,7 +31,7 @@ def contracts(check=False):
     calls = [[python_ops(), "tools/export_contracts.py"] + (["--check"] if check else [])]
     generator = str(ROOT / "tools/codegen/node_modules/openapi-typescript/bin/cli.js")
     for role in ("catalog", "journey"):
-        calls.append([node, generator, f"contracts/{role}.openapi.json", "--alphabetize", "--array-length", "--immutable",
+        calls.append([node, generator, f"contracts/{role}.openapi.json", "--alphabetize", "--immutable",
                       "-o", f"apps/web/src/generated/{role}.ts"] + (["--check"] if check else []))
     return run_calls(calls, env)
 
