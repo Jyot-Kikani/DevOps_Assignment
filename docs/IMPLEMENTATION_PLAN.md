@@ -1,18 +1,44 @@
 # Stellar Atlas — Detailed Implementation and Delivery Plan
 
-Version: 1.3 | Frozen design date: 18 October 2026 | Public repository/protected-main revision: 20 October 2026 | Companion: [PRD.md](PRD.md)
+Version: 1.4 | Course-scope revision: 20 October 2026 | Frozen design date: 18 October 2026 | Public repository/protected-main revision: 20 October 2026 | Companion: [PRD.md](PRD.md)
 
-The user selected Cloudflare Quick Tunnel as the primary public-access method on 19 October 2026. [ADR 0001](adr/0001-public-access-quick-tunnel.md) supersedes the original Tailscale-first choice. On 20 October the user selected the existing `Jyot-Kikani/DevOps_Assignment` repository exclusively and authorized basic GitHub CI before Batch 2; [ADR 0004](adr/0004-existing-repository-and-early-ci.md) records this change. The user then made this repository public. Public visibility and free main protection are live-verified. No new `stellar-atlas` repository is to be created. Other architecture and feature phase boundaries remain in force.
+The user selected Cloudflare Quick Tunnel as the primary public-access method on 19 October 2026. [ADR 0001](adr/0001-public-access-quick-tunnel.md) supersedes the original Tailscale-first choice. On 20 October the user selected the existing `Jyot-Kikani/DevOps_Assignment` repository exclusively and authorized basic GitHub CI before Batch 2; [ADR 0004](adr/0004-existing-repository-and-early-ci.md) records this change. The user then made this repository public. Public visibility and free main protection are live-verified. No new `stellar-atlas` repository is to be created. The course-scope amendment in [ADR 0005](adr/0005-course-assignment-scope.md) now controls future work and supersedes the earlier production-hardening requirements.
 
 ## 0. Execution rules, scope, and evidence boundary
 
-This is an end-to-end implementation specification, not an instruction to invent a second architecture. Implement phases P00–P23 in order. Complete each phase's exit checks before its dependants. Every product requirement has an implementation phase and final evidence check below.
+This is an end-to-end implementation specification, not an instruction to invent a second architecture. Implement phases P00–P23 in order. Complete each phase's revised course checks before its dependants. Keep the existing P00–P07 implementation and checks; do not expand them without a concrete defect or course requirement. Every product requirement has an implementation phase and final evidence check below.
 
-The plan covers account/bootstrap setup, data, contracts, services, UI, containers, local infrastructure, security, CI/CD, public access, monitoring, recovery, performance, assessment, and handoff. Nothing in scope is assigned to an unspecified later roadmap.
+The plan covers account/bootstrap setup, data, contracts, services, UI, containers, local infrastructure, security, CI/CD, public access, monitoring, recovery, performance, assessment, and handoff. Advanced items explicitly marked optional are outside the required course submission; their absence is not a failed acceptance result.
 
 Some values necessarily come from execution: authenticated GitHub owner, available host resources, generated passwords, resolved image digests, and assigned tunnel hostname. The acquisition rule for each is fixed here. They are inputs/results, not open architecture decisions. Do not invent account identities or successful measurements. If a prerequisite is unavailable, record that precise blocker and complete independent work; do not buy a replacement service or silently weaken a security gate.
 
 Writing this plan does not initialize Git, install software, create accounts, publish repositories, or deploy anything. A later implementing agent executes it only when asked to implement. Login, MFA, and account ownership remain with the human. Routine coding and reversible verification do not need new design approval. Destructive operations must target only the explicitly named project resources and follow the backup/path checks below.
+
+### 0.0 Course-sized work and checks (controlling amendment)
+
+This is a university assignment. Implement the smallest clear, reliable demonstration
+of each selected course topic. Preserve the working product, scientific data,
+zero-cost/local-host constraints and protected Git workflow. P00–P07 are complete;
+this revision changes future expectations, not their historical evidence.
+
+- Reuse existing tests. Add a normal-path check and a representative failure only
+  where new behavior warrants it; do not build exhaustive permutations or pursue
+  coverage percentages. Manual screenshots/commands are valid course evidence.
+- Run focused checks while changing code, then the existing required CI once per
+  reviewable milestone. Repeat full-data/browser checks only after a relevant
+  importer, binary, calculation or integration change, or once at final acceptance.
+- Keep ordinary validation, secret exclusion, private DB/admin access, basic role
+  isolation, healthy startup, persistent storage and a real backup/restore.
+- Signing/SBOM infrastructure, custom CNI/default-deny policy matrices, disposable
+  CI clusters, scanner exception/age frameworks, chaos/stale-release race tests,
+  automated disaster recovery and strict load/FPS SLOs are optional extensions.
+- Do not install optional tools or implement optional commands just because they
+  remain in the frozen lock, old schema, a previous report or an example tree.
+  Update a future-facing contract explicitly when simplifying it; never fill
+  obsolete signature/SBOM fields with invented values.
+- No faculty rubric/handout is present in this repository. Do not call the old
+  plan's extra gates faculty requirements. If supplied course material explicitly
+  requires an optional item, implement that item at demonstration scale.
 
 ### 0.1 Verified starting state
 
@@ -39,11 +65,11 @@ Writing this plan does not initialize Git, install software, create accounts, pu
 | Persistence | One PostgreSQL 17 instance; separate catalog/journey databases and credentials. Catalog API is read-only. No service queries the other database. |
 | Saved items | Browser localStorage only. Shared journeys are immutable, anonymous, expiring server records. No accounts. |
 | Local development | Docker Compose with frontend gateway, both APIs, PostgreSQL, and one-shot migrations/import. |
-| Kubernetes | One-node kind cluster `stellar-atlas-demo`, real Kubernetes, Calico CNI, local-path PVCs. No claim of host-level HA. |
+| Kubernetes | One-node kind cluster `stellar-atlas-demo`, default kind networking and local-path PVCs. Calico/network-policy demonstrations are optional. No host-level HA claim. |
 | Public routing | Web container is also the reverse proxy. NodePort 30080 maps to host `127.0.0.1:8080`. No additional ingress controller or cloud load balancer. |
-| IaC ownership | kind config/bootstrap owns cluster/CNI; Terraform owns namespaces, platform RBAC, policies, quotas, PVCs, PostgreSQL and monitoring; platform bootstrap owns vendored Argo installation; Argo owns application resources only. |
-| Application delivery | GitHub Actions builds/scans/signs images, writes approved digest manifests to `deploy`; local Argo CD pulls that branch. No long-lived self-hosted GitHub runner or inbound cluster credentials. |
-| Security tools | Gitleaks for secrets; Bandit for Python SAST; npm audit + pip-audit for dependencies; Grype for image vulnerabilities; Syft for SBOMs; Checkov for IaC; Cosign for keyless release-image signatures. |
+| IaC ownership | kind owns the cluster; Terraform owns the small local platform (namespaces, storage, PostgreSQL, basic monitoring); Argo owns application resources. Add policies/quotas only when needed. |
+| Application delivery | GitHub Actions builds/scans/publishes images, writes approved digest manifests to `deploy`; local Argo CD pulls that branch. No long-lived self-hosted GitHub runner or inbound cluster credentials. |
+| Security tools | Keep existing Gitleaks; use one Grype image scan for the DevSecOps demo. Additional SAST/dependency/IaC scanners and signing/SBOM tools are optional unless the course explicitly requires them. |
 | Monitoring | Plain manifests for Prometheus, Grafana, and kube-state-metrics; no Helm/operator dependency. Metrics are local-only. Structured application logs go to stdout. |
 | Public tunnel | Accountless Cloudflare Quick Tunnel to the local Kubernetes gateway. No purchased domain. Record the actual temporary URL after each start; no stable-hostname promise. |
 | Rollback | Restore previous application manifests through a new commit on `deploy`. Never rely on `kubectl rollout undo` while Argo self-heal is enabled. |
@@ -51,7 +77,7 @@ Writing this plan does not initialize Git, install software, create accounts, pu
 
 ### 0.3 Tool and version policy
 
-These releases were queried from their official release/package metadata during planning; their existence was checked, not their joint runtime compatibility. P00 freezes downloaded checksums and P12 validates the complete combination.
+These releases were queried from their official release/package metadata during planning; their existence was checked, not their joint runtime compatibility. P00 froze downloaded checksums. P12 validates the tools actually selected for the course demo; unused pins do not require installation or integration checks.
 
 | Tool/library | Baseline |
 |---|---|
@@ -60,7 +86,7 @@ These releases were queried from their official release/package metadata during 
 | kind | 0.33.0 |
 | Kubernetes/kubectl | 1.35.8 |
 | kind node | `kindest/node:v1.35.8@sha256:07b2536e30b803ed61d1677a79df6115f798ce64c80f9e22f6ed45afd09323c0` |
-| Calico | 3.33.0, manifest installation, VXLAN |
+| Calico (optional) | Existing pin: 3.33.0; not needed for default kind networking |
 | Terraform | 1.16.6; Kubernetes provider compatibility band `~> 3.2` |
 | Argo CD | 3.5.5, namespace-scoped non-HA installation plus separately installed CRDs |
 | React / React DOM | 19.3.1, matching versions |
@@ -69,7 +95,8 @@ These releases were queried from their official release/package metadata during 
 | FastAPI / SQLAlchemy / Alembic / psycopg | 0.146.0 / 2.1.5 / 1.20.0 / 3.3.6 |
 | PostgreSQL | Official 17 Bookworm image, exact digest frozen before the first build |
 | Prometheus / Grafana / kube-state-metrics | 3.15.0 / 13.2.4 / 2.20.0 |
-| Cosign / Gitleaks / Grype / Checkov | 3.1.3 / 8.30.1 / 0.120.1 / 3.3.29 |
+| Gitleaks / Grype | 8.30.1 / 0.120.1 |
+| Cosign / Checkov (optional) | Existing pins: 3.1.3 / 3.3.29; no setup required by default |
 | cloudflared | 2026.10.1, portable project-local Windows binary; exact upstream checksums and Linux counterpart frozen in the toolchain lock |
 
 P00 must create `tools/toolchain.lock.json` with exact tool versions, download URLs, SHA-256s, action commit SHAs and runtime image digests. Resolve remaining leaf packages (TypeScript, React types, HTTPX, Uvicorn, pytest, Ruff, Bandit, pip-audit, Syft and metrics client) once from official registries using the highest stable version compatible with these baselines. Save direct versions exactly and commit `package-lock.json`, hashed Python requirements, and `.terraform.lock.hcl`. This is the defined resolution algorithm, not permission to defer tool selection. Commit the resolved results before feature work.
@@ -110,13 +137,17 @@ stellar-atlas/
   .local/                         # ignored tools, secrets, state, datasets, backups, reports
 ```
 
+The tree is an illustrative inventory, not a requirement to implement optional workflows, policy files or automation.
+
 No virtualenvs, raw catalogs, generated binary chunks, database files, Terraform state, credentials, screenshots of private account information, or browser traces enter Git. Small attributed test fixtures and sanitized evidence summaries do.
 
 ### 1.2 Host command API
 
 Implement `ops.ps1` as a strict dispatcher to `python tools/run.py <action>` using argument arrays, explicit paths, checked exit codes, and bounded timeouts. `tools/run.py` imports the stdlib-only `stellar_ops` package from its own tools directory. Never use string-built shell commands or `Invoke-Expression`. Resolve repository root from the script path, not the current terminal directory. Reject unexpected Kubernetes contexts before writes. All destructive filesystem targets must resolve underneath `.local/` and pass an explicit path-containment check.
 
-| Action | Required effect |
+This inventory includes original optional extensions. Implement only the commands needed by the revised phase checks; existing commands retain their documented behavior.
+
+| Action | Effect when implemented |
 |---|---|
 | `doctor` | Read-only prerequisites, ports, versions, Docker resources, Linux containers, Git identity; JSON report; nonzero on unsatisfied requirements. |
 | `tools-lock` | Download/verify approved tools to `.local/tools`, resolve/pin dependencies/digests/actions, write committed lock artifacts. No global PATH editing. |
@@ -128,7 +159,7 @@ Implement `ops.ps1` as a strict dispatcher to `python tools/run.py <action>` usi
 | `test` | Run the required unit, integration, contract and frontend tests; reports under `.local/reports`. |
 | `security` | Run required security gates and produce normalized results; no silent skip. |
 | `images-build` | Build four application images once, with source/dataset labels and pinned bases. |
-| `cluster-create` | Create exact kind cluster and install verified Calico; wait for network and node readiness. |
+| `cluster-create` | Create the named kind cluster with default networking; wait for node readiness. |
 | `platform-plan` / `platform-apply` | Terraform initialize/validate/plan/apply using ignored local state and the explicit project context. |
 | `cluster-secrets` | Apply generated credentials outside Terraform/Argo ownership, redacting input/output. |
 | `demo-bootstrap` | Load locally built images and apply local overlay; migrate/import; complete cluster smoke tests. |
@@ -137,10 +168,10 @@ Implement `ops.ps1` as a strict dispatcher to `python tools/run.py <action>` usi
 | `public-start` / `public-stop` | Enable/disable only this project's tunnel to port 8080; record URL/status and verify HTTPS. |
 | `smoke` | Verify frontend/API source SHAs, data version, calculations, routing, public exclusions and optional public URL. |
 | `backup` / `restore` | Host-side binary-safe logical dumps / restore to an isolated test target or explicitly named demo target. |
-| `demo-start` / `demo-stop` | Idempotent routine start/verification/backup scheduling / stop scheduler+tunnel+project cluster containers, preserving data. |
-| `evidence` | Run safe demonstrations in order and build the assessment manifest; destructive/release demonstrations require explicit action flags. |
-| `cluster-rebuild` | Require verified fresh backup and explicit `--confirm-cluster stellar-atlas-demo`; delete/recreate only that cluster; regenerate secrets/roles and restore. |
-| `teardown` | Stop public access; back up; remove only named project infrastructure. Keep host backups/state unless separately requested. |
+| `demo-start` / `demo-stop` | Routine start/health check or stop project tunnel/cluster containers, preserving data. No backup scheduler required. |
+| `evidence` | Optional helper for collecting safe demonstration results. A manual evidence checklist is sufficient. |
+| `cluster-rebuild` (optional) | Require verified fresh backup and explicit `--confirm-cluster stellar-atlas-demo`; delete/recreate only that cluster; regenerate secrets/roles and restore. |
+| `teardown` (optional) | Stop public access; back up; remove only named project infrastructure. Keep host backups/state unless separately requested. |
 
 Each action supports `--json` and `--help`; operations emit start/end/result and bounded diagnostic hints, excluding secrets. Make actions resumable/idempotent where defined. Implement helpers before their first call; commands in this plan describe the final executable interface, not pre-existing scripts.
 
@@ -228,7 +259,7 @@ Sort baseline stars by `(distance_pc,numeric source_id)`, assign ordinal startin
 
 Only the last two fields may be quiet NaN for unavailable photometry; position fields must be finite. Missing display fields render neutral white and default point size. No numeric Gaia ID is packed into float32 or JavaScript Number. A selected ordinal is resolved through its API endpoint.
 
-Generate gzip deterministically (`mtime=0`), ETags and manifest checksums. Store compressed bytes in PostgreSQL so API replicas need no shared filesystem. Fetch intersecting chunks with concurrency 3, cache at most 32 MiB of decoded arrays in memory using LRU, and release Three.js buffers on unmount/eviction. A boundary chunk may contain out-of-radius objects; shader/picking filters exclude them. Draw counts and list counts must agree.
+Generate gzip deterministically (`mtime=0`), ETags and manifest checksums. Store compressed bytes in PostgreSQL so API replicas need no shared filesystem. Fetch only intersecting chunks with a small concurrency limit and release Three.js buffers on unmount. Start with straightforward bounded storage; add a Worker/LRU cache only if measured memory or responsiveness requires it. A boundary chunk may contain out-of-radius objects; shader/picking filters exclude them. Draw counts and list counts must agree.
 
 ### 2.6 Atomic importer algorithm
 
@@ -246,7 +277,7 @@ Generate gzip deterministically (`mtime=0`), ETags and manifest checksums. Store
 
 | Resource | Namespace / host port | Owner |
 |---|---|---|
-| kind cluster + Calico | `stellar-atlas-demo`, kube-system; API loopback only | bootstrap scripts + pinned vendor files |
+| kind cluster + default networking | `stellar-atlas-demo`, kube-system; API loopback only | bootstrap scripts + pinned vendor files |
 | Application resources | `stellar-atlas` | Argo; local bootstrap overlay only before Argo is enabled |
 | PostgreSQL + 10 GiB PVC | `stellar-data`, service 5432, no host port | Terraform |
 | Prometheus/Grafana/kube-state-metrics | `stellar-monitoring`, local port forwards 9090/3000 | Terraform |
@@ -254,108 +285,109 @@ Generate gzip deterministically (`mtime=0`), ETags and manifest checksums. Store
 | Public gateway | frontend NodePort 30080 → host `127.0.0.1:8080` | kind mapping + Argo application Service |
 | Terraform state/backups/secrets | `.local/terraform`, `.local/backups`, `.local/secrets` | host operations; never Git |
 
-Use one control-plane node with Linux containers, pinned node image, `disableDefaultCNI: true`, pod CIDR `192.168.0.0/16`, service CIDR `10.96.0.0/12`. Before creation, reject overlap with host/VPN/Docker ranges. If overlap exists, use the first non-overlapping pod CIDR from `[192.168.0.0/16,172.28.0.0/16,10.244.0.0/16]` and service CIDR from `[10.96.0.0/12,172.20.0.0/16,10.200.0.0/16]`, record choices and patch Calico pool consistently. Do not change an existing cluster CIDR in place.
+Use one control-plane node with Linux containers and the pinned node image.
+Use kind's default CNI; keep the API and mapped gateway on loopback. Check local
+port/CIDR conflicts if startup reveals one. Do not add a custom CNI or automatic
+multi-range network-selection framework for the baseline course demo.
 
-No ingress controller is needed: the web gateway proxies the APIs. This still satisfies public routing through Kubernetes; an Ingress object is not required by the course list.
+No ingress controller is needed: the web gateway proxies the APIs. This provides public routing through Kubernetes; a separate Ingress demonstration is outside the default scope unless supplied course material requires it.
 
-### 3.2 Kubernetes resource defaults
+### 3.2 Small local Kubernetes configuration
 
-| Workload | Replicas | CPU request/limit | Memory request/limit |
-|---|---:|---|---|
-| Web gateway | 1 | 100m / 500m | 64 / 192 MiB |
-| Catalog | 2 | 100m / 500m each | 160 / 384 MiB each |
-| Journey | 2 | 100m / 500m each | 128 / 256 MiB each |
-| PostgreSQL | 1 | 200m / 1000m | 256 / 768 MiB |
-| Migration/import/smoke Job | 1 | 100m / 1000m | 128 / 512 MiB |
-| Prometheus | 1 | 100m / 500m | 256 / 512 MiB |
-| Grafana | 1 | 100m / 300m | 128 / 256 MiB |
-| kube-state-metrics | 1 | 50m / 200m | 64 / 128 MiB |
+Use one replica each for Web, Catalog and Journey, plus one PostgreSQL instance
+with its persistent volume. Keep the planned modest per-container CPU/memory
+requests/limits and basic liveness/readiness probes. Temporarily scale an API to
+two replicas for the course demonstration, then return to one. No PDB, HA claim,
+quota-tuning exercise or custom rollout deadline is required.
 
-Cap Argo's non-HA components together at 1.5 GiB limits; disable Dex, notifications and ApplicationSet if unused, vendor that explicit patch. Set application quota to requests CPU 2 cores/memory 2 GiB, limits CPU 5 cores/memory 4 GiB, max 25 pods/10 Jobs. Raise only with a measured resource report and recorded manifest change. Include Kubernetes/CNI/Argo overhead in host measurements; these are app budget settings, not a claim that the complete cluster needs only the table total.
+Use kind's local-path storage. Pod/container restarts should retain data; cluster
+deletion can destroy it. Keep an external host dump before a destructive action.
+Routine stop preserves the cluster, volumes and local Terraform state.
 
-Web/Catalog/Journey rollout: `maxUnavailable:0`, `maxSurge:1`, progress deadline 180 s, termination grace 30 s. One-shot Jobs backoffLimit 1, activeDeadlineSeconds 300 (import 600). API liveness checks process only, readiness checks own DB and required ready snapshot. Journey readiness checks own DB; dependency failure is reported as 503 for calculations, not a liveness restart loop. startupProbe allows 120 s, then readiness every 5 s and liveness every 10 s. Use PDB minAvailable 1 for two-replica APIs; it does not protect against host failure.
+### 3.3 Basic security and private services
 
-PostgreSQL PVC uses kind's local-path provisioner on the node's Linux filesystem. Pod replacement and container stop/start preserve it. **Deleting the kind node/cluster can destroy it.** Never claim a PVC is an external backup. Use host-exported logical backups before rebuild. Terraform storage resources have prevent_destroy; regular stop must not run Terraform destroy or delete PVCs.
+Use non-root app containers, ordinary Kubernetes security contexts and resource
+limits/probes. Add writable temporary paths as needed; do not spend time forcing
+every component into a custom hardened image. Keep DB/admin/metrics ClusterIP-only
+and out of the public gateway. Block internal positions, docs and mutation/import
+routes at the gateway; use same-origin API calls and standard security headers.
+Keep a simple request/body limit, with no per-client quota framework.
 
-### 3.3 Runtime security and network policy
+Reuse P04's role-specific credentials under ignored `.local/secrets`; keep values
+out of source, images, Terraform state and reports. Generate/apply them through
+the existing helpers. Verify permissions at setup or after an access problem,
+not as a repeated elaborate audit on every feature change.
 
-Application namespace enforces Pod Security `restricted` at the pinned Kubernetes version. API/web/job pods: non-root fixed UID/GID 10001 (Nginx uses its image's documented non-root UID), readOnlyRootFilesystem, seccomp RuntimeDefault, drop ALL capabilities, allowPrivilegeEscalation false, automountServiceAccountToken false. Provide writable emptyDir only for explicitly required `/tmp`/Nginx cache. Configure PostgreSQL/Grafana volume ownership using their documented UIDs/fsGroup and restricted-compatible settings. CNI is privileged infrastructure in kube-system with a named exception; do not pretend it is an unprivileged app container.
+Calico, default-deny ingress/egress, detailed RBAC attack matrices and policy
+admission detectors are optional. If selected, prove one allowed/denied example;
+otherwise record network-policy enforcement as out of course scope, not passed.
 
-Terraform creates default-deny ingress+egress in application and data namespaces plus these allows:
+### 3.4 Git, images and simple GitOps delivery
 
-| From | To | Allowed |
-|---|---|---|
-| Host/NodePort traffic | Web | TCP 8080 container port only |
-| Web | Catalog, Journey | TCP 8000 |
-| Journey | Catalog | TCP 8000 |
-| Catalog | PostgreSQL | TCP 5432, catalog-reader credentials only |
-| Journey | PostgreSQL | TCP 5432, journey-app credentials only |
-| Migration/import/retention Jobs | Their required DB/service | Exact port/labels; separate ServiceAccounts and credentials |
-| Prometheus | Catalog/Journey | TCP 8000 metrics |
-| Smoke Job | Web/Catalog/Journey | Required HTTP ports only |
-| App/data pods needing name resolution | kube-system CoreDNS | UDP/TCP 53 |
+- Preserve protected `main`: PRs, up-to-date branch and both existing required
+  `ci / quality` and `ci / security` checks, including admins. Use `codex/` branches.
+- Keep the existing CI tests/locks/secret scan. Add only focused frontend smoke
+  coverage and ordinary image builds as those features arrive; no CI cluster.
+- Build four app images from one clean source revision, scan once, publish those
+  images to GHCR and record immutable digests plus source/data versions.
+- A trusted successful-main workflow may update application manifests on `deploy`
+  using the repository token. Keep read-only defaults, scoped write permissions,
+  no fork secrets, one release concurrency group and a simple latest-main check.
+- Argo follows `deploy`; no inbound cluster credential or self-hosted runner is
+  needed. Verify source/version and a real calculation after sync. An image push
+  alone is not a running deployment; an offline host is reported as unavailable.
+- Retain the previous deploy commit. Demonstrate rollback with a normal Git revert
+  and resync; no automated rollback state machine, fault-toggle workflow or release
+  race campaign is required. Never force-push or automatically downgrade schemas.
+- Cosign, Sigstore/OIDC, SBOM attestations, custom promotion-policy engines and
+  release artifact cleanup workflows are optional. Do not implement them by default.
 
-Runtime services have no general internet egress. Host image pulls are node traffic, not a reason to grant application pods internet access. Import reads its sealed image asset, not the internet. Argo has separate infrastructure egress for Git/DNS/Kubernetes. Monitoring read permissions are scoped to app/data namespaces and required metrics resources.
+### 3.5 Minimal DevSecOps checks
 
-Prove policy enforcement with an allowed labeled test pod and an unlabelled denied pod using bounded connect timeouts. If denial does not occur, the phase fails even if NetworkPolicy objects exist.
+Keep the passing Gitleaks/full-history publication checks. Demonstrate one image
+scan with the already selected Grype tool before publishing release images.
+Review actionable high/critical findings and fix relevant problems; never label
+an unrun/failed scan as passed. Do not publish actual secrets or deliberately
+unsafe images. Use one clearly fake local fixture to demonstrate a rejected gate.
 
-Web gateway: block `/metrics`, health internals except its own `/healthz`, OpenAPI/docs, Catalog positions batch and any admin/import path from public routing. Default-deny unknown `/api/` routes. Serve frontend SPA routes with asset exclusions. Same-origin browser requests; no wildcard CORS. CSP: self-only scripts/styles/connect, inline styles only if required and documented; frame-ancestors none; nosniff; conservative Referrer-Policy. No external analytics. HSTS only on the public HTTPS route via appropriate proxy handling.
+Basic manifest review checks non-root execution, probes/limits, private DB/admin
+surfaces and absence of embedded secrets. Plain commands and a short report are
+sufficient. No required coverage percentages, scanner exception-expiry parser,
+scanner DB-age framework, duplicate scanner stack or self-test for every tool.
+Optional SAST/dependency/IaC scans become required only if supplied course material
+asks for them. Existing required GitHub checks are never disabled to simplify work.
 
-Public request limits are deliberately global because tunnel-provided IP headers are not trusted: gateway general API 10 requests/s, burst 20; Journey estimate 120/min; Journey create 30/min, burst 5; max body 4 KiB. Nginx's single replica gives one effective bucket. Return JSON 429 with Retry-After. Do not add extra gateway replicas without moving limits to a shared mechanism.
+### 3.6 Minimal Argo setup
 
-Secrets are generated locally using a cryptographic RNG, stored under ignored `.local/secrets/` with access restricted to the current Windows account, and applied using stdin to `kubectl`, never command-line password arguments. Separate admin, catalog writer/reader, journey owner/app, and Grafana secrets. Terraform does not manage secret values; Argo does not manage generated Secret objects. Do not store database values in Terraform variables/state, image layers, manifests, GitHub variables, logs, or evidence.
+Use one non-HA Argo installation with a local-only UI and an AppProject scoped to
+this repository and application namespace. Platform resources remain Terraform's
+responsibility. Run migrations/import before runtime rollout; use simple ordered
+Jobs or manual bootstrap initially. Add the daily retention CronJob from P07.
 
-### 3.4 Git and release model
+Prove one real sync and a Git-driven update/rollback. A custom PostSync smoke
+image, exhaustive can-i matrix, retry framework and component-by-component tuning
+are not baseline requirements. Use a documented smoke command after deployment.
 
-- `main`: source, templates, tests, docs. Protect with PR requirement, required `ci / quality` and `ci / security` checks, no force push/deletion. Do not require another human approval as a technical prerequisite for a solo maintainer; record peer review when a teammate is available. No automatic main bypass.
-- `deploy`: generated, deployable snapshot only: `application/`, `release.json`, `previous-release.json`, signature/SBOM pointers. Argo tracks this ref. No PR checks are attached to this branch, so the built-in workflow token can fast-forward it. No force pushes. Only maintainers and trusted release automation should have write access.
-- Same-repository `GITHUB_TOKEN` writes `deploy`; no PAT, second repository, private SSH key or GitHub App is needed. A bot push need not trigger another workflow: Argo polls Git independently. Never add the release workflow to the deploy branch or assume a bot push triggers CI.
-- `ci.yml`: pull_request to main and push main; default read-only permissions; no fork secrets; test source, contracts, data fixtures, security and image build. Use checkout persistence false unless needed for the scoped promotion step.
-- `release.yml`: workflow_run of successful `ci` on main, plus manual retry for the same successful main SHA. Check trusted repository, triggering event push, head branch main, conclusion success, and latest-main SHA before checkout. Never execute fork-supplied code in a privileged workflow_run job.
-- Release concurrency `stellar-atlas-demo`, cancel-in-progress false; stale queued releases exit without publishing/promoting. Recheck source and deploy head immediately before promotion.
-- Build all four images for a release in one trusted job: web, catalog, journey, importer. Use the exact source commit and dataset artifact; tag `sha-<fullsha>`; scan local built images; push those exact images; obtain immutable digests; sign+verify each digest with Cosign; attach SPDX JSON SBOMs. No runtime `latest` tags, no rebuild between scan and push, no unscanned artifact promotion.
-- Job permissions: `contents:read` by default; release alone grants `packages:write`, `contents:write`, `id-token:write`. Limit token scope to this repository. OIDC is for Sigstore, not AWS.
-- Cosign verification identity is exactly `https://github.com/<owner>/DevOps_Assignment/.github/workflows/release.yml@refs/heads/main` with issuer `https://token.actions.githubusercontent.com`; confirm the workflow_run signing certificate identity in bootstrap and freeze the actual expected workflow identity rather than broadening to `.*`.
-- Render Kustomize templates with all four digests, source SHA, dataset/schema/model versions and unique release ID. Run schema and security validation on the rendered output before committing it to deploy. Copy the previous deploy snapshot into previous-release metadata. Create one fast-forward commit; reject concurrent change rather than force pushing.
-- Promotion is not deployment success. Verify the running frontend and both API SHAs plus a real calculation through the public URL. A Job inside the cluster also runs smoke checks after sync.
-- If the host is offline, mark release verification pending/failed and preserve diagnostics; Argo may apply it when the host resumes. Do not report successful deployment from a successful registry push.
+### 3.7 Basic monitoring, backup and public demo
 
-### 3.5 Security gates
+Use local Prometheus/Grafana with a small dashboard for requests, errors, latency
+and pod health. Keep monitoring private. Alert rules, automatic report collection
+and extensive capacity/observability frameworks are optional.
 
-Store exact gate settings in `security/policy.yml`. Fail closed when a required scanner cannot run or its database is too old (Grype DB age maximum 72 h for release). PR checks can use a cached DB at most 7 days old but must disclose age; releases must satisfy the stricter limit.
+Take manual binary-safe `pg_dump -Fc --no-owner --no-acl` backups of both databases
+to ignored `.local/backups/`, with a small checksum/data-version note. Do this
+before destructive changes and once before assessment. Restore once into an
+isolated test database/target and verify row count plus a saved journey. An
+automatic 30-minute scheduler, backup rotation engine, fixed RPO/RTO and complete
+cluster destruction/reconstruction are optional; do not delete the working demo
+merely to satisfy the old plan.
 
-- Secrets: any real/suspected secret is blocking. Gitleaks scans working tree and Git history, with a narrowly scoped fixture allowlist only for intentionally fake detector-test data outside actual release sources.
-- SAST: Bandit high-confidence medium/high findings block; all others get a recorded disposition.
-- Dependency audit: high/critical direct or transitive dependency findings block unless a specific unexpired reviewed exception exists.
-- Images: critical vulnerabilities always block; high vulnerabilities with a published fix block. High without fix must be listed in the report and covered by a narrowly justified exception before promotion. Do not hide them using an ignore-unfixed blanket.
-- IaC: Checkov high/critical-equivalent or project-defined mandatory failures block: root/privileged app pods, missing limits/probes, public DB/admin, wildcard app RBAC, mutable app tags, embedded secrets, and unrestricted runtime egress. Add custom checks for pinned digests/signature evidence.
-- `security/exceptions.yml` starts empty. An entry must identify finding/tool/resource, rationale, mitigation, maintainer, and expiry at most 14 days. Infrastructure privilege exceptions for Calico and scoped controllers are explicit path/resource exceptions, not global scanner exclusions.
-- Actions pinned to full commit SHA; tools verified by upstream checksums. Produce a source/dependency/image SBOM and an evidence report. Never pipe a moving network install script into a shell.
-- Scanner self-tests deliberately expect rejection of fake secrets/insecure config; a rejected fixture must not itself make the normal repository scan fail. Never introduce actual credentials or push a vulnerable release to prove a gate.
-
-### 3.6 Argo application ordering
-
-Terraform-created databases, PVCs, policies and generated Secrets must exist before enabling the application. Argo AppProject allows only the public repository and namespace `stellar-atlas`; clusterResourceWhitelist is empty. Bind its application-controller to an explicit Role for application Deployments, ReplicaSets, Pods/logs, Services, ConfigMaps, Jobs, CronJobs, PDBs and Events in that namespace. No Secret, Namespace, PV, ClusterRole or database ownership.
-
-Install Argo CRDs separately and use its `namespace-install.yaml`; grant only the documented same-cluster application RoleBinding. Verify permissions using `kubectl auth can-i --as=system:serviceaccount:argocd:argocd-application-controller ...`. Keep Argo's UI ClusterIP and local port-forward only. Disable anonymous access and replace its bootstrap admin password locally.
-
-Sync waves: catalog/journey migration Jobs -30; importer Job -20; runtime ConfigMaps/Services -10; Deployments 0; retention CronJob 10; PostSync smoke hook after healthy workloads. Ordinary migration/import Jobs have release-specific names, no ttlSecondsAfterFinished (avoids Argo repeatedly recreating a TTL-deleted Job), and are idempotent. Retire old Job resources via Argo pruning after successful new sync.
-
-App auto-sync: prune true, selfHeal true, allowEmpty false, PruneLast true, retry 3 with 5/10/20 s backoff; poll interval 30 s with small jitter. No automatic namespace creation. PostSync smoke uses importer image's `stellar_smoke` module, no service-account token, exact dependency labels, and hook-delete-policy BeforeHookCreation/HookSucceeded. Retain a failed hook for inspection until the next attempt.
-
-### 3.7 Monitoring, backups, and availability
-
-Prometheus scrapes annotated app pods through Kubernetes pod discovery, not a load-balanced Service that hides replica-specific metrics. Scope discovery RBAC to the app namespace. Metrics use route templates and service labels, never star IDs/UUIDs/request IDs as Prometheus labels. Expose request count/error/latency histograms, calculation failures, active catalog row count/version info, import success/duration, and database pool utilization.
-
-Dashboard panels: request throughput, p95 latency, 5xx ratio, ready replicas, restarts, CPU/memory, active dataset count, import status, journey creates/expiry, and release SHA information. Prometheus retention 24 h and maximum 512 MiB data; Grafana provisioned dashboards committed as JSON. No cloud monitoring, Loki, external alerts, or email requirement. Local warning rules: target absent 2 min, 5xx ratio >5% for 2 min with a minimum 20 requests, and ready replicas below desired for 2 min.
-
-Host backups: binary-safe `pg_dump -Fc --no-owner --no-acl` for each database, plus dataset/transform/release metadata and checksum manifest. Implement using Python subprocess byte streams to files; never PowerShell text redirection for binary dumps. Publish a backup directory only after both dumps and manifest checks pass. Back up on demo-start, every 30 min while the demo is running, and before import/migration/rebuild. Keep the latest 7 complete backups; do not remove the last known good backup.
-
-Backups are stored outside the kind node in `.local/backups/`, restricted to the current user. Git ignores them. A second copy on an existing team device/USB is recommended for physical host loss but is not assumed in the local-cluster recovery claim. RPO target while the host backup scheduler is running: 30 min; RTO target for local-cluster rebuild: 30 min with warmed images. Record actual restore time.
-
-Restore first into an isolated `stellar-restore-check` namespace/database instance. Verify dumps, apply fresh roles/passwords, create databases, restore with no owners/ACLs, reapply grants, validate row/chunk hashes and a journey sample, and only then permit replacement of demo data. No migration downgrade, no wholesale Docker cleanup, no deleting unrelated kind clusters or volumes.
-
-Cloudflare Quick Tunnel terminates public HTTPS and forwards only to `http://127.0.0.1:8080`. Run the pinned local `cloudflared` executable without an account, auth key, named tunnel, or purchased domain. Record its actual assigned `*.trycloudflare.com` URL; the hostname changes with each new tunnel process. Visitors need neither an account nor a client. Do not enable public access to administrative ports. Quick Tunnels are intended for testing/demos, have no uptime guarantee, allow up to 200 in-flight requests and do not support SSE; this application does not require SSE. Always report local and public timings separately. The host must be awake, connected, and running the cluster/tunnel. Update all published links and PUBLIC_BASE_URL after each URL change.
+Cloudflare Quick Tunnel forwards HTTPS to the Kubernetes gateway at
+`http://127.0.0.1:8080`. Record the actual temporary URL and verify it once from
+a phone/external browser. No account, paid service/domain, AWS, Tailscale or Vercel.
+Disclose that the host, Docker, cluster, internet and tunnel must stay running.
+Check that DB/admin routes are not public; no external availability monitor or
+automated multi-outcome verification service is required.
 
 ## 4. Implementation phases
 
@@ -433,7 +465,7 @@ Authorized on 20 October 2026. This brings source integration forward; it does n
 2. Scan complete Git history and tracked/staged files for secrets, raw catalogs and private local evidence before the first push. Keep reviewed account-level zero-paid-usage budgets. Use free standard hosted runners for the public repository, bounded storage and no paid runners, budget increases or purchased credits.
 3. Add basic `ci.yml` with `quality` and `security` jobs on main pushes and PRs to main. Use pinned actions, standard Ubuntu runner, frozen dependencies, read-only contents permissions and bounded timeouts/concurrency. Run existing unit/contract/frontend/type/lint/build checks and full-history secret/exclusion checks. Do not claim unimplemented database/E2E/security gates.
 4. Verify an actual GitHub run and record its URL and exact check names. Continue subsequent feature changes through branches/PRs and extend CI with real integration tests. Following the user's public-visibility change, main protection is active: require both observed GitHub Actions checks and an up-to-date PR; include admins; disable force pushes/deletion; resolve conversations; require zero human approvals. Preserve these rules and verify pending-check blocking and successful merge without bypass. The initial private Free limitation is historical, not the current state.
-5. P10 completes the full quality/security suite. P15 expands the existing workflow and handles final public data/images/rules. Deployment, data-release publication, signing, GitOps and public application access remain in their original phases.
+5. P10/P15 extend the existing checks only as required by the revised course scope below. Deployment, data-release publication, GitOps and public application access remain later phases; signing is optional under ADR 0005.
 
 ### P04 — Implement databases, credentials, and migrations
 
@@ -491,263 +523,247 @@ Authorized on 20 October 2026. This brings source integration forward; it does n
 
 **Exit:** estimates and shared records work through HTTP service boundaries; failure behavior and database isolation tests pass.
 
-### P08 — Build the complete web experience
+### P08 — Build the web experience
 
-**Depends on:** P06, P07. **Output:** FR01–FR17 implemented against real APIs.
+**Depends on:** P06, P07.
 
-1. Build app shell/routes `/explore`, `/journeys`, `/journeys/:uuid`, `/saved`, `/about`; use a pinned router or native History API wrapper with back/forward tests. Choose native History API + a small React route switch to avoid another framework dependency. Unknown paths show a 404 with return-home link.
-2. Implement typed API client, error-state components, abortable requests, debounced search at 250 ms and stale-response cancellation. Never request an astronomy API from the browser.
-3. Build one Three.js Points cloud per chunk, shader clipping by Sun radius and appropriate float32 units. Bound device pixel ratio to 1.5, cap visible labels at 20, use real positions and a neutral style for unavailable color/brightness. Dispose WebGL resources on route changes.
-4. Implement camera orbit, zoom bounds, orientation indicator, reference plane, distance rings, Sun and selected-point highlights, one-second fly-to and return-home. Reduced-motion mode jumps rather than animates. Disable unrequested automatic orbit.
-5. Implement selection with a screen-space spatial grid rebuilt after camera settles (75 ms debounce) and chunk/filter changes. Use a Web Worker to project/cache large point sets; nearest within 10 CSS pixels wins, then nearest depth. Resolve its ordinal through Catalog. Do not create a separate DOM element/mesh per star.
-6. Implement radius presets, exact counts, progressive chunk loading with concurrency 3/LRU cache, aborts and progress. Switching filters cannot retain an out-of-radius selectable point unnoticed; selected profile stays open with an explicit outside-current-radius label.
-7. Implement profile/search/neighbor panels and null handling, proper distance labels and scientific notices. Alias results must resolve to the same Gaia ID as their plotted point.
-8. Implement two-object distance line, Journey selectors/result panel, speed slider+numeric input, 20-second illustrative playback, scrubber and progress years. Inputs/route state remain synchronized and invalid calculations show actionable errors.
-9. Add viewpoint movement to a selected star with observer badge and persistent Sun-centered filter explanation. Preserve relative geometry; do not recompute fictitious temperature or claim true apparent sky brightness.
-10. Implement local bookmarks/saved journeys with versioned storage key `stellar-atlas.saved.v1`, caps/deduplication, storage-unavailable fallback, item removal and clear confirmation.
-11. Implement shared views using URL fragment JSON encoded base64url with schema version and maximum 4 KiB. Validate finite camera/target bounds, known radius/layer values, snapshot/object IDs and observer; ignore unexpected keys. Shared journey URL uses the persisted UUID path.
-12. On opening an expired/deleted shared journey, show 410/404 appropriately. Saved local summaries can still display frozen values; do not promise the server record is permanent.
-13. Implement responsive layouts, keyboard navigation/focus restoration, sufficient contrast, text legends and a usable list/detail mode without WebGL. Handle lost WebGL context with recovery/list fallback.
-14. Add `/about`, release SHA/version banner, dataset/source/citation/license content, scientific assumptions and host-availability statement. Do not copy invented values or geometric placements from generated mockups.
-15. Test desktop/mobile user journeys, back/forward, refresh of deep links, share-link round-trip, invalid URL data, reduced motion and no-WebGL fallback.
+Implement the planned Explore/Journeys/Saved/About routes against real APIs.
+Use Three.js point clouds, real coordinates, radius counts, profiles/search,
+measurement, playback, local saves and share links. Match desktop/mobile references
+and retain basic keyboard/reduced-motion/list fallback behavior. Start with simple
+picking/loading; add a Worker or elaborate LRU machinery only if the real view
+needs it. Keep ordinary input validation and useful loading/error states.
 
-**Exit:** every FR has working behavior and a browser test/reference; no mocked API remains in the release path.
+Checks: automate one explore/select/search flow and one journey/share flow. Manually
+check mobile layout, saved items and one unavailable/expired state. Reuse backend
+tests; no exhaustive browser/URL/storage/context-loss matrix.
 
-### P09 — Complete Docker Compose development and operational commands
+**Exit:** the main product journeys work with real APIs and have concise evidence.
 
-**Depends on:** P08. **Output:** reproducible local application startup.
+### P09 — Finish local Docker Compose
 
-1. Complete four Dockerfiles with pinned bases/dependencies, explicit non-root users, read-only-compatible filesystems, health commands and OCI labels. Web uses a Node builder and Nginx unprivileged runtime; APIs/importer use Python slim with build dependencies removed from runtime.
-2. Implement Nginx same-origin proxy, SPA deep-link routing, compressed static assets, public-route allowlist, blocked internals, security headers, global rate limits and request-ID replacement.
-3. Complete Compose project `stellar-atlas-dev`: PostgreSQL named volume, one API each, web host port 8080, one-shot role/bootstrap/migration/import commands, health-gated startup. Development can mount source only in an explicit dev profile; the release-like profile runs built images.
-4. Keep the catalog archive outside source-control/build context except the deliberate importer COPY from a checksum-verified staged asset. Do not copy `.local/secrets` through a broad context.
-5. Complete `dev-up`, `dev-down`, `images-build`, `smoke` and `doctor` diagnostics. A second dev-up is safe; dev-down does not remove volumes.
-6. Test on a fresh Compose volume, then repeat startup, recreate API/web containers and restart database; saved shared journeys and catalog survive. Test service outage messages through the gateway.
-7. Confirm public routing blocks `/metrics`, `/openapi.json`, `/docs`, internal positions/import/migration and unknown API prefixes, while local/internal maintenance still works.
+**Depends on:** P08.
 
-**Exit:** one documented command launches the release-like local app, idempotent startup works, no unintended host ports are published.
+Build the four images with pinned dependencies and non-root app users. Complete
+the gateway, deep-link routing, private/internal route exclusions, simple limits
+and named PostgreSQL volume. Implement straightforward dev-up/dev-down/smoke.
+Keep build contexts free of local secrets/raw files except the verified importer asset.
 
-### P10 — Finish automated tests and security policy
+Checks: one fresh startup, one repeat startup, one container/database restart with
+a saved journey preserved, and a gateway check that DB/admin/internal routes are
+unavailable publicly. Record useful failures; no outage permutation suite.
 
-**Depends on:** P09. **Output:** executable CI checks before repository protection.
+**Exit:** a documented command starts the usable local app and stop preserves data.
 
-1. Organize unit/contract/integration/browser tests and fixtures; provide one host action with checked exit codes. Use actual PostgreSQL integration tests and a fixture catalog for CI speed.
-2. Implement generated-contract drift check, ID-string/binary golden tests, importer atomicity tests and API failure tests. Frontend Vitest covers state/formatting; Playwright covers real gateway journeys and mobile/list fallback.
-3. Install/configure Gitleaks, Bandit, npm audit, pip-audit, Syft, Grype and Checkov at locked versions. Add scanner provenance checks and normalized report output. No blanket scanner suppression.
-4. Implement project-specific IaC assertions for public ports, limits/probes, non-root runtime, no wildcard app permissions, no embedded secrets, and image digests in demo manifests. Local/CI test-image exceptions are limited to the documented overlay and `ci-<40hexsha>` tags.
-5. Create safe detector fixtures excluded from shipped sources and actual secret scans; self-test that the scanners reject those fixtures. Fake secret values must be obvious fixtures and never real tokens.
-6. Implement gate/exception-expiry parser, scanner DB-age policy and failure summaries. Start exception file empty; add findings only with specific rationale/expiry if an unavoidable platform issue is encountered.
-7. Add test coverage minimum 85% for unit/ID/import/calculation modules, 75% for backend business logic; frontend coverage focuses on URL/state/error logic rather than renderer implementation details. No meaningless snapshot/count tests solely to inflate coverage.
-8. Implement `test`/`security` actions so a failed required tool/test exits nonzero. Run the complete suite once against release-like Compose and capture actual results.
+### P10 — Focused tests and basic security checks
 
-**Exit:** positive checks pass; safe negative detector tests prove the gates block; no promised check is a placeholder script returning success.
+**Depends on:** P09.
 
-### P11 — Validate release images, provenance, and artifact policy
+Reuse all passing P00–P07 checks. Add focused frontend unit tests and the two
+browser smoke flows from P08 to ci / quality as practical. Keep fixture-backed real
+PostgreSQL/HTTP tests; full sealed-data checks run only after relevant data/binary/
+calculation changes or once before final assessment.
 
-**Depends on:** P10. **Output:** locally verified images and release-generation scripts.
+Keep Gitleaks and add one Grype image scan command. Review manifests for basic
+ports/secrets/non-root/probes/limits. Demonstrate one rejected fake local fixture.
+Use plain checked commands and short logs. No coverage quotas, scanner orchestration,
+exception expiry system, custom policy engine or multiple redundant negative suites.
 
-1. Implement image builder with source SHA, build timestamp, data snapshot, license and OCI source labels. Handle a dirty tree by refusing a release build; local dev builds may use explicit `dev-dirty` metadata.
-2. Build each image once, scan the built local image, generate SPDX JSON via Syft, and save local digest/image-ID evidence. Check image layers/files for credentials, `.env`, caches, raw unrelated workspace data and build-only tooling.
-3. Run non-root/read-only smoke tests for each runtime. Verify Python shared package/migrations are included and importer can run from its image without the repository mounted.
-4. Implement render-release script: accepts only schema-validated image digests and version metadata, renders demo manifests deterministically, and fails if any application image/tag or source SHA is inconsistent.
-5. Define the deploy-branch generated tree and previous-release metadata. Add tests that an invalid digest, unknown namespace, Secret object, privileged pod or cluster-scoped app object cannot be promoted.
-6. Add publication/signature code paths for later trusted GitHub jobs; local checks use test keys only and cannot be mistaken for trusted GitHub OIDC signatures.
-7. Cap ordinary workflow report artifacts at 20 MiB/run and 3-day retention; upload traces/screenshots only on failure, sanitized and bounded. Keep data in release assets and images in GHCR, not the shared free Actions artifact allowance. Cleanup action removes expired project artifacts with an audited log.
+**Exit:** existing CI plus focused new checks pass; a simple bad example is rejected.
 
-**Exit:** all four release-like images pass local security/behavior checks; deterministic rendering and artifact budget checks pass. Registry publication/signing remain explicitly unrun until P15/P17.
+### P11 — Prepare ordinary release images and metadata
 
-### P12 — Build the local cluster and Terraform platform
+**Depends on:** P10.
 
-**Depends on:** P11. **Output:** reproducible cluster, real network isolation, persistent database.
+Build once from a clean commit; record source SHA, dataset ID/checksum and four
+image digests. Smoke the built images and scan them before publication. Simplify
+the existing future release schema/tests to these real fields in this phase;
+signer/SBOM fields from P02 are no longer mandatory. Do not invent their values.
+Keep old contracts until that explicit update; this plan revision changes no code.
 
-1. Implement the pinned kind configuration, loopback-only API/NodePort mapping, CIDR-overlap detection and cluster-name/context guard. If `stellar-atlas-demo` exists, inspect its node image/config and reuse only on exact match; otherwise require the guarded backup/rebuild action.
-2. Vendor Calico 3.33.0 `calico.yaml`, record its raw SHA-256/license, and apply a committed Kustomize patch: pool CIDR matches kind, IPIP disabled, VXLAN enabled, networking backend/readiness consistent with VXLAN. Do not fetch moving latest manifests during bootstrap.
-3. Create cluster without waiting for ready CNI-dependent nodes, install Calico, then wait up to 300 s for Calico DaemonSet/controllers, CoreDNS and node Ready. Check DNS and pod-to-pod HTTP with pinned fixture images. If it fails, collect events/logs and correct the exact kernel/config problem; never continue with a non-enforcing replacement CNI.
-4. Split Terraform into **two roots**: `infra/terraform/foundation/` (namespaces, RBAC, quotas, policies, PVCs) and `infra/terraform/runtime/` (PostgreSQL and monitoring). Store separate local state files under `.local/terraform/`; runtime reads foundation outputs locally. This overrides the flat grouping shown in the layout example and avoids waiting on database Secrets before their namespace exists.
-5. Configure Kubernetes provider with the explicit `kind-stellar-atlas-demo` context and pinned kubectl/CA config; no cloud provider/backend. Ignore state, saved plans and machine tfvars. Add prevent_destroy to critical PVC resources. Serialize Terraform runs with a host lock file; back up local state before apply.
-6. Run fmt/validate/plan on foundation and inspect the exact resource list. Apply namespaces, restricted app/data policies, scoped roles, quotas and PVC claims. Use kind's `standard` local-path storage class, not an invented static PV or Windows NTFS database mount.
-7. Apply generated Secrets after foundation namespaces exist using `cluster-secrets`. API/Job credentials stay in the application namespace; PostgreSQL's admin secret stays in the data namespace. Grafana credentials stay in monitoring.
-8. Apply runtime with monitoring disabled initially, creating `postgres-0`, internal Service and 10 GiB PVC; mount PGDATA in a subdirectory writable by documented UID/GID/fsGroup. Wait for pg_isready. Bootstrap both databases/roles through binary-safe protected stdin and reapply exact grants.
-9. Run a second plan in both roots; expect zero changes. Test Terraform drift using a harmless project-owned namespace label, show the plan detects it, and restore by apply. Never use a real secret value as the drift example.
-10. Verify NetworkPolicies behavior with allowed/denied test labels and database credentials. Test denied pod cannot reach PostgreSQL or APIs, and permitted service routes still work. Save connect-timeout and permission-denied evidence.
-11. Verify PostgreSQL recreation using the same PVC preserves a fixture row; do not delete the PVC/cluster for this test. Confirm database and Kubernetes API have no public/host listener beyond the explicit loopback administration context.
-12. Complete `cluster-create`, `platform-plan`, `platform-apply`, `cluster-secrets` and diagnostics. Capture actual cluster resource usage.
+Checks: images start, contain required packages/jobs, and identify the actual source.
+Keep reports local; no signing/attestation/artifact-retention framework by default.
 
-**Exit:** node/network healthy, policies demonstrably enforce, PostgreSQL persists across pod replacement, Terraform replan is empty, no cloud resources created.
+**Exit:** usable images and a small truthful release record are ready for P15.
 
-### P13 — Deploy and validate the application in Kubernetes locally
+### P12 — Create the small local Kubernetes platform
 
-**Depends on:** P12. **Output:** working application through the intended Kubernetes gateway.
+**Depends on:** P11.
 
-1. Create base and demo Kustomize templates with section 3 resource/security/probe defaults, labels and service accounts. Application Services use ClusterIP except web NodePort. No application Service exposes 5432/admin/metrics externally.
-2. Create local bootstrap overlay using locally built `dev-<source-sha>` images with imagePullPolicy Never. This overlay is only for pre-GitOps/local tests; the demo overlay accepts digests only. Load images into the exact kind cluster explicitly.
-3. Apply catalog/journey migration Jobs and wait for success; then importer with sealed baseline; then runtime ConfigMaps/Services/Deployments. Verify readiness and exact source/data metadata. Bound Jobs and make their failure logs available without secret values.
-4. Configure API/web writable emptyDirs, runtime UIDs, graceful shutdown and healthy startup. Read-only errors must be fixed through specific writable mounts, not disabling the filesystem restriction.
-5. Open `http://127.0.0.1:8080`; run real-data browser smoke: default count 1151, Proxima long-ID selection, full profile, independent distance calculation, shared journey create/open, saved-local flow and list fallback.
-6. Run cluster-internal HTTP/DB isolation tests using the same labels/policies as final Jobs. Confirm internal positions works from Journey and is blocked at the gateway.
-7. Delete one Catalog pod and measure replacement/readiness while the second pod answers requests. Record request failures rather than claiming zero downtime without measurement.
-8. Complete `demo-bootstrap` and local `smoke`. Keep Argo disabled until P17 so manual bootstrap resources are not fighting a reconciler.
+Create/reuse only stellar-atlas-demo with pinned kind/node, default networking,
+loopback mappings and local-path storage. Keep existing foundation/runtime Terraform
+roots for namespaces, PVC, PostgreSQL and basic platform settings; local ignored
+state and generated secrets stay outside Git. Do not install Calico for the baseline.
 
-**Exit:** the actual Kubernetes app works at loopback port 8080 with baseline data and runtime restrictions.
+Checks: node/DNS/DB are ready; Terraform validate/apply then a no-change plan; one
+harmless label drift and repair as the IaC demonstration. No disposable CI cluster,
+policy matrix, quotas/PDB tuning or automated cluster rebuild is required.
 
-### P14 — Add monitoring, backup scheduling, and restore verification
+**Exit:** the named local cluster/platform works and a repeat plan is clean.
 
-**Depends on:** P13. **Output:** observable and recoverable deployment.
+### P13 — Deploy the application locally
 
-1. Enable Terraform-owned monitoring manifests: Prometheus, Grafana and kube-state-metrics with fixed digests, resource limits, private Services and explicit RBAC. Add 2 GiB Prometheus and 1 GiB Grafana PVCs, protected from routine destruction. Do not deploy an operator/Helm chart.
-2. Configure pod discovery/scrapes, normalized metrics and alerts from section 3.7. Disable Grafana analytics, update checks, anonymous access and plugin downloads. Generate/protect its admin password; datasource is internal Prometheus.
-3. Provision the committed dashboard JSON and datasource automatically. Verify both replicas produce distinct scrape series, and dashboard queries show actual requests/errors/restarts and source/data versions. Avoid high-cardinality ID labels.
-4. Implement local-only admin port-forward helpers for Grafana 3000, Prometheus 9090, Argo 8081; bind explicitly to 127.0.0.1 and record owned processes. Never expose these through the public gateway/tunnel.
-5. Implement `backup` to dump both DBs to temporary host files using subprocess bytes, hash, verify pg_restore list, add snapshot/release metadata, then rename to a completed timestamp directory. Complete the seven-backup retention/path guards.
-6. Implement the host backup scheduler (Python stdlib background process) which runs on demo-start and every 30 min. Launch hidden on Windows, record project identity/heartbeat and use a project-owned stop-request file. Never kill a PID solely because an old PID file matches; confirm ownership. Stop waits for an in-progress dump to finish.
-7. Implement `restore --target restore-check`: create isolated namespace/PostgreSQL/PVC with no public Service, restore with fresh credentials/grants, verify complete catalog counts/chunks and a saved journey, compare checksums/results, then remove only the explicitly named test resources after evidence is saved.
-8. Write RUNBOOK sections for monitoring, backup validity, restore-check, and restricted manual inspection. Test a corrupt/truncated dump is rejected before any demo database change.
+**Depends on:** P12.
 
-**Exit:** dashboards show real traffic, a complete host backup exists, restore-check and corruption rejection pass; scheduled backup lifecycle is tested.
+Deploy one replica of Web/Catalog/Journey, migrations/import Jobs, private DB
+Service/PVC and the daily Journey retention CronJob. Use image digests, basic probes
+and resource limits. Keep the gateway as the only user-facing route.
 
-### P15 — Complete public distribution, data release, and CI
+Checks: real catalog counts, search, calculation and share round-trip through the
+gateway; one workload restart and a representative private-route denial. Reuse
+P04–P07 data/expiry proofs rather than rebuilding their entire test matrix here.
 
-**Depends on:** P14. **Output:** public source/data distribution and enforced quality/security gates.
+**Exit:** the real-data app works through the local Kubernetes gateway.
 
-1. Re-run local test/security/history scans and inspect staged files before the first push. Verify ownership/publication target and account free-plan settings from P00. Do not upload `.local`, secrets, raw catalog or private evidence.
-2. Reuse only public `Jyot-Kikani/DevOps_Assignment` and its existing `origin`. Preserve remote history, protected main and early CI. Recheck anonymous source access and protections; do not create `stellar-atlas`, force-push or bypass main. Public source and basic protection were brought forward; full P15 gates still require their own evidence.
-3. Publish the P03 data release with verified asset/notice files; confirm anonymous download returns the expected bytes/hash. Commit a separate resolved lock with actual data URL/archive hash through a PR; preserve sealed P03 lock/notice bytes.
-4. Expand the existing early `ci.yml` job IDs `quality` and `security`, explicitly named `ci / quality` and `ci / security`, so those exact check-run names can be required. Preserve verified early checks and add the remaining P10/P15 gates. Confirm actual check-run names through GitHub before enabling the rule. Trigger on all PRs to main and main pushes; do not path-skip a required check into a permanently pending state. Use standard `ubuntu-24.04` hosted runners, pinned actions and Node/Python versions.
-5. Quality runs frozen installs, lint/typecheck, unit/contracts, PostgreSQL integration, frontend tests and Playwright against release-like Compose with the small fixture. Security runs all policy checks and scanner self-tests. Build all Dockerfiles on PRs without pushing, signing or accessing secrets.
-6. Add a bounded ephemeral kind+Calico cluster job for server-side schema validation and network-policy/runtime smoke using the fixture/local `ci-<sha>` images. Omit Argo/monitoring from this ephemeral test; those are verified on the actual host. Keep one API replica in CI to fit free-runner resources. Always delete only the CI cluster on cleanup.
-7. Cache dependency/scanner downloads with keys including lock hashes and DB timestamps. Do not share a credentialed Docker config with untrusted PR jobs. Do not upload secrets in artifacts or run `pull_request_target` on checkout of contributor code.
-8. Configure bounded artifact upload/cleanup and report retention. Keep total retained Actions artifact usage below 400 MiB; if it approaches this threshold, delete oldest project reports after archiving essential sanitized evidence, never buy extra storage.
-9. Reverify existing main protection: both exact required checks, PR/up-to-date requirements, admins included, no force push/deletion and zero mandatory human approvals. Preserve CODEOWNERS with actual maintainer login. Extend rules only for evidenced new gates; keep deployment branch separate. Never disable protection for automation convenience.
-10. Configure Dependabot weekly for npm, Python requirements and GitHub Actions; updates create PRs and do not auto-merge or auto-deploy failed checks. Pin generated updates before merge.
-11. Prove a wrong unit-conversion test in an isolated PR fails quality and blocks merge, then fix it. Prove insecure config fixture in a separate isolated PR fails security. Do not merge intentionally failing branches or publish unsafe images.
-12. Implement release workflow shell/Python scripts, but set repository variable `GITOPS_ENABLED=false` for the explicit first-publication bootstrap. The release can build/scan/sign/publish/promote its deploy snapshot now, but the verification job reports `bootstrap: deployment not yet verified` and cannot claim a deployed release.
-13. On first GHCR publication, explicitly change each of the four packages to public in its package settings, retaining repository association. Public repo does not automatically guarantee public packages. Verify anonymous image manifest/pull for all four digests before P17.
+### P14 — Add basic monitoring and backup/restore
 
-**Exit:** public source/data are accessible; protected main checks genuinely enforce; release artifacts are publicly pullable and signed; first deployment verification remains explicitly pending until GitOps starts.
+**Depends on:** P13.
 
-### P16 — Establish the public HTTPS endpoint
+Run local Prometheus/Grafana with a small provisioned dashboard. Take a manual
+host-side backup of both DBs and restore once to an isolated target. Verify catalog
+count and a saved journey, retaining the original working database.
 
-**Depends on:** P15 and healthy local app. **Output:** verified external access with no cloud compute.
+Checks: one request appears in metrics; the restored sample matches. Record commands
+and screenshots. No alerting suite, scheduled backup service or RPO/RTO gate.
 
-1. Verify local gateway smoke and confirm only it is bound at 127.0.0.1:8080. Check no public mapping was added for DB, Kubernetes API, Grafana, Prometheus or Argo.
-2. Start the pinned `cloudflared tunnel --url http://127.0.0.1:8080` as a hidden project-owned process using argument arrays and explicit executable/log paths. Record process ownership and do not replace unrelated tunnels. No account, token or named-tunnel configuration is needed.
-3. Parse the actual assigned HTTPS `trycloudflare.com` URL from the owned process output; verify origin routing and record its temporary lifetime. No domain/account purchase. A generated URL alone is not an external application smoke pass.
-4. Store public origin in `.local/operator.json` and GitHub repository variable `PUBLIC_BASE_URL`; validate it is HTTPS and the recorded `.trycloudflare.com` hostname. Never interpolate unchecked URL text into a shell command.
-5. Run an external smoke from a standard GitHub runner or a phone on mobile data. Verify TLS, frontend deep links, API metadata, star search, estimate and shared journey open. Visitors must not need authentication or a tunnel client.
-6. Probe forbidden paths/ports through the public origin; show 404/403, not proxied admin content. Recheck HTTP error formatting/security headers and rate-limit response.
-7. Complete public-start/stop and host demo-start/stop actions: verify prerequisites, start existing kind node containers/Docker services if permitted, wait on readiness, start/verify tunnel, start backup scheduler, and show URL/version summary. Stopping closes the tunnel and scheduler and stops only owned project containers; it does not delete PVCs/cluster/state.
-8. Record exact operating instructions and uptime limits in About/RUNBOOK. Each new Quick Tunnel has a different hostname; update the repository variable, operator state and assessment link before the next release/demo. Never claim a stopped tunnel's former URL remains usable.
+**Exit:** metrics and a real non-destructive backup/restore demonstration work.
 
-**Exit:** external user can use the Kubernetes application over HTTPS; no admin surface is exposed; correct public URL and limitations are documented.
+### P15 — Complete course-sized GitHub CI and publication
 
-### P17 — Enable GitOps and finish the first verified deployment
+**Depends on:** P14.
 
-**Depends on:** P16 and published release images/deploy ref from P15. **Output:** normal Git-driven CD without bootstrap loopholes.
+Use only DevOps_Assignment. Retain the two existing protected-main check names
+and policies. Add relevant frontend smoke/image-build checks to the existing jobs;
+do not require kind/Calico or a separate environment in CI.
 
-1. Verify deploy ref contains only the generated application tree/release metadata and all four digests are anonymous-pullable, scanned and correctly signed. Verify current rendered manifests with policy/schema checks.
-2. Vendor Argo 3.5.5 namespace-install manifest and separate CRDs; record checksums/license. Bootstrap CRDs using server-side apply with no blanket force-conflicts, wait for Established, then apply namespace-scoped components and explicit same-cluster controller RoleBinding.
-3. Install AppProject/Application from section 3.6 pointing to public `https://github.com/<owner>/DevOps_Assignment.git`, revision `deploy`, path `application`, destination `stellar-atlas`. Public Git read requires no repository credential; verify access before enabling sync. Do not enable Argo to manage Terraform platform resources.
-4. Complete Argo component resource bounds/disabled unused components, local-only UI access, generated admin credential, reconciliation polling and sync options. Use can-i tests to prove allowed Deployment/Job access and denied Secret/Namespace/ClusterRole management.
-5. Let Argo adopt the existing bootstrap application objects and reconcile them to digest-pinned demo manifests. This intentionally replaces local Never-pull image settings. Wait for migration/import Jobs, runtime rollout, Synced+Healthy and PostSync smoke.
-6. Compare running images and frontend/API source/data metadata to release.json, not just a green Argo badge. Run external smoke again and verify shared records/data survived adoption.
-7. Set `GITOPS_ENABLED=true` permanently after this verified bootstrap. A release workflow must fail/pending rather than silently skip deployment checks if the variable/URL is missing afterward. Add a CI assertion that release-ready documentation/config does not leave bootstrap mode enabled.
-8. Commit/update evidence with actual sync revision, running pod imageIDs, source SHA, catalog version, signature checks and public test result. Complete gitops-bootstrap command and ownership documentation.
+Publish the verified sealed data asset and four scanned images using the existing
+free repository/GHCR; verify anonymous access. Keep source/data/digest metadata.
+Set up a simple trusted successful-main release workflow and deploy branch. Avoid
+new token/account services; signing, SBOMs and automated artifact cleanup are optional.
 
-**Exit:** actual GitOps deployment is Synced/Healthy, application is externally verified, bootstrap mode is disabled, no direct runner-to-cluster access exists.
+Checks: one intentionally failing test in an unmerged PR blocks CI, then the fixed
+version passes. Reuse the local security rejection from P10; no separate PR for
+every detector. Bootstrap publication is not yet a verified deployment.
 
-### P18 — Prove the full release pipeline and Git rollback
+**Exit:** required CI works and the real data/images are anonymously accessible.
 
-**Depends on:** P17. **Output:** end-to-end automated delivery and recovery evidence.
+### P16 — Open the temporary public demo
 
-1. Implement release workflow exactly as section 3.4: trusted main CI result, stale-commit guard, serial release concurrency, build once, SBOM/scan, push exact images, obtain digests, keyless sign+verify, render/policy-check, fast-forward deploy commit, and external verification.
-2. External verifier polls every 10 s for at most 600 s, with per-request timeout 5 s. It checks `/version.json`, both `/v1/meta`, required active snapshot/count, estimate oracle and shared journey round-trip. All three source SHAs must equal the promoted commit. Use a unique idempotency UUID for each test create.
-3. Distinguish outcomes: verified release; reachable old release after rollout deadline; candidate reachable but smoke fails; entirely unreachable host. Store status and reason in workflow summary/release evidence. A successful image push cannot satisfy deployment status.
-4. For reachable-old/candidate-bad failures, restore the prior deploy application tree through a new commit **only if deploy head is still the candidate promoted by this run**, then verify the previous source SHA. For entirely unreachable host, do not blindly mutate Git; fail/pending with host-start instructions. If the cluster first appeared offline then resumes, rerun verification before retrying/rebuilding.
-5. Implement `rollback.yml` workflow_dispatch accepting a previously recorded release ID, not arbitrary shell/manifest input. Verify its signatures/digests, compatibility floor and no-destructive-migration rule, render that saved release, commit on deploy with compare-and-swap guard and verify public metadata. Source main remains unchanged.
-6. Make a real small visible application change (About wording/release badge), open PR, pass checks, merge, and observe automated public update. Record the PR, CI run, images, deploy commit, Argo revision and public SHA as one chain.
-7. In the demo environment, promote a controlled non-security failure candidate that fails readiness/smoke while preserving old healthy replicas. Record timeout/recovery behavior; restore through Git. Use a dedicated explicit demo switch in a test-only overlay/workflow input, not a latent public application endpoint or permanent production fault toggle.
-8. Demonstrate concurrent/stale release protection with two queued safe commits; final deployed release must be the newest approved source, never a stale job winning a race. Test rollback head-change guard refuses to overwrite a later release.
-9. Keep DB schemas forward-compatible; rollback only app images/config and active snapshot pointer if explicitly part of the saved release. Do not revert PostgreSQL volume contents or Alembic version automatically.
+**Depends on:** P15 and healthy local app.
 
-**Exit:** one normal change deploys automatically and is verified; one failed release is recovered through Git; concurrency guards and offline-host reporting pass.
+Start the pinned accountless Cloudflare Quick Tunnel to the Kubernetes gateway.
+Record the current HTTPS URL and its host/uptime limitations. Stop/start only this
+project's tunnel; keep DB, metrics and admin tools private.
 
-### P19 — Complete DevSecOps and runtime attack-surface demonstrations
+Checks: use a phone/external browser for Explore, calculate/share and a private-route
+denial. A local curl or assigned hostname alone does not prove external access.
 
-**Depends on:** P18. **Output:** evidence for security throughout the lifecycle.
+**Exit:** the real Kubernetes app is usable from outside the host over HTTPS.
 
-1. Run Gitleaks over complete main/deploy history and runtime build contexts. Verify only protected local files/ephemeral GitHub tokens hold credentials; no Kubeconfig or DB secret is present in GitHub variables/artifacts/images.
-2. Capture dependency/image/IaC/SAST reports and DB ages for a successful release. Verify all four Cosign identities/digests and SBOM references. Show unsigned/wrong-identity digest cannot pass promotion validation; do not weaken verification to broad identity regex.
-3. Demonstrate fake-secret detector rejection and unsafe Kubernetes manifest rejection in isolated local fixtures/PRs, then corrected passing checks. Do not publish a real secret or known vulnerable application image.
-4. In cluster, verify app runs non-root/read-only without service-account tokens; privileged/root/missing-limit app manifests are rejected by policy checks/Pod Security. Prove CNI-specific exceptions do not extend to app namespaces.
-5. Verify actual allowed/denied network connections, DB role grants, public-route denial, body bounds, invalid JSON, rate limits, same-origin behavior, XSS-safe object labels and no outbound astronomy calls.
-6. Test malicious inputs: >2^53 ID preservation, path traversal chunk IDs, SQL meta-characters in q, 1000-item position batch, Infinity speed, user-supplied remote URL/redirect, and huge view fragment. Expect bounded 4xx/no crash/no external fetch.
-7. Inspect logs and reports for credentials/personal headers; ensure normalized route metrics do not create series per source ID/journey UUID. Keep the app unauthenticated by design; do not imply public share UUIDs are private accounts.
-8. Audit zero paid services, purchases, nonstandard runners, storage overages, data-LFS use and expired security exceptions. Record original-software/data/tool license notices.
+### P17 — Connect Argo GitOps
 
-**Exit:** all mandatory gates and runtime protections have evidence; exceptions are specific, justified and unexpired; no secret-containing evidence is published.
+**Depends on:** P16.
 
-### P20 — Prove Kubernetes operations and data failure handling
+Install the small non-HA Argo instance with local-only UI and repository/namespace
+scope. Track the generated deploy branch; keep Terraform platform ownership separate.
+Bootstrap migrations/data before app rollout and preserve the existing database.
 
-**Depends on:** P19. **Output:** measured operational demonstrations.
+Checks: one Synced/Healthy application, correct running source/image/data metadata,
+and the public smoke flow. No custom sync-hook or permission-test framework.
 
-1. Delete one Catalog pod and one Journey pod separately; watch ready replica count, requests, replacement time and restart/event evidence. Expect <120 s on the warmed reference host; investigate if exceeded.
-2. Change Journey replicas from 2 to 3 through source/template PR and release (or a recorded GitOps-only approved scale revision), observe reconciliation, request distribution and quota usage, then return to 2 through Git. Do not run an unrecorded kubectl scale against Argo self-heal.
-3. Demonstrate rolling application update and previous-image Git rollback with continuous read probes. Record any failures; do not claim HA across a host loss.
-4. Temporarily stop Catalog while keeping Journey running. Existing frozen shared summaries remain readable; estimates return controlled 503; Journey liveness stays healthy. Restore Catalog and show recovery without manual API restart.
-5. Run malformed catalog import (wrong checksum/duplicate/invalid coordinate) as a bounded Job. Verify failure log/report and unchanged active data/count/chunk hashes. Repeat the valid snapshot to show idempotence.
-6. Demonstrate an intentionally interrupted staging import leaves old active data intact, then a valid new transform/version candidate can activate atomically. For a demonstration version, change only a verified alias/provenance transformation version; do not fabricate astronomical coordinates. Retain both immutable snapshots.
-7. Stop/start the named node container and public tunnel after a fresh backup; verify PVC data, Argo reconciliation and public app return. Record the downtime/operating-hours constraint.
-8. Test host offline during release: workflow cannot report verified success; when the host returns, Argo reconciles approved Git state and a rerun verifies actual SHA. Record this separately from application rollback failure.
+**Exit:** GitOps manages the working application and actual running versions match Git.
 
-**Exit:** pod recovery, Git-managed scaling, rolling delivery, dependency failure, atomic data handling and host-resume behavior are demonstrated.
+### P18 — Demonstrate one update and Git rollback
 
-### P21 — Complete backup, restore, rebuild, and safe teardown
+**Depends on:** P17.
 
-**Depends on:** P20. **Output:** repeatable disaster recovery and cleanup.
+Make a small visible change through a protected PR. Let CI build/publish the
+images and update deploy; observe Argo reconciliation and verify the running change.
+Then revert the deploy change through Git and verify the prior version. Keep schemas
+forward-compatible and do not restore the DB as an application rollback.
 
-1. Take a fresh complete host backup with both dumps, dataset/release references and checksums. Create a known shared journey and include its UUID/result in the backup verification fixture.
-2. Restore into isolated restore-check target, compare all snapshot/star/chunk counts/hashes and sampled calculations, prove saved journey survives, and measure duration. Verify regenerated roles/grants/credentials work.
-3. Implement/run guarded `cluster-rebuild --confirm-cluster stellar-atlas-demo` only after fresh backup verification: close public access and scheduler; stop GitOps; archive Terraform states; delete only the named kind cluster; retain host backups/source/tools. Do not bypass prevent_destroy or run a blanket Terraform destroy against persistent claims. Cluster deletion bypasses Kubernetes lifecycle protections, which is why the host backup/explicit-name gate is mandatory.
-4. Recreate exact kind+Calico/foundation, generate credentials, restore PostgreSQL with fresh owner/grants, restore catalog/journey data, recreate monitoring, reinstall restricted Argo, reconcile saved release, then restart/verify public tunnel. Do not import a new snapshot over the restored active one accidentally.
-5. Handle local Terraform state from the deleted cluster explicitly: archive it, initialize fresh project state for the new cluster, and reapply; do not treat old state as proof resources still exist. Never remove unrelated state or force-unlock a lock owned by a running operation.
-6. Verify real public source/data SHA, shared journey and local browser saved-item behavior after rebuild; collect actual RTO. Restore-check resources are separately removed using explicit target names.
-7. Test `demo-stop`/`demo-start` twice for idempotency without data deletion. Default teardown is a safe stop retaining cluster/PVC/state. Its explicit `--remove-cluster --confirm-cluster stellar-atlas-demo` form requires a verified fresh host backup, removes only that named cluster, then archives its state; it never wipes host backups or unrelated Docker volumes. Test teardown dry-run prints exact names/paths; reject unexpected cluster names, root paths and paths outside `.local`.
-8. Write precise RUNBOOK recovery branches: Docker not running/access denied; wrong context; port conflict; DNS/CNI failure; ImagePullBackOff/private GHCR; PodSecurity/read-only mount failure; DB auth/migration; Argo RBAC/CRD; missing snapshot; scanner DB unavailable; disk full; lost tunnel; stale Git release and invalid dump.
-9. For final assessment leave the agreed demo environment running or stopped according to the user's instruction; never teardown merely because documentation is complete. State operational status honestly.
+Checks: retain the PR/run/deploy revision and before/after version screenshot. One
+real update and rollback suffice; no fault injection, queued-release races, automatic
+rollback controller or multiple offline-release scenarios.
 
-**Exit:** complete cluster reconstruction and restored data are proven; safe stop/start and scoped teardown work; backups remain outside the cluster.
+**Exit:** an ordinary update and a Git-based rollback are demonstrated.
 
-### P22 — Finish performance, visual, accessibility, and reproducibility acceptance
+### P19 — Summarize basic DevSecOps evidence
 
-**Depends on:** P21. **Output:** final measured acceptance, not aspirational targets.
+**Depends on:** P18.
 
-1. Measure default 50-ly initial interaction time and compressed payload; verify exact 1151 count and no raw CSV transfer. Measure 100-pc view with exact 300526 median-in-scope objects. Preserve all records; do not silently downsample to pass a visual test.
-2. Run 30-second camera-orbit FPS measurement on the declared host/browser, record median/p95 frame time/DPR/count and GPU/software-rendering status. Default radius must meet NF04. Use shader point cloud, label cap, Worker picking and DPR bound as the prescribed remedies.
-3. Benchmark local read+estimate endpoints with ten concurrent virtual clients and a total paced arrival rate of 8 requests/s for 60 s (6 read/s, 1 estimate/s, 1 other read/s). Exclude shared-create from the main load test; separately verify create limits. This avoids mistaking intentional global rate limiting for an API reliability failure. Record errors/429s/latency distribution and warm-up conditions.
-4. Compare localhost and public tunnel timings separately. Quick Tunnel throughput/availability limits cannot be represented as a backend benchmark. If public transfer is slow, verify chunk compression/cache/progressive loading rather than adding paid hosting.
-5. Review desktop 1440×900/1920×1080 and mobile 390×844, keyboard-only use, reduced motion, color legend correctness, text contrast, profile overflow, no-WebGL fallback, deep-link refresh and saved-item limits. Capture final actual screenshots, not generated mockups.
-6. Test default/empty/maximum radius, lost network mid-fetch, old snapshot share, expired/purged journey, localStorage denied/full, WebGL context loss and malformed fragments. Ensure retry/cancellation does not produce stale selection/calculation.
-7. Test a clean clone in a separate workspace with no original node_modules/venvs/cache/secrets. Follow README commands, download sealed asset, create fresh fixture Compose environment and validate locks. An existing team machine may additionally execute the same bootstrap; do not claim a second physical-host test if only a clean local clone was used.
-8. Re-run the appropriate full suite and security gates after fixes. Record measured values and remaining blockers without changing acceptance targets silently. Any required failure keeps final acceptance incomplete.
+Show the existing secret gate, one image scan, one safe rejected example, private
+DB/admin routing and non-root app settings. Reuse earlier checks and role-denial
+results. Review logs/evidence for accidental secrets before submission.
 
-**Exit:** FR/NF acceptance has actual results; visual/interactive behavior is reviewed; clean-clone instructions work.
+Checks: record actual pass/fail output and fix actionable issues. No new scanner
+stack, signing policy, attack matrix or exhaustive hostile-input suite unless the
+course explicitly asks for it. Existing working validation remains in place.
 
-### P23 — Package assessment evidence, release, and implementing-agent handoff
+**Exit:** the course security demonstrations have clear, limited evidence.
 
-**Depends on:** all previous phases. **Output:** submission-ready project and reproducible operational handoff.
+### P20 — Demonstrate basic Kubernetes operations
 
-1. Complete `docs/ARCHITECTURE.md` with service, data, runtime, trust-boundary and delivery diagrams matching the implementation. Include resource ownership and the distinction between Compose dev, ephemeral CI and local demo.
-2. Complete `docs/RUNBOOK.md` with exact commands from clean setup to demo-start/stop, routine release, data operation, rollback, backup/restore, local-only admin access, public URL maintenance, resource/billing inspection, and guarded teardown.
-3. Complete `docs/EVIDENCE_MATRIX.md`: each DV topic maps to source files, actual command/run URL, screenshot/report and a one-sentence explanation of what it proves. Map FR/NF criteria to tests/measurements in ACCEPTANCE.md.
-4. Create `evidence/manifest.json` referencing actual commit IDs, PRs, workflow runs, image digests, signatures/SBOMs, deployment revisions, cluster/policy demonstrations, data validation, public URL checks and recovery/performance results. Small sanitized summaries may enter Git; bulky/raw/private material remains local or in bounded release assets.
-5. Write a 12–15 minute `docs/DEMO_SCRIPT.md`: public product tour; service/image separation; IaC no-change/drift; PR security/test rejection; approved release/version; Argo reconciliation; pod recovery/scaling; dashboards; Git rollback; backup/restore evidence; zero-cost and uptime limits. Use recorded recovery evidence if a live destructive demonstration would exceed assessment time.
-6. Run a final cost audit: free Personal/educational plans, standard public runners, current registry policy, bounded artifacts, no paid domains/cloud, no AWS resources. Attach sanitized dates/links; free-provider policy is periodically rechecked, not guaranteed forever.
-7. Reconcile deployed release to final tested source, tag software `v1.0.0`, publish release notes/data credits/known operational limits and sanitized evidence assets. Tagging alone cannot replace CI/CD acceptance. Do not overwrite the immutable data release.
-8. Run final external smoke and all relevant acceptance checks against that exact release. Record final public URL and its expected operating schedule, latest backup path/hash, current deployment SHA and unresolved **actual** blockers if any.
-9. Ensure no acceptance item says passed merely because a command was planned. If any required item is failed/blocked/not run, mark project incomplete and state the precise requirement; do not omit it from the final handoff.
-10. Provide the user a concise completion report linking PRD, implementation/runbook, repository/release, public URL, evidence matrix and actual test results. State whether the local demo is running. Preserve originals and approved scope.
+**Depends on:** P19.
 
-**Exit:** every required FR/NF/DV item has evidence; a new implementing/operating agent can reproduce and operate the result without inventing omitted architecture or deployment steps.
+Delete one stateless app pod and observe replacement. Scale one API from one to
+two replicas through the deployment config/GitOps and return to one. Show the rollout
+and explain the PVC. Reuse the P18 rollback and P05 atomic-import evidence.
+
+Checks: record pod/replica output and observed recovery time. A single-node host
+is not HA; there is no required chaos campaign, repeated import interruption or
+host-offline/release race demonstration.
+
+**Exit:** pod replacement, scaling, rollout and persistence are understandable and shown.
+
+### P21 — Write the short operating/recovery guide
+
+**Depends on:** P20.
+
+Document clean startup, safe stop, update/rollback, manual backup/restore, tunnel
+restart and the common observed problems. Reuse the P14 restore evidence; repeat
+only if persistence or schema handling changed. Leave the demo running/stopped as
+requested; preserve originals, state, backups and unrelated containers.
+
+Checks: one normal stop/start preserves catalog and journey. Full cluster deletion,
+automated reconstruction, destructive teardown and a disaster-recovery engine are
+optional and require an explicitly named target plus verified backup if requested.
+
+**Exit:** another student can operate the demo using the guide and existing scripts.
+
+### P22 — Do one final usability and performance review
+
+**Depends on:** P21.
+
+Check the main flows once on desktop and mobile: explore/search/profile, calculate/
+share, saved items and a useful error state. Check keyboard access and the list
+fallback. Record actual screenshots and the correct 1151/300526 catalog counts.
+
+Record a simple warm page/API timing and whether default-radius movement is smooth.
+Fix visible slowness or incorrect behavior; 5-second/30-FPS/500-ms targets are now
+advisory, not release-blocking SLOs. No mandatory ten-client 60-second load harness,
+full browser/device matrix, repeated fault suite or second machine/clean-cluster
+campaign. A clean-clone check is useful once if practical, not an entire new platform.
+
+Checks: focused reruns after fixes and the existing required CI before merge. Reuse
+the sealed full-data and browser-byte evidence unless those paths changed.
+
+**Exit:** the app is usable at demonstration scale and actual limits are documented.
+
+### P23 — Package the course submission
+
+**Depends on:** all revised required phases.
+
+Provide a concise architecture diagram, README/runbook, course-topic evidence
+table, screenshots, PR/CI/release links, current public URL and a short demonstration
+script. Reuse real earlier outputs rather than creating an evidence-collection engine.
+Record actual running source/data versions, backup location and host availability.
+
+Checks: review the core FR/NF/DV course criteria and one final public smoke flow.
+Report real required gaps honestly. Explicitly optional extensions are out of scope,
+not failed gates. No new hardening/measurement infrastructure at submission time.
+
+**Exit:** a clear, working, zero-cost course demo with reproducible core evidence.
 
 ## 5. Cross-phase details that must not be improvised
 
@@ -768,48 +784,27 @@ All configuration is parsed/validated at startup. Nonsecret defaults go in `.env
 | `CATALOG_INTERNAL_URL` | `http://catalog.stellar-atlas.svc.cluster.local:8000` in demo; `http://catalog:8000` in Compose | Journey |
 | `LOG_LEVEL` | `INFO` demo; no body/header/credential dumps | Python services/jobs |
 | `SHARE_RETENTION_DAYS` | 30; expired grace 7 days | Journey/retention |
-| `PUBLIC_BASE_URL` | Actual HTTPS tunnel URL; GitHub repository variable and ignored operator config | Release verifier/runbook, not baked browser code |
-| `GITOPS_ENABLED` | false only during P15 bootstrap; true after P17 | Trusted release workflow |
+| `PUBLIC_BASE_URL` | Actual HTTPS tunnel URL in ignored operator config/runbook; GitHub variable only if needed | Public smoke, not baked browser code |
+| `GITOPS_ENABLED` | Optional bootstrap flag if the workflow needs it; final demo uses GitOps | Trusted release workflow |
 | `PGDATA` | `/var/lib/postgresql/data/pgdata` on Linux PVC | PostgreSQL |
-| `EXPECTED_SIGNER` | Exact verified release-workflow certificate identity, no wildcard | Promotion/rollback verification |
+| `EXPECTED_SIGNER` | Optional only if signing is explicitly selected | Optional signing checks |
 
 Web API calls use relative `/api/...` URLs and share links use `window.location.origin`, so a tunnel change does not require rebuilding frontend code. Serve static build `/version.json` with SOURCE_SHA; serve nonsecret `/release.json` from a read-only mounted release ConfigMap containing source SHA, RELEASE_ID, image digests, and dataset ID. Release verification checks both static source identity and this runtime deployment identity.
 
 API metadata includes both `source_sha` and `release_id`. This distinguishes deploying the same images in a retry, controlled fault demonstration, or rollback. No health/readiness metadata is accepted solely from an unauthenticated client request header.
 
-### 5.2 Release manifest, retry, rollback, and expiry semantics
+### 5.2 Small release record and rollback
 
-`release.json` required fields:
+In P11, revise the existing future release contract/tests to require only actual
+source/repository/release IDs, timestamp, sealed dataset ID/checksum, four image
+digests and compatibility versions. Preserve scientific/API contracts. Signature
+identity and SBOM hashes are optional extensions; never fabricate them to satisfy
+the P02 draft schema. This documentation change does not modify that schema today.
 
-```json
-{
-  "schema_version": 1,
-  "release_id": "generated-from-actual-run",
-  "source_sha": "actual-full-commit",
-  "source_repository": "actual-owner/DevOps_Assignment",
-  "created_at": "actual-UTC-timestamp",
-  "dataset": {"snapshot_id": "locked-id", "raw_sha256": "locked-hash", "fixture": false},
-  "images": {
-    "web": {"ref": "ghcr.io/owner/stellar-atlas-web@sha256:actual", "sbom_sha256": "actual"},
-    "catalog": {"ref": "ghcr.io/owner/stellar-atlas-catalog@sha256:actual", "sbom_sha256": "actual"},
-    "journey": {"ref": "ghcr.io/owner/stellar-atlas-journey@sha256:actual", "sbom_sha256": "actual"},
-    "importer": {"ref": "ghcr.io/owner/stellar-atlas-importer@sha256:actual", "sbom_sha256": "actual"}
-  },
-  "signer_identity": "exact-expected-workflow-identity",
-  "compatibility": {"catalog_schema": 1, "journey_schema": 1, "model": "constant-speed-v1"},
-  "verification": {"state": "pending"}
-}
-```
-
-The example uses descriptive values; production schema validation requires real SHAs/digests/URLs and rejects those strings. Verified status is emitted by the verifier as a separate report; it must not be set to verified merely when this manifest is generated.
-
-For a source SHA already built, reuse the complete verified four-image set and archived SBOMs; rescan it with the current allowed vulnerability DB before promotion. Do not overwrite existing immutable `sha-<fullsha>` image tags or rebuild with a different base under the same source release. If only a partial set was published, recover the missing verified build outputs or create a new source commit/build-set ID; never mix unverified sets. Retries get a new runtime RELEASE_ID while preserving image digests.
-
-Capture the complete prior application tree before promotion, not just a previous SHA string. Store its exact manifest tree and release metadata as a bounded software-release asset and in deploy-branch history. Retain all assessment release manifests/digests until course completion. The rollback workflow selects only this recorded set and checks schema compatibility; it never executes arbitrary paths supplied by workflow input.
-
-After app rollback, re-run the import Job with its release-declared snapshot and `--activate`; an already-ready older snapshot can become active again without reimporting rows. Schemas remain at the forward-compatible head; frozen shared journey values remain readable. Do not equate image rollback with database restoration.
-
-The controlled fault demo uses a temporary, test-only manifest overlay with a deliberately nonexistent **readiness path**, unchanged verified images and a new RELEASE_ID. It leaves liveness/process behavior intact and old healthy replicas running. Restrict this workflow input to explicit maintainer dispatch and restore the previous Git tree after observation; it is never a public application feature or a normal release default. The verifier detects that candidate RELEASE_ID did not become healthy, even if source SHA was unchanged.
+Keep the previous deploy commit for a normal Git revert and verify the restored
+running version. Do not downgrade database schemas or wipe data for app rollback.
+Use an ordinary manual smoke check after sync; report an offline host honestly.
+Journey's implemented 30-day expiry/7-day grace behavior remains unchanged.
 
 ### 5.3 Bootstrap order and command milestones
 
@@ -848,22 +843,22 @@ python tools/run.py data-seal
 .\ops.ps1 gitops-bootstrap
 .\ops.ps1 smoke --target public
 
-# P21: explicit destructive recovery demonstration, only after a verified backup
-.\ops.ps1 cluster-rebuild --confirm-cluster stellar-atlas-demo
-.\ops.ps1 smoke --target public
+# P21: safe restart and reuse the P14 manual restore evidence
+.\ops.ps1 demo-stop
+.\ops.ps1 demo-start
 ```
 
-The dispatcher accepts the shown arguments as its API; implement validation and useful `--help`, not a set of shell snippets requiring the operator to infer missing flags. If PowerShell execution policy blocks a local script, use the equivalent `python tools/run.py ...` action; do not weaken machine-wide policy.
+Implement only commands needed for the revised phases, with simple validation and useful `--help`. Optional commands in the original section 1.2 inventory are not a requirement to build extra automation. If PowerShell execution policy blocks a local script, use the equivalent `python tools/run.py ...` action; do not weaken machine-wide policy.
 
-P15's first release is allowed to report artifact publication plus pending bootstrap verification, but the final delivered workflow must have GitOps enabled and must not pass a deployed status without public verification. P16 needs a local app, not an already-working Argo instance; P17 needs the already-published deploy ref. This order avoids a circular bootstrap dependency.
+P15's first release may report publication with deployment verification pending. The final demo must show GitOps and a public smoke check; a recorded manual check is sufficient. Do not label an unverified release as deployed. P16 needs a local app, not an already-working Argo instance; P17 needs the already-published deploy ref. This order avoids a circular bootstrap dependency.
 
 ### 5.4 CI fixture and production separation
 
 - CI fixtures have their own manifest/count and `fixture=true`. CI Playwright expected counts derive from that manifest; production acceptance uses the exact baseline counts from the PRD.
 - The release builder rejects APP_ENV demo + fixture=true. Promotion schema rejects a fixture dataset. The full importer image is built only from the checksum-verified public data-release archive.
-- Local CI images use explicit CI/bootstrap tags only inside their documented overlays. The deployed demo uses image digests and complete signature evidence.
+- Local CI images use explicit CI/bootstrap tags only inside their documented overlays. The deployed demo uses image digests; signatures are optional.
 - CI uses software-rendered Chromium for functional tests; no CI FPS result can be advertised as the reference laptop's hardware result.
-- Full real-data validation runs before data publication and on every release build; PR tests use fixtures and cannot claim to have validated an arbitrary new catalog upload.
+- Full real-data validation runs before publication, after relevant data/import/binary/calculation changes and once at final acceptance. Ordinary UI/docs releases reuse the unchanged sealed checksum; PR tests use fixtures and cannot claim new full-data validation.
 
 ### 5.5 Failure decisions
 
@@ -875,14 +870,14 @@ P15's first release is allowed to report artifact publication plus pending boots
 | Snapshot checksum changes | Treat as a new candidate/version; retain sealed baseline; never edit expected hash merely to pass. |
 | Optional alias/photometry absent | Display ID/Not available; preserve correct coordinates and feature behavior. |
 | Required coordinates/unit/schema invalid | Reject candidate; keep active snapshot and prior report. |
-| Scanner unavailable/DB too old | Fail release gate with retry/cache-age diagnostics; do not skip scan. |
+| Required image scan unavailable | Record the failed scan and retry; never report a pass or substitute an optional scanner framework. |
 | GHCR package private | Make the four intended public packages public after inspecting their contents; reverify anonymously; no cluster PAT workaround. |
 | No public tunnel route | Verify pinned cloudflared, local gateway health, owned process/logs, outbound connectivity and the current Quick Tunnel URL. Record any external-service blocker; no cloud purchase or silent hosting change. |
 | Public app unreachable during release | Report pending/failed verification and host-start instructions; do not claim deployed or blindly overwrite deploy history. |
-| Candidate unhealthy while old route remains reachable | Compare-and-swap restore prior deploy tree, verify prior RELEASE_ID and record failure. |
+| Candidate unhealthy | Use the recorded previous deploy commit for a deliberate Git rollback and verify the previous version. No automatic recovery controller required. |
 | Newer deploy commit exists during rollback | Abort stale rollback; do not force push or revert someone else's newer release. |
 | PVC/node lost | Verify external host dumps, rebuild exact project cluster and restore; never claim local PVC alone is a backup. |
-| Policy objects exist but connections are not denied | Fail network-policy acceptance; repair CNI/enforcement before continuing. |
+| Optional network-policy demo selected but denial fails | Report that optional demonstration as failed; do not claim enforcement. It is not required for the default course scope. |
 | Public bandwidth slow | Optimize verified chunks/cache/loading; report tunnel timing separately. |
 | Free-provider terms change | Recheck whether the already-approved free option remains usable; use local equivalents/declared tunnel contingency, report any unmet public-delivery requirement, never authorize spending. |
 
@@ -894,25 +889,25 @@ P15's first release is allowed to report artifact publication plus pending boots
 | FR05–FR07 search/profiles/neighbors | P03, P06, P08 | P10 contracts/browser, P22 null/alias/neighbor checks |
 | FR08 distance | P02, P07, P08 | Independent triangle and real-object calculation tests |
 | FR09–FR11 journeys/playback/sharing | P07, P08 | P10 browser/API, P18 public shared round-trip |
-| FR12 share views | P08 | URL round-trip, bad fragment, old snapshot tests in P22 |
-| FR13 saved items | P08 | Browser storage/dedup/cap/fallback tests in P22 |
+| FR12 share views | P08 | One URL round-trip and representative invalid-state check in P22 |
+| FR13 saved items | P08 | Manual saved-item flow and one storage-unavailable check in P22 |
 | FR14 observer | P08 | Coordinate-basis test and actual viewpoint demonstration P22 |
-| FR15–FR17 resilience/release/accessibility | P08, P09 | P18 release metadata, P22 fault/mobile/keyboard/reduced motion |
+| FR15–FR17 resilience/release/accessibility | P08, P09 | P18 release metadata, P22 representative error/mobile/keyboard/reduced-motion checks |
 | NF01 zero cost | P00, P15, P16 | P19/P23 dated cost/configuration audit |
-| NF02 reproducibility | P01, P09, P12 | P21 rebuild, P22 clean clone |
-| NF03–NF06 performance/transfer | P05, P06, P08 | P22 measured local/public reports |
-| NF07 security | P04, P09, P10, P12 | P19 gates/ports/grants/runtime/policy proof |
+| NF02 reproducibility | P01, P09, P12 | Repeat documented startup; one clean-clone check if practical |
+| NF03–NF06 performance/transfer | P05, P06, P08 | P22 simple usability/timings; old strict SLOs advisory; retain byte/count correctness |
+| NF07 security | P04, P09, P10, P12 | P19 basic gates/ports/grants/runtime evidence |
 | NF08 recovery | P12, P17, P18 | P20 pod/rollback timing |
-| NF09 atomic data | P05 | P20 invalid/interrupted/valid candidate evidence |
-| NF10 persistence | P04, P12, P14 | P21 restore/rebuild with saved journey |
-| NF11 expiry | P07, P13 | Controlled-clock/retention tests in P10/P22 |
+| NF09 atomic data | P05 | Reuse completed P05 failure/activation evidence unless importer changes |
+| NF10 persistence | P04, P12, P14 | P14 isolated restore with saved journey; P21 safe restart |
+| NF11 expiry | P07, P13 | Reuse completed P07 controlled-clock/retention tests unless behavior changes |
 | NF12 availability | P16 | P20 offline/resume; About/runbook/public schedule |
 | DV01 microservices | P04, P06, P07, P13 | Service HTTP trace, separate images/deployments and privilege isolation |
-| DV02 Docker | P09, P11 | Fresh Compose, non-root/read-only images, digests/SBOM |
-| DV03 IaC | P12 | First apply, zero-diff replan, label drift repair and rebuild |
-| DV04 Kubernetes | P12, P13 | P20 probes/recovery/scaling/rollout; policy proof |
-| DV05 CI/CD | P15, P17, P18 | PR gates → image provenance → deploy commit → Argo → public release |
-| DV06 DevSecOps | P10, P11, P19 | Negative gate examples, verified image signatures and runtime restrictions |
+| DV02 Docker | P09, P11 | Fresh Compose, non-root app images and recorded digests |
+| DV03 IaC | P12 | Apply, no-change replan and one label-drift repair |
+| DV04 Kubernetes | P12, P13 | P20 probes/pod replacement/scaling/rollout; policy enforcement optional |
+| DV05 CI/CD | P15, P17, P18 | PR gates → built image digests → deploy commit → Argo → public smoke |
+| DV06 DevSecOps | P10, P11, P19 | One safe rejected example, image scan and basic runtime/private-route settings |
 | DV07 local deployment | P12, P14, P16, P21 | Start/stop, monitoring, resource budget, backup/restore |
 | DV08 public URL | P16 | External client reaches actual Kubernetes app over HTTPS |
 
@@ -934,10 +929,10 @@ Primary documentation consulted on 18 October 2026:
 
 Registry metadata queried for pinned application packages: npm official package endpoints for React/Vite/Three/Vitest/Playwright and PyPI for FastAPI/SQLAlchemy/Alembic/psycopg. Runtime compatibility, successful installs, scanner findings and performance are explicitly implementation-phase checks, not findings from writing the plan.
 
-### Planning-document completion check
+### Original planning-document completion check (historical)
 
 - PRD defines 17 functional, 12 nonfunctional and 8 DevOps acceptance requirements.
-- Implementation phases P00–P23 cover initial prerequisites through final operational handoff, each with dependencies, ordered actions and exit criteria.
+- Revised phases P00–P23 cover prerequisites through handoff. P00–P07 evidence is historical; future exit criteria follow ADR 0005.
 - External/machine inputs have acquisition rules; no paid fallback is permitted.
 - Data source, schemas, units, binary format, APIs, runtime topology, ownership, workflow privileges, bootstrap ordering, rollback, backup and acceptance evidence are specified.
 - No application code, installation, cloud resource, Git repository publication or deployment has been executed by this document-writing task.

@@ -1,8 +1,10 @@
 # Stellar Atlas — Product Requirements Document
 
-Version: 1.1 | Decision date: 18 October 2026 | Public-access revision: 19 October 2026 | Status: approved project, planned implementation
+Version: 1.2 | Decision date: 18 October 2026 | Course-scope revision: 20 October 2026 | Status: P00–P07 complete; later phases planned
 
 Read with [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md). That document specifies the implementation sequence and operational contracts. This document specifies required user-visible behavior and acceptance criteria.
+
+The user-approved [course-scope amendment](adr/0005-course-assignment-scope.md) controls future checks. Use basic reliable demonstrations and focused tests. Advanced hardening is optional; completed code, sealed data and existing CI checks remain intact.
 
 ## 1. Purpose and priority
 
@@ -133,19 +135,19 @@ Reference files: `design/mockups/01-explore.png`, `02-star-profile.png`, `03-jou
 | ID | Target | Measurement |
 |---|---|---|
 | NF01 | No paid-service dependency | Cost/configuration audit and account-plan screenshots with sensitive fields excluded. |
-| NF02 | Local reproducibility | A second clean clone can run the documented bootstrap with only declared account identity and host prerequisites. |
-| NF03 | Responsiveness | Initial 50-ly atlas interactive within 5 s on the declared reference laptop over localhost with warmed container images. Public-path timings recorded separately. |
-| NF04 | Rendering | At least 30 FPS median during a 30-second camera orbit at the default radius on the declared laptop; record hardware, browser, DPR, data count, and conditions. |
-| NF05 | API behavior | After warm-up, read/estimate API p95 under 500 ms with 10 concurrent local clients for 60 s, excluding map-asset download and cold database startup. Error rate under 1%. |
+| NF02 | Local reproducibility | Repeat documented startup successfully with declared prerequisites; check one clean clone at final handoff if practical. |
+| NF03 | Responsiveness | Record a simple initial 50-ly load timing and address visibly poor usability. The original 5 s target is advisory; record public-path behavior separately. |
+| NF04 | Rendering | Demonstrate usable orbit/selection on the reference laptop and record browser/hardware. The original 30 FPS benchmark is optional. |
+| NF05 | API behavior | Demonstrate working API reads/estimates and note obvious delays. The original p95 <500 ms, 10-client/60-second load benchmark is optional. |
 | NF06 | Transfer size | No raw CSV in browser responses. Default map binary plus metadata below 1 MiB compressed. Complete in-scope binary assets below 12 MiB compressed. |
 | NF07 | Safety | No committed credentials; no public database, Kubernetes administration, Argo CD UI, Grafana, metrics, importer, or migration endpoint. |
-| NF08 | Recovery | With the host/cluster running, a deleted stateless pod is replaced and ready within 120 s. A failed application rollout can be restored through Git within 10 min. |
+| NF08 | Recovery | Demonstrate replacement of one deleted stateless pod and one Git rollback; record elapsed time. Original 120 s/10 min targets are advisory. |
 | NF09 | Data resilience | Invalid candidates cannot replace the active catalog. Preserve a working snapshot during import failure. |
-| NF10 | Persistence | Restarting pods does not lose data. Complete cluster deletion is recoverable from a host-stored backup; PVC persistence alone is not a host backup. |
+| NF10 | Persistence | Restarting pods preserves data. Create a host-stored backup and restore it once to an isolated target, checking catalog count and a journey. Destructive cluster deletion/rebuild is optional. |
 | NF11 | Journey retention | Shared journeys expire after 30 days; after expiry return 410 for 7 days, then purge. Saved local journeys retain enough frozen calculation data to display their summary. |
 | NF12 | Honest availability | Public availability is conditional on the local host, Docker, Kubernetes, tunnel, and internet. No 24/7 or high-availability claim. |
 
-Targets NF03–NF06 are acceptance targets, not measurements already achieved. Failures must be investigated, fixed, and remeasured; never relabel an unrun check as passed.
+NF03–NF05 require simple usability observations; their original numeric benchmarks are advisory, not submission gates. NF06 transfer limits remain required. Record actual results and any material usability problems; never label unrun checks as passed.
 
 ## 8. DevOps acceptance requirements
 
@@ -153,10 +155,10 @@ Targets NF03–NF06 are acceptance targets, not measurements already achieved. F
 |---|---|---|
 | DV01 | Microservices | Separate contracts/images/deployments; Journey calls Catalog over HTTP; independent deployment/recovery demonstration; database grants prevent cross-service writes. |
 | DV02 | Docker | Reproducible Compose startup, non-root application images, health checks, pinned bases, and image digests. |
-| DV03 | IaC | kind configuration plus Terraform-managed platform; first apply, second no-change plan, detected/restored drift, and documented rebuild. |
-| DV04 | Kubernetes | Running services, probes, limits, rollout, pod replacement, Git-managed replica change, persistent data, and enforced network policy. |
-| DV05 | CI/CD | Protected-main PR checks, failed test gate, successful image build/scan/sign/publish, GitOps promotion, running version verification, and Git rollback. |
-| DV06 | DevSecOps | Secret/configuration/image checks block promotion; signed image verification; runtime restrictions; safe negative examples; no exposed admin surfaces. |
+| DV03 | IaC | kind configuration plus Terraform-managed platform; first apply, second no-change plan and one detected/restored label drift. A full rebuild is optional. |
+| DV04 | Kubernetes | Running services, probes, limits, rollout, pod replacement, Git-managed replica change, persistent data. Custom CNI/network-policy enforcement is optional. |
+| DV05 | CI/CD | Protected-main PR checks, failed test gate, successful image build/scan/publish, GitOps promotion, running version verification, and Git rollback. |
+| DV06 | DevSecOps | Keep existing secret checks; one Grype image scan, one safe rejected example, non-root app images and private admin surfaces. Signing/SBOMs, extra scanners and attack matrices are optional. |
 | DV07 | Local deployment | Documented zero-cost host prerequisites, start/stop commands, resource budget, persistence, monitoring, backup, restore. |
 | DV08 | Public URL | External unauthenticated browser reaches the local Kubernetes application over HTTPS through accountless Cloudflare Quick Tunnel. Record the actual temporary URL, update shared links after each new tunnel, and disclose local-host availability and no uptime guarantee. |
 
@@ -164,11 +166,11 @@ Targets NF03–NF06 are acceptance targets, not measurements already achieved. F
 
 Excluded from this release: user registration, social features, personal data, AI generation, orbital/gravity simulation, whole-galaxy reconstruction, scientifically accurate apparent sky brightness from arbitrary locations, interstellar route optimization, paid domains, cloud compute, managed databases, service mesh, multi-host HA, and a staging cloud environment.
 
-CI fixtures, disposable CI clusters, and the local demo namespace are sufficient environments. Exclusions prevent unrelated scope growth; they are not missing implementation decisions.
+Use CI fixtures and the local demo cluster. Disposable clusters in CI, a custom CNI, signing/SBOM tooling, exhaustive fault matrices and automated disaster recovery are outside the default course scope. Exclusions prevent unrelated scope growth; they are not missing implementation decisions.
 
 ## 10. Definition of complete
 
-The release is complete only when FR01–FR17, NF01–NF12, and DV01–DV08 have an acceptance result linked to evidence. The runbook must cover setup, routine startup/shutdown, public access, release, rollback, import, backup, restore, common failures, and guarded teardown. The repository must contain a final architecture diagram, dependency/data attribution, actual measurements, a course-topic evidence matrix, and an assessment script.
+The release is complete when FR01–FR17, NF01–NF12 and DV01–DV08 have course-sized acceptance evidence under ADR 0005. Focused automated checks and recorded manual demonstrations are both valid; reuse unchanged earlier evidence. The runbook must cover setup, routine startup/shutdown, public access, release, rollback, import, backup, restore, common failures, and guarded teardown. The repository must contain a final architecture diagram, dependency/data attribution, actual measurements, a course-topic evidence matrix, and an assessment script.
 
-Any unmet requirement is recorded as a failed or blocked acceptance result with its concrete cause. A polished mockup, passing build, or planned demonstration is not completion evidence.
+Any unmet required behavior is recorded as failed or blocked with its concrete cause. Unselected optional checks are recorded as optional, not failed. A polished mockup, passing build, or planned demonstration is not completion evidence.
 

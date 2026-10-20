@@ -118,3 +118,5 @@ no second-person approval is mandatory. The early workflow runs
 on main pushes, PRs targeting main, and manual dispatch. It checks implemented
 quality gates and full-history secrets/publication exclusions. It does not deploy
 or publish data/images. See [CI scope and Batch 2 handoff](docs/EARLY_CI.md).
+
+Future implementation follows the [course-scope amendment](docs/adr/0005-course-assignment-scope.md): focused checks and simple DevOps demonstrations. Advanced hardening is optional; existing CI and completed backend checks stay intact.

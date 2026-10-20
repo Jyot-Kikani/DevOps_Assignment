@@ -23,3 +23,5 @@ and its history. Never create a replacement `stellar-atlas` repository. Keep
 public visibility chosen by the user and zero-paid-usage budgets. Full
 security/integration checks are added in their plan phases;
 an early CI pass does not establish a deployed or complete application.
+
+For future work, follow [ADR 0005](docs/adr/0005-course-assignment-scope.md). Run focused checks for the actual change and retain both existing required CI jobs. Reuse unchanged evidence; do not add scanners, exhaustive failure matrices, coverage targets or infrastructure solely for defensive completeness. Manual course demonstrations are valid evidence.

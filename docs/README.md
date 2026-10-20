@@ -19,3 +19,5 @@ and exact validation. Read its phase guides for reproducible database and HTTP
 checks. The early-CI and Batch 1 documents remain historical checkpoints.
 The next implementation phase is P08; frontend screens, complete application
 containers, Kubernetes and public access are still pending.
+
+Read [ADR 0005](adr/0005-course-assignment-scope.md) before future work. It narrows checks to a practical course demonstration and supersedes older mandatory hardening language. The revised PRD and implementation plan agree with it; historical completion reports remain unchanged.
