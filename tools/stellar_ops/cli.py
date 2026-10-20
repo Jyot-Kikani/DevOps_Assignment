@@ -11,7 +11,7 @@ from .bootstrap import ROOT, LOCAL, doctor, write_json
 def parser():
     result = argparse.ArgumentParser(description="Stellar Atlas host operations")
     commands = result.add_subparsers(dest="action", required=True)
-    for name in ('dev-up', 'dev-down', 'smoke', 'compose-check', 'images-build', 'security'):
+    for name in ('dev-up', 'dev-down', 'smoke', 'compose-check', 'images-build', 'images-check', 'security'):
         action = commands.add_parser(name, help='Local application/images operation; see docs/P09_COMPOSE.md')
         action.add_argument('--json', action='store_true')
         if name == 'dev-up':
@@ -60,7 +60,7 @@ def main(argv=None):
         if arguments.action == 'security':
             from .security import security
             report = security()
-        elif arguments.action in ('dev-up', 'dev-down', 'smoke', 'compose-check', 'images-build'):
+        elif arguments.action in ('dev-up', 'dev-down', 'smoke', 'compose-check', 'images-build', 'images-check'):
             from .application import action
             report = action(arguments.action, no_build=getattr(arguments, 'no_build', False))
         elif arguments.action == "secrets-init":

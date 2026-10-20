@@ -1,5 +1,6 @@
 """Local application operations. No Kubernetes, publication or destructive teardown."""
 import gzip
+from datetime import datetime, timezone
 import hashlib
 import json
 import os
@@ -54,6 +55,7 @@ def configure(sha):
 
 def images_build(clean=False):
     sha = source(clean)
+    dirty = bool(run(['git', 'status', '--porcelain']))
     dataset, manifest = stage_dataset()
     tag = configure(sha)
     images = {}
@@ -66,12 +68,43 @@ def images_build(clean=False):
         record = json.loads(run(['docker', 'image', 'inspect', f'stellar-atlas-{role}:{tag}']))[0]
         if record['Config']['Labels'].get('org.opencontainers.image.revision') != sha or record['Config']['User'] in ('', 'root', '0', '0:0'):
             raise ValueError('Image source/non-root check failed: ' + role)
-        images[role] = {'ref': record['Id'], 'local_tag': f'stellar-atlas-{role}:{tag}', 'digest_kind': 'docker-image-id'}
+        manifest_digest = record.get('Descriptor', {}).get('digest')
+        if not manifest_digest:
+            raise ValueError('Docker did not return an OCI manifest digest: ' + role)
+        images[role] = {'ref': record['Id'], 'local_tag': f'stellar-atlas-{role}:{tag}', 'manifest_digest': manifest_digest}
     release = {'schema_version': 1, 'release_id': tag, 'source_sha': sha,
-        'source_repository': 'Jyot-Kikani/DevOps_Assignment',
-        'dataset': {'snapshot_id': manifest['snapshot_id'], 'raw_sha256': manifest['raw_sha256'], 'fixture': False}, 'images': images}
+        'source_repository': 'Jyot-Kikani/DevOps_Assignment', 'source_dirty': dirty, 'created_at': datetime.now(timezone.utc).isoformat(),
+        'dataset': {'snapshot_id': manifest['snapshot_id'], 'raw_sha256': manifest['raw_sha256'], 'fixture': False}, 'images': images,
+        'compatibility': {'catalog_schema': 1, 'journey_schema': 1, 'model': 'constant-speed-v1'}}
     write_json(LOCAL / 'release.json', release)
+    if clean:
+        from .quality import python_ops
+        run([python_ops(), 'tools/check_release.py', str(LOCAL / 'release.json')])
     return {'status': 'passed', 'source_sha': sha, 'clean_source': clean, 'images': images, 'publication': 'local only'}
+
+def image_smoke():
+    release = json.loads((LOCAL / 'release.json').read_text())
+    results = {}
+    for role, image in release['images'].items():
+        info = json.loads(run(['docker', 'image', 'inspect', image['ref']]))[0]
+        if info['Id'] != image['ref'] or info['Descriptor']['digest'] != image['manifest_digest'] or info['Config']['Labels']['org.opencontainers.image.revision'] != release['source_sha']:
+            raise ValueError('Image identity mismatch: ' + role)
+        if info['Config']['User'] in ('', 'root', '0', '0:0'):
+            raise ValueError('Root application image: ' + role)
+        if role != 'importer':
+            container = run(compose() + ['ps', '-q', role])
+            running = json.loads(run(['docker', 'inspect', container]))[0]
+            if running['Image'] != image['ref'] or running['State']['Health']['Status'] != 'healthy':
+                raise ValueError('Running image identity/health mismatch: ' + role)
+        if role != 'web':
+            run(['docker', 'run', '--rm', '--network', 'none', '--entrypoint', 'python', image['ref'], '-m', 'pip', 'check'])
+            modules = {'catalog': 'stellar_catalog.app, stellar_catalog.migrate', 'journey': 'stellar_journey.app, stellar_journey.migrate', 'importer': 'stellar_importer.pipeline, stellar_importer.maintenance'}[role]
+            code = f'import os; import {modules}; assert os.getuid() != 0; assert os.environ["SOURCE_SHA"] == "{release["source_sha"]}"'
+            run(['docker', 'run', '--rm', '--network', 'none', '--entrypoint', 'python', image['ref'], '-c', code])
+        results[role] = {'status': 'passed', 'ref': image['ref'], 'user': info['Config']['User'], 'manifest_digest': image['manifest_digest']}
+    result = smoke()
+    result['images'] = results
+    return result
 
 def compose():
     if not (LOCAL / 'compose.env').is_file():
@@ -178,4 +211,6 @@ def action(name, no_build=False):
         return smoke()
     if name == 'compose-check':
         return persistence_check()
+    if name == 'images-check':
+        return image_smoke()
     return images_build(clean=True)

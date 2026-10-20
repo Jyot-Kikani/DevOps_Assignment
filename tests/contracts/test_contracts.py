@@ -64,11 +64,9 @@ def release_fixture():
     return {"schema_version": 1, "release_id": "r1-a1-" + "a" * 12, "source_sha": "a" * 40,
         "source_repository": "fixture-owner/DevOps_Assignment", "created_at": "2026-10-19T00:00:00Z",
         "dataset": {"snapshot_id": SNAPSHOT, "raw_sha256": "b" * 64, "fixture": False},
-        "images": {role: {"ref": f"ghcr.io/fixture-owner/stellar-atlas-{role}@sha256:" + "c" * 64, "sbom_sha256": "d" * 64}
+        "images": {role: {"ref": f"ghcr.io/fixture-owner/stellar-atlas-{role}@sha256:" + "c" * 64, "manifest_digest": "sha256:" + "c" * 64}
                    for role in ("web", "catalog", "journey", "importer")},
-        "signer_identity": "https://github.com/fixture-owner/DevOps_Assignment/.github/workflows/release.yml@refs/heads/main",
-        "compatibility": {"catalog_schema": 1, "journey_schema": 1, "model": "constant-speed-v1"},
-        "verification": {"state": "pending"}}
+        "compatibility": {"catalog_schema": 1, "journey_schema": 1, "model": "constant-speed-v1"}}
 
 
 def test_release_schema_rejects_mutable_or_inconsistent_artifacts():
@@ -76,13 +74,24 @@ def test_release_schema_rejects_mutable_or_inconsistent_artifacts():
     Release.model_validate(valid)
     for mutate in (lambda r: r["images"]["web"].update(ref="ghcr.io/fixture-owner/stellar-atlas-web:latest"),
                    lambda r: r.update(source_sha="b" * 40), lambda r: r["dataset"].update(fixture=True),
-                   lambda r: r.update(signer_identity="https://example.com")):
+                   lambda r: r.update(source_dirty=True), lambda r: r["images"]["web"].update(manifest_digest="sha256:" + "d" * 64)):
         invalid = copy.deepcopy(valid)
         mutate(invalid)
         with pytest.raises(ValidationError):
             Release.model_validate(invalid)
     PhaseReport.model_validate({"phase": "P02", "status": "in_progress", "checked_at_utc": "2026-10-19T00:00:00Z",
         "source_commit": None, "depends_on": ["P01"], "steps": [], "commands": [], "notes": [], "human_actions": []})
+
+
+def test_local_release_requires_real_image_ids_and_matching_source_tags():
+    record = release_fixture()
+    record['release_id'] = 'local-' + record['source_sha'][:12]
+    for role, image in record['images'].items():
+        image.update(ref='sha256:' + 'c' * 64, local_tag=f'stellar-atlas-{role}:local-' + record['source_sha'][:12])
+    Release.model_validate(record)
+    record['images']['web']['local_tag'] = 'stellar-atlas-catalog:local-' + record['source_sha'][:12]
+    with pytest.raises(ValidationError):
+        Release.model_validate(record)
 
 
 def test_fixture_manifest_hashes_are_independent_of_full_baseline():
