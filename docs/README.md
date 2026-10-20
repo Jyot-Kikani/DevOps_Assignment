@@ -13,3 +13,9 @@ local dataset sealing; feature implementation, database and deployment phases fo
 The user authorized [early GitHub CI](EARLY_CI.md) before Batch 2 and selected the
 existing `Jyot-Kikani/DevOps_Assignment` repository exclusively. Read
 [ADR 0004](adr/0004-existing-repository-and-early-ci.md) before remote operations.
+
+The [Batch 2 report](BATCH2_REPORT.md) records P04–P07 database/import/API work
+and exact validation. Read its phase guides for reproducible database and HTTP
+checks. The early-CI and Batch 1 documents remain historical checkpoints.
+The next implementation phase is P08; frontend screens, complete application
+containers, Kubernetes and public access are still pending.

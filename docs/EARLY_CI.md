@@ -1,5 +1,9 @@
 # Early CI and Batch 2 handoff
 
+Current implementation update: [Batch 2](BATCH2_REPORT.md) adds P04–P07 and real
+PostgreSQL/HTTP integration checks to the same required `ci / quality` job.
+The checkpoint below describes the earlier pre-Batch-2 state. P08 remains pending.
+
 The user authorized this checkpoint after P03 on 2026-10-20. It changes delivery
 sequence and repository identity, leaving P04–P07 for another chat.
 
