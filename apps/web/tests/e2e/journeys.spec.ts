@@ -47,4 +47,10 @@ test('calculate, illustrate, save and reopen an immutable share', async ({ page,
   await expect(page.getByRole('heading', { name: 'Journeys (1)' })).toBeVisible();
   await page.locator('.saved-row a').click();
   await expect(page.getByTestId('journey-result')).toBeVisible();
+  // Resaving can reorder the local list; the stable link must retain its journey.
+  const localUrl = page.url();
+  await page.getByRole('button', { name: 'Save journey', exact: true }).click();
+  await page.reload();
+  await expect(page.getByTestId('journey-result')).toContainText((star.distance_ly / .1).toLocaleString(undefined, { maximumFractionDigits: 4 }));
+  expect(page.url()).toBe(localUrl);
 });

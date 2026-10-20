@@ -150,8 +150,8 @@ function Journeys({ snapshot, view, save, copy, saved }: { snapshot?: Snapshot; 
   const cameraRef = useRef<CameraState | undefined>(undefined);
   const pendingShare = useRef<{ body: string; key: string } | undefined>(undefined);
   const sharedId = params.get('id');
-  const localIndex = params.get('local');
-  const frozen = !!sharedId || localIndex != null;
+  const localKey = params.get('local');
+  const frozen = !!sharedId || localKey != null;
   useEffect(() => {
     const abort = new AbortController(); setError('');
     if (sharedId) {
@@ -160,14 +160,13 @@ function Journeys({ snapshot, view, save, copy, saved }: { snapshot?: Snapshot; 
       request<SharedJourney>(`/api/journey/v1/journeys/${sharedId}`, { signal: abort.signal }).then(j => {
         setResult(j); setShared(j); setOrigin(j.origin_id); setDestination(j.destination_id); setSpeed(j.speed_fraction_c);
       }).catch(e => { if (!abort.signal.aborted) setError(message(e)); }).finally(() => { if (!abort.signal.aborted) setBusy(false); });
-    } else if (localIndex != null) {
-      const index = /^\d+$/.test(localIndex) ? Number(localIndex) : -1;
-      const j = saved.journeys[index];
+    } else if (localKey != null) {
+      const j = saved.journeys.find(item => journeyKey(item) === localKey);
       if (j) { setResult(j); setOrigin(j.origin_id); setDestination(j.destination_id); setSpeed(j.speed_fraction_c); }
       else setError('Saved journey unavailable.');
     }
     return () => abort.abort();
-  }, [sharedId, localIndex, saved.journeys, attempt]);
+  }, [sharedId, localKey, saved.journeys, attempt]);
   useEffect(() => {
     if (!playing) return;
     let last = performance.now();
@@ -222,7 +221,7 @@ function SavedPage({ saved, store }: { saved: Saved; store: (items: Saved) => vo
     <h2>Stars ({saved.stars.length})</h2>{!saved.stars.length && <p>No saved stars yet. Explore the atlas to save one.</p>}
     {saved.stars.map(s => <article className="saved-row" key={`${s.snapshot_id}:${s.source_id}`}><a href={starLink(s)}>{label(s)}<small>{number(s.distance_ly, 4)} ly from Sun</small></a><button aria-label={`Remove ${label(s)}`} onClick={() => store({ ...saved, stars: saved.stars.filter(v => v !== s) })}>Remove</button></article>)}
     <h2>Journeys ({saved.journeys.length})</h2>{!saved.journeys.length && <p>No saved journeys yet.</p>}
-    {saved.journeys.map((j, i) => <article className="saved-row" key={journeyKey(j)}><a href={`/journeys?snapshot=${j.snapshot_id}&local=${i}`}>{j.origin_id} → {j.destination_id}<small>{number(j.distance_ly, 4)} ly · {number(j.duration_julian_years, 4)} Julian years at {j.speed_fraction_c}c</small></a><button aria-label={`Remove journey ${i + 1}`} onClick={() => store({ ...saved, journeys: saved.journeys.filter(v => v !== j) })}>Remove</button></article>)}
+    {saved.journeys.map((j, i) => <article className="saved-row" key={journeyKey(j)}><a href={`/journeys?snapshot=${j.snapshot_id}&local=${encodeURIComponent(journeyKey(j))}`}>{j.origin_id} → {j.destination_id}<small>{number(j.distance_ly, 4)} ly · {number(j.duration_julian_years, 4)} Julian years at {j.speed_fraction_c}c</small></a><button aria-label={`Remove journey ${i + 1}`} onClick={() => store({ ...saved, journeys: saved.journeys.filter(v => v !== j) })}>Remove</button></article>)}
     <button disabled={!saved.stars.length && !saved.journeys.length} onClick={() => { if (confirm('Clear all stars and journeys saved in this browser?')) store(EMPTY); }}>Clear all saved items</button>
   </section>;
 }
