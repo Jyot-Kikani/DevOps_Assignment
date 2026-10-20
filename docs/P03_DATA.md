@@ -39,13 +39,18 @@ software MIT does not change its rights.
 
 `data-publish` defaults to ignored local staging. It validates the complete asset
 set, reuses identical assets, and rejects changed/extra assets without clobbering.
-The explicit P15 `--github --repository <owner>/stellar-atlas` path checks a public
+The explicit P15 `--github --repository <owner>/DevOps_Assignment` path checks a public
 personal repo, creates/reuses the exact release, compares GitHub asset digests,
 uploads only missing assets and verifies final digests. Login/MFA is never started
 by this command. It requires an already usable `gh` credential/environment in P15.
 On network/rights/digest failure it exits nonzero and preserves existing assets.
 Successful publication writes a separate local resolved lock/URL; the sealed
 asset's provenance bytes remain immutable.
+
+Repository amendment (2026-10-20): ADR 0004 supersedes the historical `stellar-atlas`
+URL template in the sealed lock. Actual publication uses only `DevOps_Assignment`;
+the frozen archive/lock/notice bytes remain unchanged. The existing repository
+currently remains private; public release availability is a separate P15 gate.
 
 P03 exercised local staging and a fresh loopback HTTP download/extraction with
 both archive and raw checksum verification. Actual GitHub publication and a public

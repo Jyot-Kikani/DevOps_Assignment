@@ -9,3 +9,7 @@ The planning documents were created on 18 October 2026. No application, cluster,
 Implementation status is tracked separately: [Batch 1 report](BATCH1_REPORT.md)
 covers P01–P03, completed on 19 October 2026. It records foundation checks and
 local dataset sealing; feature implementation, database and deployment phases follow.
+
+The user authorized [early GitHub CI](EARLY_CI.md) before Batch 2 and selected the
+existing `Jyot-Kikani/DevOps_Assignment` repository exclusively. Read
+[ADR 0004](adr/0004-existing-repository-and-early-ci.md) before remote operations.

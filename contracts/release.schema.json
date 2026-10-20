@@ -148,7 +148,7 @@
       "type": "string"
     },
     "source_repository": {
-      "pattern": "^[A-Za-z0-9-]+/stellar-atlas$",
+      "pattern": "^[A-Za-z0-9-]+/DevOps_Assignment$",
       "title": "Source Repository",
       "type": "string"
     },

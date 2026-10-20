@@ -61,11 +61,11 @@ def test_http_validation_no_reflection_and_bounds():
 
 def release_fixture():
     return {"schema_version": 1, "release_id": "r1-a1-" + "a" * 12, "source_sha": "a" * 40,
-        "source_repository": "fixture-owner/stellar-atlas", "created_at": "2026-10-19T00:00:00Z",
+        "source_repository": "fixture-owner/DevOps_Assignment", "created_at": "2026-10-19T00:00:00Z",
         "dataset": {"snapshot_id": SNAPSHOT, "raw_sha256": "b" * 64, "fixture": False},
         "images": {role: {"ref": f"ghcr.io/fixture-owner/stellar-atlas-{role}@sha256:" + "c" * 64, "sbom_sha256": "d" * 64}
                    for role in ("web", "catalog", "journey", "importer")},
-        "signer_identity": "https://github.com/fixture-owner/stellar-atlas/.github/workflows/release.yml@refs/heads/main",
+        "signer_identity": "https://github.com/fixture-owner/DevOps_Assignment/.github/workflows/release.yml@refs/heads/main",
         "compatibility": {"catalog_schema": 1, "journey_schema": 1, "model": "constant-speed-v1"},
         "verification": {"state": "pending"}}
 

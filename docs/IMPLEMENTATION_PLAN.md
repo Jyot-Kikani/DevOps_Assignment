@@ -1,8 +1,8 @@
 # Stellar Atlas — Detailed Implementation and Delivery Plan
 
-Version: 1.1 | Frozen design date: 18 October 2026 | Public-access revision: 19 October 2026 | Companion: [PRD.md](PRD.md)
+Version: 1.2 | Frozen design date: 18 October 2026 | Repository/early-CI revision: 20 October 2026 | Companion: [PRD.md](PRD.md)
 
-The user selected Cloudflare Quick Tunnel as the primary public-access method on 19 October 2026. [ADR 0001](adr/0001-public-access-quick-tunnel.md) supersedes the original Tailscale-first choice. Other architectural decisions and phase boundaries remain in force.
+The user selected Cloudflare Quick Tunnel as the primary public-access method on 19 October 2026. [ADR 0001](adr/0001-public-access-quick-tunnel.md) supersedes the original Tailscale-first choice. On 20 October the user selected the existing `Jyot-Kikani/DevOps_Assignment` repository exclusively and authorized basic GitHub CI before Batch 2; [ADR 0004](adr/0004-existing-repository-and-early-ci.md) records this change. No new `stellar-atlas` repository is to be created. The current private visibility is preserved; final public distribution requires an explicit visibility decision for this same repository. Other architecture and feature phase boundaries remain in force.
 
 ## 0. Execution rules, scope, and evidence boundary
 
@@ -32,7 +32,7 @@ Writing this plan does not initialize Git, install software, create accounts, pu
 | Budget | Existing local hardware; no paid services, domains, cloud resources, or expiring credits. |
 | Host | Windows with Docker Desktop Linux containers/WSL2; PowerShell orchestration. Containers and CI use Linux. |
 | Runtime budget | Reference host at least 16 GiB RAM, 4 logical CPUs and 40 GiB free disk; Docker allocation target 8 GiB RAM/4 CPUs. Measure before installation. If insufficient, use another existing team machine and the same architecture; do not purchase compute. |
-| Repository | One public GitHub repository named `stellar-atlas`, source branch `main`, deployment branch `deploy`. Reuse an existing exact-name repository only after verifying ownership and preserving its contents. |
+| Repository | Use only the existing `Jyot-Kikani/DevOps_Assignment`, source branch `main`, deployment branch `deploy`. Preserve its contents/history and existing `origin`; inspect remote history before pushing, never force-push. Keep current private visibility for early CI; public distribution in P15 must use this same repository after an explicit visibility decision. Application name, Kubernetes namespace and image prefixes remain `stellar-atlas`. |
 | Frontend | React + TypeScript + Vite; direct Three.js renderer managed through React lifecycle; plain CSS; system fonts. No React Three Fiber, state framework, paid UI library, or external font dependency. |
 | APIs | Two independently packaged FastAPI services: Catalog and Journey. SQLAlchemy + psycopg, Alembic migrations, HTTPX for the Journey-to-Catalog call. One Uvicorn process per container. |
 | Data | Immutable baseline snapshot; normalized PostgreSQL rows and pre-generated gzip binary map chunks. No runtime astronomy API calls. |
@@ -315,7 +315,7 @@ Secrets are generated locally using a cryptographic RNG, stored under ignored `.
 - Release concurrency `stellar-atlas-demo`, cancel-in-progress false; stale queued releases exit without publishing/promoting. Recheck source and deploy head immediately before promotion.
 - Build all four images for a release in one trusted job: web, catalog, journey, importer. Use the exact source commit and dataset artifact; tag `sha-<fullsha>`; scan local built images; push those exact images; obtain immutable digests; sign+verify each digest with Cosign; attach SPDX JSON SBOMs. No runtime `latest` tags, no rebuild between scan and push, no unscanned artifact promotion.
 - Job permissions: `contents:read` by default; release alone grants `packages:write`, `contents:write`, `id-token:write`. Limit token scope to this repository. OIDC is for Sigstore, not AWS.
-- Cosign verification identity is exactly `https://github.com/<owner>/stellar-atlas/.github/workflows/release.yml@refs/heads/main` with issuer `https://token.actions.githubusercontent.com`; confirm the workflow_run signing certificate identity in bootstrap and freeze the actual expected workflow identity rather than broadening to `.*`.
+- Cosign verification identity is exactly `https://github.com/<owner>/DevOps_Assignment/.github/workflows/release.yml@refs/heads/main` with issuer `https://token.actions.githubusercontent.com`; confirm the workflow_run signing certificate identity in bootstrap and freeze the actual expected workflow identity rather than broadening to `.*`.
 - Render Kustomize templates with all four digests, source SHA, dataset/schema/model versions and unique release ID. Run schema and security validation on the rendered output before committing it to deploy. Copy the previous deploy snapshot into previous-release metadata. Create one fast-forward commit; reject concurrent change rather than force pushing.
 - Promotion is not deployment success. Verify the running frontend and both API SHAs plus a real calculation through the public URL. A Job inside the cluster also runs smoke checks after sync.
 - If the host is offline, mark release verification pending/failed and preserve diagnostics; Argo may apply it when the host resumes. Do not report successful deployment from a successful registry push.
@@ -370,7 +370,7 @@ Each phase records its actual commands, exit results and source commit in `.loca
 3. Inventory CPU, RAM, free disk, OS, WSL2 and Docker settings from the user's normal session. Treat sandbox access denial separately from a host problem. Record the reference hardware/browser for later measurements.
 4. Start the existing Docker Desktop in Linux-container mode. If missing, use the official educational/free installer only after host prerequisite authorization. Verify Docker server responds, a pinned Linux hello container runs, named volumes work, and `docker compose version` succeeds. Do not change Windows security settings to bypass an access error.
 5. Verify loopback ports 8080, 8081, 9090 and 3000 are free. If occupied by this project, reuse/reconcile its recorded process. If occupied by another application, fail with its exact port and require the operator to free it; do not kill unrelated processes or silently change documented ports.
-6. Confirm GitHub authentication using `gh auth status` and `gh api user`. Human completes login/MFA. Use the authenticated personal owner and repository `stellar-atlas`; no organization/billing prerequisite. If that exact repository already exists, inspect it and stop before destructive replacement.
+6. Confirm GitHub authentication using `gh auth status` and `gh api user`. Human completes login/MFA if needed. Use authenticated personal owner `Jyot-Kikani` and existing repository `DevOps_Assignment`; inspect and preserve existing contents/history/remote. Do not create a replacement repository or change visibility automatically. No organization/billing prerequisite.
 7. Confirm GitHub Free/public-repository usage, standard hosted runner availability, current GHCR free policy, no purchased runner/marketplace action/paid storage, and zero overage budget where configurable. Capture sanitized evidence. Refuse an account change that requires a paid upgrade.
 8. Prepare the pinned portable `cloudflared` Windows executable, verify its publisher's SHA-256 and version, and freeze the corresponding Linux binary metadata. Cloudflare Quick Tunnel requires no account, login/MFA, auth key, DNS configuration or purchased domain. Tailscale installation/sign-in is not a prerequisite.
 9. Record the temporary-URL lifetime and absence of an uptime guarantee. P00 checks binary readiness and the accountless routing contract; an actual public URL and external application smoke remain unverified until P16, when the local Kubernetes gateway exists. Do not start a placeholder public site or claim it proves the application deployment.
@@ -420,10 +420,20 @@ Each phase records its actual commands, exit results and source commit in `.loca
 4. Verify the two initial aliases against recorded SIMBAD identifiers/cross-identifications. Store URLs and checked mapping in aliases.sources.json. If a mapping cannot be verified, omit that display alias and retain ID search; record the reason. This does not block the core catalog.
 5. Preserve the provider's Gaia/GCNS credit and data-license notice with citations and an explicit transformed-data notice. ESA's official `https://www.cosmos.esa.int/web/gaia-users/license` was successfully fetched during planning and states CC BY-NC 3.0 IGO; retain that license/link, ESA/Gaia/DPAC attribution, the EDR3 credit instructions and GCNS paper citation. This release is educational/noncommercial; software MIT licensing does not relicense the catalog. Archive the notice and retrieval date with the data asset. If a provider page is temporarily blocked, use the retained official notice and its archive credit page; do not substitute an unrelated license or introduce commercial reuse.
 6. Implement `data-publish` to create an immutable public GitHub data release `data-gcns-edr3-20261013`, upload `gcns-required-fields.csv.gz`, `snapshot.lock.json`, the validation report and data notices. If an exact release/asset exists, compare hashes and reuse; never overwrite changed bytes under the same data version.
-7. Publication occurs in P15 after the public repo exists. Until then test publication with a local staging directory. Record the exact eventual download URL pattern `https://github.com/<owner>/stellar-atlas/releases/download/data-gcns-edr3-20261013/gcns-required-fields.csv.gz` in the resolved lock after publication.
+7. Publication occurs in P15 after public access for the existing repository is explicitly established. Until then test publication with a local staging directory. The eventual URL is `https://github.com/<owner>/DevOps_Assignment/releases/download/data-gcns-edr3-20261013/gcns-required-fields.csv.gz`. The P03 sealed lock retains its historical `stellar-atlas` URL template to preserve immutable bytes; ADR 0004 supersedes that planned destination. Resolve the actual new URL into a separate resolved lock after publication; never rewrite the sealed archive/notices merely to rename a repository.
 8. Keep large data out of Git/LFS/Actions artifact storage. Test download-to-temp, checksum verification and extraction using a fresh local cache; after P15 repeat against the actual release URL.
 
 **Exit:** deterministic, validated local archive and complete provenance exist; publication contract is implemented. Network/rights failure has an explicit safe outcome, never fabricated success.
+
+### Early CI checkpoint — after P03, before P04
+
+Authorized on 20 October 2026. This brings source integration forward; it does not complete P10/P15 or authorize P04–P07 in the CI setup chat.
+
+1. Inspect the existing `Jyot-Kikani/DevOps_Assignment` repository, authentication, remote history and permissions. Preserve current private visibility, remote contents and origin; no new repository.
+2. Scan complete Git history and tracked/staged files for secrets, raw catalogs and private local evidence before the first push. Keep reviewed account-level zero-paid-usage budgets. Private CI must fit included usage; do not enable paid runners, increase budgets or buy credits. If exhausted, report the block rather than silently change visibility.
+3. Add basic `ci.yml` with `quality` and `security` jobs on main pushes and PRs to main. Use pinned actions, standard Ubuntu runner, frozen dependencies, read-only contents permissions and bounded timeouts/concurrency. Run existing unit/contract/frontend/type/lint/build checks and full-history secret/exclusion checks. Do not claim unimplemented database/E2E/security gates.
+4. Verify an actual GitHub run and record its URL and exact check names. Continue subsequent feature changes through branches/PRs and extend CI with real integration tests as they are implemented. Repository rules may be unavailable on GitHub Free private repos; report that limit explicitly instead of purchasing a plan or claiming enforcement.
+5. P10 completes the full quality/security suite. P15 expands the existing workflow and handles final public data/images/rules. Deployment, data-release publication, signing, GitOps and public application access remain in their original phases.
 
 ### P04 — Implement databases, credentials, and migrations
 
@@ -595,14 +605,14 @@ Each phase records its actual commands, exit results and source commit in `.loca
 
 **Exit:** dashboards show real traffic, a complete host backup exists, restore-check and corruption rejection pass; scheduled backup lifecycle is tested.
 
-### P15 — Create the free remote repository, data release, and CI
+### P15 — Complete public distribution, data release, and CI
 
 **Depends on:** P14. **Output:** public source/data distribution and enforced quality/security gates.
 
 1. Re-run local test/security/history scans and inspect staged files before the first push. Verify ownership/publication target and account free-plan settings from P00. Do not upload `.local`, secrets, raw catalog or private evidence.
-2. Create or safely connect the public `stellar-atlas` repository, set `origin` to the authenticated owner's actual URL, and push the complete bootstrap source. Creation/push are implementation actions; do not pretend writing this plan already did them.
+2. Reuse only `Jyot-Kikani/DevOps_Assignment` and its existing `origin`. Inspect and preserve remote history and early-CI work. Establish public source distribution on this same repository only after the explicit visibility decision; do not create `stellar-atlas`, force-push or silently expose a private repository. If visibility remains private, record public-distribution/protection gates as blocked rather than satisfied.
 3. Publish the P03 data release with verified asset/notice files; confirm anonymous download returns the expected bytes/hash. Update and commit the resolved data URL/archive hash in its lock manifest.
-4. Implement `ci.yml` job IDs `quality` and `security`, explicitly named `ci / quality` and `ci / security`, so those exact check-run names can be required. Confirm actual check-run names through GitHub before enabling the rule. Trigger on all PRs to main and main pushes; do not path-skip a required check into a permanently pending state. Use standard `ubuntu-24.04` hosted runners, pinned actions and Node/Python versions.
+4. Expand the existing early `ci.yml` job IDs `quality` and `security`, explicitly named `ci / quality` and `ci / security`, so those exact check-run names can be required. Preserve verified early checks and add the remaining P10/P15 gates. Confirm actual check-run names through GitHub before enabling the rule. Trigger on all PRs to main and main pushes; do not path-skip a required check into a permanently pending state. Use standard `ubuntu-24.04` hosted runners, pinned actions and Node/Python versions.
 5. Quality runs frozen installs, lint/typecheck, unit/contracts, PostgreSQL integration, frontend tests and Playwright against release-like Compose with the small fixture. Security runs all policy checks and scanner self-tests. Build all Dockerfiles on PRs without pushing, signing or accessing secrets.
 6. Add a bounded ephemeral kind+Calico cluster job for server-side schema validation and network-policy/runtime smoke using the fixture/local `ci-<sha>` images. Omit Argo/monitoring from this ephemeral test; those are verified on the actual host. Keep one API replica in CI to fit free-runner resources. Always delete only the CI cluster on cleanup.
 7. Cache dependency/scanner downloads with keys including lock hashes and DB timestamps. Do not share a credentialed Docker config with untrusted PR jobs. Do not upload secrets in artifacts or run `pull_request_target` on checkout of contributor code.
@@ -636,7 +646,7 @@ Each phase records its actual commands, exit results and source commit in `.loca
 
 1. Verify deploy ref contains only the generated application tree/release metadata and all four digests are anonymous-pullable, scanned and correctly signed. Verify current rendered manifests with policy/schema checks.
 2. Vendor Argo 3.5.5 namespace-install manifest and separate CRDs; record checksums/license. Bootstrap CRDs using server-side apply with no blanket force-conflicts, wait for Established, then apply namespace-scoped components and explicit same-cluster controller RoleBinding.
-3. Install AppProject/Application from section 3.6 pointing to `https://github.com/<owner>/stellar-atlas.git`, revision `deploy`, path `application`, destination `stellar-atlas`. No credentials are needed to read a public repo. Do not enable Argo to manage Terraform platform resources.
+3. Install AppProject/Application from section 3.6 pointing to `https://github.com/<owner>/DevOps_Assignment.git`, revision `deploy`, path `application`, destination `stellar-atlas`. No credentials are needed after approved public visibility; a private-repo choice requires an explicit credential/security amendment rather than a false public-read claim. Do not enable Argo to manage Terraform platform resources.
 4. Complete Argo component resource bounds/disabled unused components, local-only UI access, generated admin credential, reconciliation polling and sync options. Use can-i tests to prove allowed Deployment/Job access and denied Secret/Namespace/ClusterRole management.
 5. Let Argo adopt the existing bootstrap application objects and reconcile them to digest-pinned demo manifests. This intentionally replaces local Never-pull image settings. Wait for migration/import Jobs, runtime rollout, Synced+Healthy and PostSync smoke.
 6. Compare running images and frontend/API source/data metadata to release.json, not just a green Argo badge. Run external smoke again and verify shared records/data survived adoption.
@@ -776,7 +786,7 @@ API metadata includes both `source_sha` and `release_id`. This distinguishes dep
   "schema_version": 1,
   "release_id": "generated-from-actual-run",
   "source_sha": "actual-full-commit",
-  "source_repository": "actual-owner/stellar-atlas",
+  "source_repository": "actual-owner/DevOps_Assignment",
   "created_at": "actual-UTC-timestamp",
   "dataset": {"snapshot_id": "locked-id", "raw_sha256": "locked-hash", "fixture": false},
   "images": {

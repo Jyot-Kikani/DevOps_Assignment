@@ -44,7 +44,7 @@ class Release(Model):
     schema_version: Literal[1]
     release_id: Annotated[str, Field(pattern=r"^r[0-9]+-a[0-9]+-[a-f0-9]{12}$")]
     source_sha: Commit
-    source_repository: Annotated[str, Field(pattern=r"^[A-Za-z0-9-]+/stellar-atlas$")]
+    source_repository: Annotated[str, Field(pattern=r"^[A-Za-z0-9-]+/DevOps_Assignment$")]
     created_at: AwareDatetime
     dataset: Dataset
     images: Images

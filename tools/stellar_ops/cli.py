@@ -23,7 +23,7 @@ def parser():
     action = commands.add_parser("data-publish", help="Stage immutable data locally; explicit --github publication belongs to P15")
     action.add_argument("--stage", help="Existing/new directory strictly beneath .local")
     action.add_argument("--github", action="store_true", help="Publish exact immutable assets after public repository setup in P15")
-    action.add_argument("--repository", help="Explicit owner/stellar-atlas; required with --github")
+    action.add_argument("--repository", help="Explicit owner/DevOps_Assignment; required with --github")
     action.add_argument("--json", action="store_true")
     action = commands.add_parser("tools-lock", help="Verify locks or restore frozen tools; never select moving versions")
     action.add_argument("--verify-only", action="store_true")

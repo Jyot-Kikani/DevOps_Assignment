@@ -1,7 +1,7 @@
 """Bounded P02 checks. Later integration phases extend this suite explicitly."""
 import os
 from pathlib import Path
-from .bootstrap import ROOT, LOCAL, command
+from .bootstrap import ROOT, LOCAL, command, find_tool
 
 
 def python_ops():
@@ -13,11 +13,15 @@ def python_ops():
 
 def node_environment():
     nodes = sorted((LOCAL / "tools/node").rglob("node.exe" if os.name == "nt" else "node"))
-    if not nodes:
-        raise ValueError("Restore pinned Node using tools-lock")
+    executable = str(nodes[0]) if nodes else find_tool("node")
+    if not executable:
+        raise ValueError("Restore pinned Node using tools-lock or setup-node in CI")
     env = os.environ.copy()
-    env["PATH"] = str(nodes[0].parent) + os.pathsep + env.get("PATH", "")
-    return str(nodes[0]), env
+    env["PATH"] = str(Path(executable).parent) + os.pathsep + env.get("PATH", "")
+    version = command([executable, "--version"], env=env)
+    if version["exit_code"] != 0 or version["stdout"] != "v24.22.0":
+        raise ValueError("Node must match the frozen version 24.22.0")
+    return executable, env
 
 
 def contracts(check=False):

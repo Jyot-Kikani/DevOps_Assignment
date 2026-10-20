@@ -1,0 +1,66 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: ci / quality
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up frozen Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.13.5'
+      - name: Set up frozen Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.22.0'
+          package-manager-cache: false
+      - name: Verify committed dependency and tool locks
+        run: python tools/run.py tools-lock --verify-only --json
+      - name: Install hashed dependencies into isolated environments
+        run: python tools/setup_envs.py
+      - name: Build and install first-party wheels
+        run: python tools/build_packages.py
+      - name: Restore frozen frontend and contract-generator dependencies
+        run: |
+          npm ci --prefix apps/web --ignore-scripts --engine-strict --no-audit --no-fund --cache=.local/npm-cache
+          npm ci --prefix tools/codegen --ignore-scripts --engine-strict --no-audit --no-fund --cache=.local/npm-cache
+      - name: Run implemented quality gates
+        run: python tools/run.py test --json
+
+  security:
+    name: ci / security
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out complete history
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set up frozen Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.13.5'
+      - name: Verify locks and pinned actions
+        run: python tools/run.py tools-lock --verify-only --json
+      - name: Check publication boundaries and scan full history
+        run: python tools/ci_security.py --json
