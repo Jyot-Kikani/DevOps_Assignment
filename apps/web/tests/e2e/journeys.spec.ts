@@ -35,6 +35,14 @@ test('calculate, illustrate, save and reopen an immutable share', async ({ page,
   await expect(page.getByRole('button', { name: 'Pause', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Pause', exact: true }).click();
   await page.getByRole('button', { name: 'Save journey', exact: true }).click();
+  const speedInput = page.getByLabel('Speed (fraction of c)', { exact: true });
+  await speedInput.fill('0.2');
+  await page.getByRole('button', { name: 'Calculate journey' }).click();
+  await expect(page.getByTestId('journey-result')).toContainText((star.distance_ly / .2).toLocaleString(undefined, { maximumFractionDigits: 4 }));
+  await page.getByRole('button', { name: 'Save journey', exact: true }).click();
+  await speedInput.fill('0.1');
+  await page.getByRole('button', { name: 'Calculate journey' }).click();
+  await expect(page.getByTestId('journey-result')).toContainText((star.distance_ly / .1).toLocaleString(undefined, { maximumFractionDigits: 4 }));
   await page.getByRole('button', { name: 'Create 30-day share' }).click();
   const sharedLink = page.getByRole('link', { name: 'Open shared journey' });
   await expect(sharedLink).toBeVisible();
@@ -44,8 +52,8 @@ test('calculate, illustrate, save and reopen an immutable share', async ({ page,
   await expect(page.getByText('Frozen journey', { exact: false })).toBeVisible();
   await expect(page.getByTestId('journey-result')).toContainText((star.distance_ly / .1).toLocaleString(undefined, { maximumFractionDigits: 4 }));
   await page.getByRole('link', { name: 'Saved', exact: true }).click();
-  await expect(page.getByRole('heading', { name: 'Journeys (1)' })).toBeVisible();
-  await page.locator('.saved-row a').click();
+  await expect(page.getByRole('heading', { name: 'Journeys (2)' })).toBeVisible();
+  await page.locator('.saved-row a').first().click();
   await expect(page.getByTestId('journey-result')).toBeVisible();
   // Resaving can reorder the local list; the stable link must retain its journey.
   const localUrl = page.url();

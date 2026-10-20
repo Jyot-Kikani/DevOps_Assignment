@@ -34,7 +34,7 @@ zero scanner findings. The newly introduced strict local threshold is a separate
 implementation choice, not an existing required CI check. Its failed result must
 remain visible. No unsafe image, data release or public app is published.
 
-Final clean-source scan at `96a6c03e5b357d6eb4947d5c4021e6bb46ee62de`:
+Final clean-source scan at `d6d7752157edad63394b64b83ce0510576105f49`:
 
 | Updated image | High | Critical | Scan exit |
 |---|---:|---:|---:|
