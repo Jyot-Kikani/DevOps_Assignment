@@ -1,5 +1,4 @@
-"""Install locked third-party dependencies into project-local Windows environments."""
-from concurrent.futures import ThreadPoolExecutor
+"""Install hashed dependencies into isolated project-local Python environments."""
 import json
 from pathlib import Path
 import subprocess
@@ -34,8 +33,14 @@ def main():
                ("journey", "services/journey/requirements-dev-windows.txt"),
                ("importer", "jobs/catalog-importer/requirements-dev-windows.txt"),
                ("ops", "tools/requirements-ops-windows.txt")]
-    with ThreadPoolExecutor(max_workers=4) as pool:
-        results = dict(pool.map(lambda item: install(*item), targets))
+    # EnvBuilder bootstraps executable copies and ensurepip subprocesses. Running
+    # four creators concurrently hit Linux ETXTBSY on a fresh hosted runner.
+    # Prefer deterministic sequential setup; dependency versions/hashes stay fixed.
+    results = {}
+    for name, requirement in targets:
+        print(f"Preparing locked environment: {name}", flush=True)
+        key, result = install(name, requirement)
+        results[key] = result
     report = {"status": "passed" if all(r["status"] == "passed" for r in results.values()) else "failed", "environments": results}
     write_json(LOCAL / "reports/p01-environments.json", report)
     print(json.dumps(report, indent=2))

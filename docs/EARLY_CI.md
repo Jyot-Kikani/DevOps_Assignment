@@ -42,6 +42,14 @@ the main branch-protection API returned HTTP 403: GitHub requires Pro or public
 visibility for this feature. Neither was changed. Checks run, but GitHub does not
 technically enforce merge blocking on this private Free repository.
 
+Hosted verification caught a Linux `Text file busy` error in the first main-push
+run during concurrent `venv.EnvBuilder` creation. `tools/setup_envs.py` now prepares
+environments sequentially instead of starting four creators together. Frozen
+dependencies, hash checks and `pip check` remain unchanged. Both PR and main-push
+results are retained in the local run evidence, including failed attempts.
+Pytest scratch/cache directories are fresh, path-checked children of ignored
+`.local/test-temp/`, avoiding dependence on Windows system-temp permissions.
+
 For Batch 2, read PRD/implementation plan and the P01–P03 reports plus ADR 0004.
 Create `codex/` branches, keep logical phase commits, open PRs to `main`, and wait
 for both checks before merging. Extend the same checks with real PostgreSQL and

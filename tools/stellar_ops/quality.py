@@ -1,7 +1,9 @@
 """Bounded P02 checks. Later integration phases extend this suite explicitly."""
 import os
 from pathlib import Path
+import tempfile
 from .bootstrap import ROOT, LOCAL, command, find_tool
+from .guards import local_target
 
 
 def python_ops():
@@ -50,7 +52,14 @@ def tests():
         return report
     node, env = node_environment()
     npm = str(Path(node).parent / ("npm.cmd" if os.name == "nt" else "npm"))
-    calls = [[python_ops(), "-m", "pytest", "tests/unit", "tests/contracts", "-q", "--junitxml=.local/reports/p02-pytest.xml"],
+    temp_root = local_target(LOCAL / "test-temp")
+    temp_root.mkdir(parents=True, exist_ok=True)
+    scratch = local_target(Path(tempfile.mkdtemp(prefix="pytest-", dir=temp_root)))
+    # Fresh, verified children only: pytest may clear its --basetemp directory.
+    cases = local_target(scratch / "cases")
+    cache = local_target(scratch / "cache")
+    calls = [[python_ops(), "-m", "pytest", "tests/unit", "tests/contracts", "-q", "--basetemp", str(cases),
+              "-o", "cache_dir=" + str(cache), "--junitxml=.local/reports/p02-pytest.xml"],
              [npm, "--prefix", "apps/web", "run", "test"], [npm, "--prefix", "apps/web", "run", "typecheck"],
              [npm, "--prefix", "apps/web", "run", "lint"], [npm, "--prefix", "apps/web", "run", "build"]]
     follow = run_calls(calls, env)
