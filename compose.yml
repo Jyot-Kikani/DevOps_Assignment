@@ -1,0 +1,96 @@
+name: stellar-atlas-db
+x-runtime: &runtime
+  restart: unless-stopped
+  init: true
+  mem_limit: 256m
+  cpus: 1
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+x-environment: &environment
+  APP_ENV: ${APP_ENV:-demo}
+  RELEASE_ID: ${RELEASE_ID:?Use python tools/run.py dev-up}
+  CATALOG_SNAPSHOT_ID: gcns-edr3-20261013-20271720
+  LOG_LEVEL: INFO
+services:
+  postgres:
+    extends:
+      file: compose.database.yml
+      service: postgres
+    mem_limit: 512m
+    cpus: 1
+  bootstrap:
+    image: stellar-atlas-importer:${IMAGE_TAG:?Use dev-up}
+    profiles: [jobs]
+    command: [python, /app/bootstrap.py]
+    secrets: [postgres_admin, catalog_writer, catalog_reader, journey_owner, journey_app]
+    mem_limit: 128m
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+  catalog-migrate:
+    image: stellar-atlas-catalog:${IMAGE_TAG:?Use dev-up}
+    profiles: [jobs]
+    command: [python, -m, stellar_catalog.migrate]
+    environment:
+      CATALOG_WRITER_DSN_FILE: /run/secrets/catalog_writer_dsn
+    secrets: [catalog_writer_dsn]
+    mem_limit: 128m
+    cap_drop: [ALL]
+  journey-migrate:
+    image: stellar-atlas-journey:${IMAGE_TAG:?Use dev-up}
+    profiles: [jobs]
+    command: [python, -m, stellar_journey.migrate]
+    environment:
+      JOURNEY_OWNER_DSN_FILE: /run/secrets/journey_owner_dsn
+    secrets: [journey_owner_dsn]
+    mem_limit: 128m
+    cap_drop: [ALL]
+  importer:
+    image: stellar-atlas-importer:${IMAGE_TAG:?Use dev-up}
+    profiles: [jobs]
+    environment:
+      CATALOG_WRITER_DSN_FILE: /run/secrets/catalog_writer_dsn
+    secrets: [catalog_writer_dsn]
+    mem_limit: 512m
+    cpus: 1
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+  catalog:
+    <<: *runtime
+    image: stellar-atlas-catalog:${IMAGE_TAG:?Use dev-up}
+    environment:
+      <<: *environment
+      CATALOG_READER_DSN_FILE: /run/secrets/catalog_reader_dsn
+    secrets: [catalog_reader_dsn]
+    depends_on:
+      postgres: {condition: service_healthy}
+  journey:
+    <<: *runtime
+    image: stellar-atlas-journey:${IMAGE_TAG:?Use dev-up}
+    environment:
+      <<: *environment
+      JOURNEY_DSN_FILE: /run/secrets/journey_app_dsn
+      CATALOG_INTERNAL_URL: http://catalog:8000
+    secrets: [journey_app_dsn]
+    depends_on:
+      postgres: {condition: service_healthy}
+      catalog: {condition: service_healthy}
+  web:
+    <<: *runtime
+    image: stellar-atlas-web:${IMAGE_TAG:?Use dev-up}
+    ports: [127.0.0.1:8080:8080]
+    volumes: [./.local/release.json:/etc/stellar/release.json:ro]
+    depends_on:
+      catalog: {condition: service_healthy}
+      journey: {condition: service_healthy}
+secrets:
+  postgres_admin: {file: .local/secrets/postgres_admin}
+  catalog_writer: {file: .local/secrets/catalog_writer}
+  catalog_reader: {file: .local/secrets/catalog_reader}
+  journey_owner: {file: .local/secrets/journey_owner}
+  journey_app: {file: .local/secrets/journey_app}
+  catalog_writer_dsn: {file: .local/secrets/catalog_writer_dsn}
+  catalog_reader_dsn: {file: .local/secrets/catalog_reader_dsn}
+  journey_owner_dsn: {file: .local/secrets/journey_owner_dsn}
+  journey_app_dsn: {file: .local/secrets/journey_app_dsn}
+volumes:
+  postgres-data:

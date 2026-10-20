@@ -11,6 +11,13 @@ from .bootstrap import ROOT, LOCAL, doctor, write_json
 def parser():
     result = argparse.ArgumentParser(description="Stellar Atlas host operations")
     commands = result.add_subparsers(dest="action", required=True)
+    for name in ('dev-up', 'dev-down', 'smoke', 'compose-check', 'images-build'):
+        action = commands.add_parser(name, help='Local application/images operation; see docs/P09_COMPOSE.md')
+        action.add_argument('--json', action='store_true')
+        if name == 'dev-up':
+            action.add_argument('--no-build', action='store_true', help='Reuse already built images and metadata')
+        if name == 'smoke':
+            action.add_argument('--target', choices=['local'], default='local')
     for name, help_text in (("secrets-init", "Generate/reuse private local credentials"),
                             ("db-start", "Start only PostgreSQL with no host port"),
                             ("db-stop", "Stop only PostgreSQL, preserving its volume"),
@@ -50,7 +57,10 @@ def main(argv=None):
     LOCAL.mkdir(exist_ok=True)
     (LOCAL / "reports").mkdir(exist_ok=True)
     try:
-        if arguments.action == "secrets-init":
+        if arguments.action in ('dev-up', 'dev-down', 'smoke', 'compose-check', 'images-build'):
+            from .application import action
+            report = action(arguments.action, no_build=getattr(arguments, 'no_build', False))
+        elif arguments.action == "secrets-init":
             from .secrets import initialize
             report = initialize()
         elif arguments.action.startswith("db-") or arguments.action in ("catalog-import", "catalog-report"):

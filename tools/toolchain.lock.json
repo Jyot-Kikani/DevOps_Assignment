@@ -1878,6 +1878,12 @@
           }
         }
       ]
+    },
+    "node:24.22.0-bookworm-slim": {
+      "source_tag": "node:24.22.0-bookworm-slim",
+      "ref": "docker.io/library/node@sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5",
+      "digest": "sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5",
+      "metadata_url": "https://registry-1.docker.io/v2/library/node/manifests/24.22.0-bookworm-slim"
     }
   },
   "actions": {
@@ -2279,6 +2285,10 @@
     },
     "jobs/importer/pyproject.toml": {
       "sha256": "189892b011ab72c28541eb32bcfa8aaffdee6b8a03ce9cf242913c94fea0505a"
+    },
+    "tools/locks/image-build.txt": {
+      "sha256": "41fdf034a80eb8f3f1a87b8da3ff0a61286895c9ecea8a286da5f78a725119ec",
+      "bytes": 1006
     }
   },
   "retired_downloads": {
