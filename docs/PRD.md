@@ -1,6 +1,6 @@
 # Stellar Atlas — Product Requirements Document
 
-Version: 1.2 | Decision date: 18 October 2026 | Course-scope revision: 20 October 2026 | Status: P00–P07 complete; later phases planned
+Version: 1.2 | Decision date: 18 October 2026 | Course-scope revision: 20 October 2026 | Status: P00–P11 implementation present; image-scan findings and later operational gates outstanding
 
 Read with [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md). That document specifies the implementation sequence and operational contracts. This document specifies required user-visible behavior and acceptance criteria.
 

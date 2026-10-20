@@ -85,6 +85,35 @@ def main():
             if args.phase:
                 command.append("tests/integration/test_full_data.py")
         raise SystemExit(subprocess.call(command))
+    elif args.action == "web-probe":
+        # Local P08 development only. Each subprocess receives only its runtime DSN.
+        os.environ.update(CATALOG_SNAPSHOT_ID="gcns-edr3-20261013-20271720", APP_ENV="dev")
+        if os.environ.get('STELLAR_WEB_FIXTURE') == '1':
+            import tempfile
+            from uuid import uuid4
+            from stellar_importer.validation import validate
+            from stellar_importer.pipeline import load_catalog
+            os.environ['APP_ENV'] = 'ci'
+            with tempfile.TemporaryDirectory(prefix='stellar-web-fixture-') as scratch:
+                csv = ROOT / 'tests/fixtures/catalog/catalog.csv'
+                checked = validate(csv, fixture=True)
+                data = json.loads((ROOT / 'data/snapshot.lock.json').read_text())
+                data.update(snapshot_id='fixture-' + uuid4().hex, fixture=True, raw_sha256=checked['raw_sha256'], raw_bytes=checked['raw_bytes'], counts=checked['counts'])
+                manifest = Path(scratch) / 'manifest.json'
+                manifest.write_text(json.dumps(data))
+                load_catalog(csv, manifest, aliases_path=ROOT / 'data/aliases.csv', activate=True)
+                os.environ['CATALOG_SNAPSHOT_ID'] = json.loads(manifest.read_text())['snapshot_id']
+        processes = []
+        try:
+            for role, port, dsn in (("catalog", "18000", "CATALOG_READER_DSN"), ("journey", "18001", "JOURNEY_DSN")):
+                env = {k: v for k, v in os.environ.items() if not k.endswith(("_DSN", "_DSN_FILE")) or k == dsn}
+                env["CATALOG_INTERNAL_URL"] = "http://127.0.0.1:18000"
+                processes.append(subprocess.Popen([sys.executable, "-m", "uvicorn", f"stellar_{role}.app:app", "--host", "0.0.0.0", "--port", port, "--no-access-log"], env=env))
+            processes[0].wait()
+        finally:
+            for process in processes:
+                process.terminate()
+                process.wait(timeout=10)
     elif args.action == "catalog-probe":
         os.environ.update(CATALOG_SNAPSHOT_ID="gcns-edr3-20261013-20271720",APP_ENV="dev")
         for key in tuple(os.environ):

@@ -290,22 +290,10 @@ export interface components {
         /** FrozenPosition */
         readonly FrozenPosition: {
             /** Position Pc */
-            readonly position_pc: [
-                [
-                    number,
-                    number,
-                    number
-                ],
-                [
-                    number,
-                    number,
-                    number
-                ],
-                [
-                    number,
-                    number,
-                    number
-                ]
+            readonly position_pc: readonly [
+                number,
+                number,
+                number
             ];
             /**
              * Source Id
@@ -392,10 +380,7 @@ export interface components {
         /** Positions */
         readonly Positions: {
             /** Items */
-            readonly items: [
-            ] | [
-                components["schemas"]["FrozenPosition"]
-            ];
+            readonly items: readonly components["schemas"]["FrozenPosition"][];
             /**
              * Snapshot Id
              * @example gcns-edr3-20261013-20271720
@@ -405,10 +390,7 @@ export interface components {
         /** PositionsRequest */
         readonly PositionsRequest: {
             /** Ids */
-            readonly ids: [
-            ] | [
-                string
-            ];
+            readonly ids: readonly string[];
         };
         /** SearchResult */
         readonly SearchResult: {
@@ -488,22 +470,10 @@ export interface components {
             /** Ordinal */
             readonly ordinal: number;
             /** Position Pc */
-            readonly position_pc: [
-                [
-                    number,
-                    number,
-                    number
-                ],
-                [
-                    number,
-                    number,
-                    number
-                ],
-                [
-                    number,
-                    number,
-                    number
-                ]
+            readonly position_pc: readonly [
+                number,
+                number,
+                number
             ];
             /** Ra Deg */
             readonly ra_deg: number | null;

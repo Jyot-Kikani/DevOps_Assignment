@@ -19,8 +19,10 @@ class Dataset(Model):
 
 
 class Image(Model):
-    ref: Annotated[str, Field(pattern=r"^ghcr\.io/[a-z0-9-]+/stellar-atlas-(web|catalog|journey|importer)@sha256:[a-f0-9]{64}$")]
-    sbom_sha256: SHA
+    # Local Docker IDs are usable immutable references; registry refs belong to P15.
+    ref: Annotated[str, Field(pattern=r"^(sha256:[a-f0-9]{64}|ghcr\.io/[a-z0-9-]+/stellar-atlas-(web|catalog|journey|importer)@sha256:[a-f0-9]{64})$")]
+    manifest_digest: Annotated[str, Field(pattern=r"^sha256:[a-f0-9]{64}$")]
+    local_tag: str | None = None
 
 
 class Images(Model):
@@ -36,21 +38,16 @@ class Compatibility(Model):
     model: Literal["constant-speed-v1"]
 
 
-class Verification(Model):
-    state: Literal["pending"]
-
-
 class Release(Model):
     schema_version: Literal[1]
-    release_id: Annotated[str, Field(pattern=r"^r[0-9]+-a[0-9]+-[a-f0-9]{12}$")]
+    release_id: Annotated[str, Field(pattern=r"^(r[0-9]+-a[0-9]+-[a-f0-9]{12}|local-[a-f0-9]{12})$")]
     source_sha: Commit
     source_repository: Annotated[str, Field(pattern=r"^[A-Za-z0-9-]+/DevOps_Assignment$")]
     created_at: AwareDatetime
     dataset: Dataset
     images: Images
-    signer_identity: str
+    source_dirty: Literal[False] = False
     compatibility: Compatibility
-    verification: Verification
 
     @model_validator(mode="after")
     def consistency(self):
@@ -58,13 +55,13 @@ class Release(Model):
             raise ValueError("Release timestamp must use UTC")
         if not self.release_id.endswith(self.source_sha[:12]):
             raise ValueError("Release suffix must match source SHA")
-        expected = f"https://github.com/{self.source_repository}/.github/workflows/release.yml@refs/heads/main"
-        if self.signer_identity != expected:
-            raise ValueError("Signer identity does not match source repository")
         owner = self.source_repository.split("/")[0].lower()
         for role, image in self.images:
-            if not image.ref.startswith(f"ghcr.io/{owner}/stellar-atlas-{role}@sha256:"):
-                raise ValueError("Image owner/role does not match source")
+            if image.ref.startswith("ghcr.io/"):
+                if not image.ref.startswith(f"ghcr.io/{owner}/stellar-atlas-{role}@sha256:") or image.ref.split("@")[-1] != image.manifest_digest:
+                    raise ValueError("Registry image owner/role/digest does not match source")
+            elif image.local_tag != f"stellar-atlas-{role}:local-{self.source_sha[:12]}":
+                raise ValueError("Local image role/source tag does not match source")
         return self
 
 
