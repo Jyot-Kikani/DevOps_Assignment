@@ -1,0 +1,627 @@
+{
+  "provider": {
+    "kubernetes": {
+      "config_path": "${var.kubeconfig}",
+      "config_context": "kind-stellar-atlas-demo"
+    }
+  },
+  "variable": {
+    "kubeconfig": {
+      "type": "string"
+    },
+    "monitoring": {
+      "type": "bool",
+      "default": false
+    }
+  },
+  "resource": {
+    "kubernetes_deployment_v1": {
+      "postgres": {
+        "metadata": [
+          {
+            "name": "postgres",
+            "namespace": "stellar-data",
+            "labels": {
+              "app": "postgres",
+              "app.kubernetes.io/part-of": "stellar-atlas"
+            }
+          }
+        ],
+        "spec": [
+          {
+            "replicas": 1,
+            "strategy": [
+              {
+                "type": "Recreate"
+              }
+            ],
+            "selector": [
+              {
+                "match_labels": {
+                  "app": "postgres"
+                }
+              }
+            ],
+            "template": [
+              {
+                "metadata": [
+                  {
+                    "labels": {
+                      "app": "postgres"
+                    }
+                  }
+                ],
+                "spec": [
+                  {
+                    "automount_service_account_token": false,
+                    "security_context": [
+                      {
+                        "run_as_user": 999,
+                        "run_as_group": 999,
+                        "fs_group": 999
+                      }
+                    ],
+                    "container": [
+                      {
+                        "name": "postgres",
+                        "image": "docker.io/library/postgres@sha256:3645570cccdfa447589da9f57dd740faa29b30938e861289a5574b6ca6b03826",
+                        "port": [
+                          {
+                            "container_port": 5432
+                          }
+                        ],
+                        "resources": [
+                          {
+                            "requests": {
+                              "cpu": "50m",
+                              "memory": "64Mi"
+                            },
+                            "limits": {
+                              "cpu": "1",
+                              "memory": "512Mi"
+                            }
+                          }
+                        ],
+                        "args": [
+                          "-c",
+                          "max_connections=60",
+                          "-c",
+                          "timezone=UTC",
+                          "-c",
+                          "log_statement=none"
+                        ],
+                        "env": [
+                          {
+                            "name": "POSTGRES_PASSWORD_FILE",
+                            "value": "/run/secrets/postgres_admin"
+                          },
+                          {
+                            "name": "PGDATA",
+                            "value": "/var/lib/postgresql/data/pgdata"
+                          }
+                        ],
+                        "volume_mount": [
+                          {
+                            "name": "secrets",
+                            "mount_path": "/run/secrets",
+                            "read_only": true
+                          },
+                          {
+                            "name": "data",
+                            "mount_path": "/var/lib/postgresql/data"
+                          }
+                        ],
+                        "readiness_probe": [
+                          {
+                            "exec": [
+                              {
+                                "command": [
+                                  "pg_isready",
+                                  "-U",
+                                  "postgres",
+                                  "-d",
+                                  "postgres"
+                                ]
+                              }
+                            ],
+                            "period_seconds": 3
+                          }
+                        ],
+                        "liveness_probe": [
+                          {
+                            "exec": [
+                              {
+                                "command": [
+                                  "pg_isready",
+                                  "-U",
+                                  "postgres",
+                                  "-d",
+                                  "postgres"
+                                ]
+                              }
+                            ],
+                            "initial_delay_seconds": 30,
+                            "period_seconds": 10
+                          }
+                        ]
+                      }
+                    ],
+                    "volume": [
+                      {
+                        "name": "secrets",
+                        "secret": [
+                          {
+                            "secret_name": "postgres-admin",
+                            "default_mode": "0444"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "data",
+                        "persistent_volume_claim": [
+                          {
+                            "claim_name": "postgres-data"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "prometheus": {
+        "count": "${var.monitoring ? 1 : 0}",
+        "metadata": [
+          {
+            "name": "prometheus",
+            "namespace": "stellar-monitoring",
+            "labels": {
+              "app": "prometheus",
+              "app.kubernetes.io/part-of": "stellar-atlas"
+            }
+          }
+        ],
+        "spec": [
+          {
+            "replicas": 1,
+            "strategy": [
+              {
+                "type": "Recreate"
+              }
+            ],
+            "selector": [
+              {
+                "match_labels": {
+                  "app": "prometheus"
+                }
+              }
+            ],
+            "template": [
+              {
+                "metadata": [
+                  {
+                    "labels": {
+                      "app": "prometheus"
+                    },
+                    "annotations": {
+                      "stellar-atlas/config-sha256": "${sha256(jsonencode(kubernetes_config_map_v1.prometheus[0].data))}"
+                    }
+                  }
+                ],
+                "spec": [
+                  {
+                    "automount_service_account_token": false,
+                    "security_context": [
+                      {
+                        "run_as_user": 65534,
+                        "run_as_group": 65534,
+                        "fs_group": 65534
+                      }
+                    ],
+                    "container": [
+                      {
+                        "name": "prometheus",
+                        "image": "docker.io/prom/prometheus@sha256:efd719c99d83b060d9daefdcf00360461adf279f45ef5391f8d111892118753e",
+                        "port": [
+                          {
+                            "container_port": 9090
+                          }
+                        ],
+                        "resources": [
+                          {
+                            "requests": {
+                              "cpu": "50m",
+                              "memory": "64Mi"
+                            },
+                            "limits": {
+                              "cpu": "1",
+                              "memory": "512Mi"
+                            }
+                          }
+                        ],
+                        "security_context": [
+                          {
+                            "allow_privilege_escalation": false,
+                            "capabilities": [
+                              {
+                                "drop": [
+                                  "ALL"
+                                ]
+                              }
+                            ]
+                          }
+                        ],
+                        "args": [
+                          "--config.file=/etc/prometheus/prometheus.yml",
+                          "--storage.tsdb.path=/prometheus",
+                          "--storage.tsdb.retention.time=24h"
+                        ],
+                        "volume_mount": [
+                          {
+                            "name": "config",
+                            "mount_path": "/etc/prometheus",
+                            "read_only": true
+                          },
+                          {
+                            "name": "data",
+                            "mount_path": "/prometheus"
+                          }
+                        ],
+                        "readiness_probe": [
+                          {
+                            "http_get": [
+                              {
+                                "path": "/-/ready",
+                                "port": "9090"
+                              }
+                            ],
+                            "period_seconds": 5
+                          }
+                        ],
+                        "liveness_probe": [
+                          {
+                            "http_get": [
+                              {
+                                "path": "/-/ready",
+                                "port": "9090"
+                              }
+                            ],
+                            "initial_delay_seconds": 30,
+                            "period_seconds": 10
+                          }
+                        ]
+                      }
+                    ],
+                    "volume": [
+                      {
+                        "name": "config",
+                        "config_map": [
+                          {
+                            "name": "${kubernetes_config_map_v1.prometheus[0].metadata[0].name}"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "data",
+                        "empty_dir": [
+                          {}
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "grafana": {
+        "count": "${var.monitoring ? 1 : 0}",
+        "metadata": [
+          {
+            "name": "grafana",
+            "namespace": "stellar-monitoring",
+            "labels": {
+              "app": "grafana",
+              "app.kubernetes.io/part-of": "stellar-atlas"
+            }
+          }
+        ],
+        "spec": [
+          {
+            "replicas": 1,
+            "strategy": [
+              {
+                "type": "Recreate"
+              }
+            ],
+            "selector": [
+              {
+                "match_labels": {
+                  "app": "grafana"
+                }
+              }
+            ],
+            "template": [
+              {
+                "metadata": [
+                  {
+                    "labels": {
+                      "app": "grafana"
+                    },
+                    "annotations": {
+                      "stellar-atlas/config-sha256": "${sha256(jsonencode(kubernetes_config_map_v1.grafana[0].data))}"
+                    }
+                  }
+                ],
+                "spec": [
+                  {
+                    "automount_service_account_token": false,
+                    "security_context": [
+                      {
+                        "run_as_user": 472,
+                        "run_as_group": 472,
+                        "fs_group": 472
+                      }
+                    ],
+                    "container": [
+                      {
+                        "name": "grafana",
+                        "image": "docker.io/grafana/grafana@sha256:dbbc38ea21103cefb50396340cd88afec779c7e070b0a7bf5a75b4ce46651d3f",
+                        "port": [
+                          {
+                            "container_port": 3000
+                          }
+                        ],
+                        "resources": [
+                          {
+                            "requests": {
+                              "cpu": "50m",
+                              "memory": "64Mi"
+                            },
+                            "limits": {
+                              "cpu": "1",
+                              "memory": "512Mi"
+                            }
+                          }
+                        ],
+                        "security_context": [
+                          {
+                            "allow_privilege_escalation": false,
+                            "capabilities": [
+                              {
+                                "drop": [
+                                  "ALL"
+                                ]
+                              }
+                            ]
+                          }
+                        ],
+                        "env": [
+                          {
+                            "name": "GF_SECURITY_ADMIN_PASSWORD__FILE",
+                            "value": "/run/secrets/grafana_admin"
+                          },
+                          {
+                            "name": "GF_USERS_ALLOW_SIGN_UP",
+                            "value": "false"
+                          },
+                          {
+                            "name": "GF_ANALYTICS_REPORTING_ENABLED",
+                            "value": "false"
+                          },
+                          {
+                            "name": "GF_ANALYTICS_CHECK_FOR_UPDATES",
+                            "value": "false"
+                          }
+                        ],
+                        "volume_mount": [
+                          {
+                            "name": "data",
+                            "mount_path": "/var/lib/grafana"
+                          },
+                          {
+                            "name": "secrets",
+                            "mount_path": "/run/secrets",
+                            "read_only": true
+                          },
+                          {
+                            "name": "config",
+                            "mount_path": "/etc/grafana/provisioning/datasources/default.yaml",
+                            "read_only": true,
+                            "sub_path": "datasources.yaml"
+                          },
+                          {
+                            "name": "config",
+                            "mount_path": "/etc/grafana/provisioning/dashboards/default.yaml",
+                            "read_only": true,
+                            "sub_path": "dashboards.yaml"
+                          },
+                          {
+                            "name": "config",
+                            "mount_path": "/var/lib/grafana/dashboards/stellar-atlas.json",
+                            "read_only": true,
+                            "sub_path": "dashboard.json"
+                          }
+                        ],
+                        "readiness_probe": [
+                          {
+                            "http_get": [
+                              {
+                                "path": "/api/health",
+                                "port": "3000"
+                              }
+                            ],
+                            "period_seconds": 5
+                          }
+                        ],
+                        "liveness_probe": [
+                          {
+                            "http_get": [
+                              {
+                                "path": "/api/health",
+                                "port": "3000"
+                              }
+                            ],
+                            "initial_delay_seconds": 30,
+                            "period_seconds": 10
+                          }
+                        ]
+                      }
+                    ],
+                    "volume": [
+                      {
+                        "name": "config",
+                        "config_map": [
+                          {
+                            "name": "${kubernetes_config_map_v1.grafana[0].metadata[0].name}"
+                          }
+                        ]
+                      },
+                      {
+                        "name": "data",
+                        "empty_dir": [
+                          {}
+                        ]
+                      },
+                      {
+                        "name": "secrets",
+                        "secret": [
+                          {
+                            "secret_name": "grafana-admin",
+                            "default_mode": "0444"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "kubernetes_service_v1": {
+      "postgres": {
+        "metadata": [
+          {
+            "name": "postgres",
+            "namespace": "stellar-data",
+            "labels": {
+              "app": "postgres",
+              "app.kubernetes.io/part-of": "stellar-atlas"
+            }
+          }
+        ],
+        "spec": [
+          {
+            "selector": {
+              "app": "postgres"
+            },
+            "port": [
+              {
+                "port": 5432,
+                "target_port": "5432"
+              }
+            ],
+            "type": "ClusterIP"
+          }
+        ]
+      },
+      "prometheus": {
+        "count": "${var.monitoring ? 1 : 0}",
+        "metadata": [
+          {
+            "name": "prometheus",
+            "namespace": "stellar-monitoring",
+            "labels": {
+              "app": "prometheus",
+              "app.kubernetes.io/part-of": "stellar-atlas"
+            }
+          }
+        ],
+        "spec": [
+          {
+            "selector": {
+              "app": "prometheus"
+            },
+            "port": [
+              {
+                "port": 9090,
+                "target_port": "9090"
+              }
+            ],
+            "type": "ClusterIP"
+          }
+        ]
+      },
+      "grafana": {
+        "count": "${var.monitoring ? 1 : 0}",
+        "metadata": [
+          {
+            "name": "grafana",
+            "namespace": "stellar-monitoring",
+            "labels": {
+              "app": "grafana",
+              "app.kubernetes.io/part-of": "stellar-atlas"
+            }
+          }
+        ],
+        "spec": [
+          {
+            "selector": {
+              "app": "grafana"
+            },
+            "port": [
+              {
+                "port": 3000,
+                "target_port": "3000"
+              }
+            ],
+            "type": "ClusterIP"
+          }
+        ]
+      }
+    },
+    "kubernetes_config_map_v1": {
+      "prometheus": {
+        "count": "${var.monitoring ? 1 : 0}",
+        "metadata": [
+          {
+            "name": "prometheus",
+            "namespace": "stellar-monitoring",
+            "labels": {
+              "app": "prometheus",
+              "app.kubernetes.io/part-of": "stellar-atlas"
+            }
+          }
+        ],
+        "data": {
+          "prometheus.yml": "${file(\"${path.module}/../../../monitoring/prometheus.json\")}"
+        }
+      },
+      "grafana": {
+        "count": "${var.monitoring ? 1 : 0}",
+        "metadata": [
+          {
+            "name": "grafana",
+            "namespace": "stellar-monitoring",
+            "labels": {
+              "app": "grafana",
+              "app.kubernetes.io/part-of": "stellar-atlas"
+            }
+          }
+        ],
+        "data": {
+          "datasources.yaml": "${file(\"${path.module}/../../../monitoring/datasources.json\")}",
+          "dashboards.yaml": "${file(\"${path.module}/../../../monitoring/dashboards.json\")}",
+          "dashboard.json": "${file(\"${path.module}/../../../monitoring/stellar-atlas-dashboard.json\")}"
+        }
+      }
+    }
+  }
+}

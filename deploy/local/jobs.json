@@ -1,0 +1,314 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "batch/v1",
+      "kind": "Job",
+      "metadata": {
+        "name": "bootstrap",
+        "namespace": "stellar-atlas",
+        "labels": {
+          "app": "bootstrap",
+          "app.kubernetes.io/part-of": "stellar-atlas"
+        }
+      },
+      "spec": {
+        "backoffLimit": 0,
+        "activeDeadlineSeconds": 600,
+        "template": {
+          "spec": {
+            "automountServiceAccountToken": false,
+            "restartPolicy": "Never",
+            "securityContext": {
+              "runAsNonRoot": true,
+              "runAsUser": 10001,
+              "runAsGroup": 10001
+            },
+            "containers": [
+              {
+                "name": "importer",
+                "image": "IMAGE_IMPORTER",
+                "imagePullPolicy": "Never",
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  }
+                },
+                "resources": {
+                  "requests": {
+                    "cpu": "50m",
+                    "memory": "64Mi"
+                  },
+                  "limits": {
+                    "cpu": "1",
+                    "memory": "512Mi"
+                  }
+                },
+                "command": [
+                  "python",
+                  "/app/bootstrap.py"
+                ],
+                "volumeMounts": [
+                  {
+                    "name": "secrets",
+                    "mountPath": "/run/secrets",
+                    "readOnly": true
+                  }
+                ]
+              }
+            ],
+            "volumes": [
+              {
+                "name": "secrets",
+                "secret": {
+                  "secretName": "bootstrap",
+                  "defaultMode": 292
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "batch/v1",
+      "kind": "Job",
+      "metadata": {
+        "name": "catalog-migrate",
+        "namespace": "stellar-atlas",
+        "labels": {
+          "app": "catalog-migrate",
+          "app.kubernetes.io/part-of": "stellar-atlas"
+        }
+      },
+      "spec": {
+        "backoffLimit": 0,
+        "activeDeadlineSeconds": 600,
+        "template": {
+          "spec": {
+            "automountServiceAccountToken": false,
+            "restartPolicy": "Never",
+            "securityContext": {
+              "runAsNonRoot": true,
+              "runAsUser": 10001,
+              "runAsGroup": 10001
+            },
+            "containers": [
+              {
+                "name": "catalog",
+                "image": "IMAGE_CATALOG",
+                "imagePullPolicy": "Never",
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  }
+                },
+                "resources": {
+                  "requests": {
+                    "cpu": "50m",
+                    "memory": "64Mi"
+                  },
+                  "limits": {
+                    "cpu": "1",
+                    "memory": "512Mi"
+                  }
+                },
+                "command": [
+                  "python",
+                  "-m",
+                  "stellar_catalog.migrate"
+                ],
+                "env": [
+                  {
+                    "name": "CATALOG_WRITER_DSN_FILE",
+                    "value": "/run/secrets/catalog_writer_dsn"
+                  }
+                ],
+                "volumeMounts": [
+                  {
+                    "name": "secrets",
+                    "mountPath": "/run/secrets",
+                    "readOnly": true
+                  }
+                ]
+              }
+            ],
+            "volumes": [
+              {
+                "name": "secrets",
+                "secret": {
+                  "secretName": "catalog-writer",
+                  "defaultMode": 292
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "batch/v1",
+      "kind": "Job",
+      "metadata": {
+        "name": "journey-migrate",
+        "namespace": "stellar-atlas",
+        "labels": {
+          "app": "journey-migrate",
+          "app.kubernetes.io/part-of": "stellar-atlas"
+        }
+      },
+      "spec": {
+        "backoffLimit": 0,
+        "activeDeadlineSeconds": 600,
+        "template": {
+          "spec": {
+            "automountServiceAccountToken": false,
+            "restartPolicy": "Never",
+            "securityContext": {
+              "runAsNonRoot": true,
+              "runAsUser": 10001,
+              "runAsGroup": 10001
+            },
+            "containers": [
+              {
+                "name": "journey",
+                "image": "IMAGE_JOURNEY",
+                "imagePullPolicy": "Never",
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  }
+                },
+                "resources": {
+                  "requests": {
+                    "cpu": "50m",
+                    "memory": "64Mi"
+                  },
+                  "limits": {
+                    "cpu": "1",
+                    "memory": "512Mi"
+                  }
+                },
+                "command": [
+                  "python",
+                  "-m",
+                  "stellar_journey.migrate"
+                ],
+                "env": [
+                  {
+                    "name": "JOURNEY_OWNER_DSN_FILE",
+                    "value": "/run/secrets/journey_owner_dsn"
+                  }
+                ],
+                "volumeMounts": [
+                  {
+                    "name": "secrets",
+                    "mountPath": "/run/secrets",
+                    "readOnly": true
+                  }
+                ]
+              }
+            ],
+            "volumes": [
+              {
+                "name": "secrets",
+                "secret": {
+                  "secretName": "journey-owner",
+                  "defaultMode": 292
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "batch/v1",
+      "kind": "Job",
+      "metadata": {
+        "name": "importer",
+        "namespace": "stellar-atlas",
+        "labels": {
+          "app": "importer",
+          "app.kubernetes.io/part-of": "stellar-atlas"
+        }
+      },
+      "spec": {
+        "backoffLimit": 0,
+        "activeDeadlineSeconds": 600,
+        "template": {
+          "spec": {
+            "automountServiceAccountToken": false,
+            "restartPolicy": "Never",
+            "securityContext": {
+              "runAsNonRoot": true,
+              "runAsUser": 10001,
+              "runAsGroup": 10001
+            },
+            "containers": [
+              {
+                "name": "importer",
+                "image": "IMAGE_IMPORTER",
+                "imagePullPolicy": "Never",
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  }
+                },
+                "resources": {
+                  "requests": {
+                    "cpu": "50m",
+                    "memory": "64Mi"
+                  },
+                  "limits": {
+                    "cpu": "1",
+                    "memory": "512Mi"
+                  }
+                },
+                "command": [
+                  "python",
+                  "/app/import.py"
+                ],
+                "env": [
+                  {
+                    "name": "CATALOG_WRITER_DSN_FILE",
+                    "value": "/run/secrets/catalog_writer_dsn"
+                  }
+                ],
+                "volumeMounts": [
+                  {
+                    "name": "secrets",
+                    "mountPath": "/run/secrets",
+                    "readOnly": true
+                  }
+                ]
+              }
+            ],
+            "volumes": [
+              {
+                "name": "secrets",
+                "secret": {
+                  "secretName": "catalog-writer",
+                  "defaultMode": 292
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

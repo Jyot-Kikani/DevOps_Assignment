@@ -1,0 +1,560 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "postgres",
+        "namespace": "stellar-atlas",
+        "labels": {
+          "app": "postgres",
+          "app.kubernetes.io/part-of": "stellar-atlas"
+        }
+      },
+      "spec": {
+        "type": "ExternalName",
+        "externalName": "postgres.stellar-data.svc.cluster.local"
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "name": "catalog",
+        "namespace": "stellar-atlas",
+        "labels": {
+          "app": "catalog",
+          "app.kubernetes.io/part-of": "stellar-atlas"
+        }
+      },
+      "spec": {
+        "replicas": 1,
+        "selector": {
+          "matchLabels": {
+            "app": "catalog"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "catalog"
+            }
+          },
+          "spec": {
+            "automountServiceAccountToken": false,
+            "restartPolicy": "Always",
+            "securityContext": {
+              "runAsNonRoot": true,
+              "runAsUser": 10001,
+              "runAsGroup": 10001
+            },
+            "containers": [
+              {
+                "name": "catalog",
+                "image": "IMAGE_CATALOG",
+                "imagePullPolicy": "Never",
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  }
+                },
+                "resources": {
+                  "requests": {
+                    "cpu": "50m",
+                    "memory": "64Mi"
+                  },
+                  "limits": {
+                    "cpu": "1",
+                    "memory": "512Mi"
+                  }
+                },
+                "env": [
+                  {
+                    "name": "APP_ENV",
+                    "value": "demo"
+                  },
+                  {
+                    "name": "RELEASE_ID",
+                    "value": "RELEASE_ID"
+                  },
+                  {
+                    "name": "CATALOG_SNAPSHOT_ID",
+                    "value": "SNAPSHOT_ID"
+                  },
+                  {
+                    "name": "CATALOG_READER_DSN_FILE",
+                    "value": "/run/secrets/catalog_reader_dsn"
+                  }
+                ],
+                "volumeMounts": [
+                  {
+                    "name": "secrets",
+                    "mountPath": "/run/secrets",
+                    "readOnly": true
+                  }
+                ],
+                "ports": [
+                  {
+                    "containerPort": 8000
+                  }
+                ],
+                "readinessProbe": {
+                  "httpGet": {
+                    "path": "/health/ready",
+                    "port": 8000
+                  },
+                  "periodSeconds": 5,
+                  "timeoutSeconds": 3,
+                  "failureThreshold": 6
+                },
+                "livenessProbe": {
+                  "httpGet": {
+                    "path": "/health/live",
+                    "port": 8000
+                  },
+                  "periodSeconds": 5,
+                  "timeoutSeconds": 3,
+                  "failureThreshold": 6
+                },
+                "startupProbe": {
+                  "httpGet": {
+                    "path": "/health/live",
+                    "port": 8000
+                  },
+                  "periodSeconds": 3,
+                  "failureThreshold": 40
+                }
+              }
+            ],
+            "volumes": [
+              {
+                "name": "secrets",
+                "secret": {
+                  "secretName": "catalog-reader",
+                  "defaultMode": 292
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "catalog",
+        "namespace": "stellar-atlas",
+        "labels": {
+          "app": "catalog",
+          "app.kubernetes.io/part-of": "stellar-atlas"
+        }
+      },
+      "spec": {
+        "type": "ClusterIP",
+        "selector": {
+          "app": "catalog"
+        },
+        "ports": [
+          {
+            "port": 8000,
+            "targetPort": 8000
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "name": "journey",
+        "namespace": "stellar-atlas",
+        "labels": {
+          "app": "journey",
+          "app.kubernetes.io/part-of": "stellar-atlas"
+        }
+      },
+      "spec": {
+        "replicas": 1,
+        "selector": {
+          "matchLabels": {
+            "app": "journey"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "journey"
+            }
+          },
+          "spec": {
+            "automountServiceAccountToken": false,
+            "restartPolicy": "Always",
+            "securityContext": {
+              "runAsNonRoot": true,
+              "runAsUser": 10001,
+              "runAsGroup": 10001
+            },
+            "containers": [
+              {
+                "name": "journey",
+                "image": "IMAGE_JOURNEY",
+                "imagePullPolicy": "Never",
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  }
+                },
+                "resources": {
+                  "requests": {
+                    "cpu": "50m",
+                    "memory": "64Mi"
+                  },
+                  "limits": {
+                    "cpu": "1",
+                    "memory": "512Mi"
+                  }
+                },
+                "env": [
+                  {
+                    "name": "APP_ENV",
+                    "value": "demo"
+                  },
+                  {
+                    "name": "RELEASE_ID",
+                    "value": "RELEASE_ID"
+                  },
+                  {
+                    "name": "CATALOG_SNAPSHOT_ID",
+                    "value": "SNAPSHOT_ID"
+                  },
+                  {
+                    "name": "JOURNEY_DSN_FILE",
+                    "value": "/run/secrets/journey_app_dsn"
+                  },
+                  {
+                    "name": "CATALOG_INTERNAL_URL",
+                    "value": "http://catalog:8000"
+                  }
+                ],
+                "volumeMounts": [
+                  {
+                    "name": "secrets",
+                    "mountPath": "/run/secrets",
+                    "readOnly": true
+                  }
+                ],
+                "ports": [
+                  {
+                    "containerPort": 8000
+                  }
+                ],
+                "readinessProbe": {
+                  "httpGet": {
+                    "path": "/health/ready",
+                    "port": 8000
+                  },
+                  "periodSeconds": 5,
+                  "timeoutSeconds": 3,
+                  "failureThreshold": 6
+                },
+                "livenessProbe": {
+                  "httpGet": {
+                    "path": "/health/live",
+                    "port": 8000
+                  },
+                  "periodSeconds": 5,
+                  "timeoutSeconds": 3,
+                  "failureThreshold": 6
+                },
+                "startupProbe": {
+                  "httpGet": {
+                    "path": "/health/live",
+                    "port": 8000
+                  },
+                  "periodSeconds": 3,
+                  "failureThreshold": 40
+                }
+              }
+            ],
+            "volumes": [
+              {
+                "name": "secrets",
+                "secret": {
+                  "secretName": "journey-app",
+                  "defaultMode": 292
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "journey",
+        "namespace": "stellar-atlas",
+        "labels": {
+          "app": "journey",
+          "app.kubernetes.io/part-of": "stellar-atlas"
+        }
+      },
+      "spec": {
+        "type": "ClusterIP",
+        "selector": {
+          "app": "journey"
+        },
+        "ports": [
+          {
+            "port": 8000,
+            "targetPort": 8000
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "name": "web",
+        "namespace": "stellar-atlas",
+        "labels": {
+          "app": "web",
+          "app.kubernetes.io/part-of": "stellar-atlas"
+        }
+      },
+      "spec": {
+        "replicas": 1,
+        "selector": {
+          "matchLabels": {
+            "app": "web"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "web"
+            }
+          },
+          "spec": {
+            "automountServiceAccountToken": false,
+            "restartPolicy": "Always",
+            "securityContext": {
+              "runAsNonRoot": true,
+              "runAsUser": 10001,
+              "runAsGroup": 10001
+            },
+            "containers": [
+              {
+                "name": "web",
+                "image": "IMAGE_WEB",
+                "imagePullPolicy": "Never",
+                "securityContext": {
+                  "allowPrivilegeEscalation": false,
+                  "capabilities": {
+                    "drop": [
+                      "ALL"
+                    ]
+                  }
+                },
+                "resources": {
+                  "requests": {
+                    "cpu": "50m",
+                    "memory": "64Mi"
+                  },
+                  "limits": {
+                    "cpu": "1",
+                    "memory": "512Mi"
+                  }
+                },
+                "env": [
+                  {
+                    "name": "APP_ENV",
+                    "value": "demo"
+                  },
+                  {
+                    "name": "RELEASE_ID",
+                    "value": "RELEASE_ID"
+                  },
+                  {
+                    "name": "CATALOG_SNAPSHOT_ID",
+                    "value": "SNAPSHOT_ID"
+                  }
+                ],
+                "ports": [
+                  {
+                    "containerPort": 8080
+                  }
+                ],
+                "readinessProbe": {
+                  "httpGet": {
+                    "path": "/health/live",
+                    "port": 8080
+                  },
+                  "periodSeconds": 5,
+                  "timeoutSeconds": 3,
+                  "failureThreshold": 6
+                },
+                "livenessProbe": {
+                  "httpGet": {
+                    "path": "/health/live",
+                    "port": 8080
+                  },
+                  "periodSeconds": 5,
+                  "timeoutSeconds": 3,
+                  "failureThreshold": 6
+                },
+                "startupProbe": {
+                  "httpGet": {
+                    "path": "/health/live",
+                    "port": 8080
+                  },
+                  "periodSeconds": 3,
+                  "failureThreshold": 40
+                },
+                "volumeMounts": [
+                  {
+                    "name": "release",
+                    "mountPath": "/etc/stellar",
+                    "readOnly": true
+                  }
+                ]
+              }
+            ],
+            "volumes": [
+              {
+                "name": "release",
+                "configMap": {
+                  "name": "release"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "web",
+        "namespace": "stellar-atlas",
+        "labels": {
+          "app": "web",
+          "app.kubernetes.io/part-of": "stellar-atlas"
+        }
+      },
+      "spec": {
+        "type": "NodePort",
+        "selector": {
+          "app": "web"
+        },
+        "ports": [
+          {
+            "port": 8080,
+            "targetPort": 8080,
+            "nodePort": 30080
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "batch/v1",
+      "kind": "CronJob",
+      "metadata": {
+        "name": "journey-retention",
+        "namespace": "stellar-atlas",
+        "labels": {
+          "app": "journey-retention",
+          "app.kubernetes.io/part-of": "stellar-atlas"
+        }
+      },
+      "spec": {
+        "schedule": "0 2 * * *",
+        "timeZone": "Etc/UTC",
+        "concurrencyPolicy": "Forbid",
+        "successfulJobsHistoryLimit": 1,
+        "failedJobsHistoryLimit": 1,
+        "jobTemplate": {
+          "spec": {
+            "backoffLimit": 1,
+            "activeDeadlineSeconds": 300,
+            "template": {
+              "spec": {
+                "automountServiceAccountToken": false,
+                "restartPolicy": "Never",
+                "securityContext": {
+                  "runAsNonRoot": true,
+                  "runAsUser": 10001,
+                  "runAsGroup": 10001
+                },
+                "containers": [
+                  {
+                    "name": "importer",
+                    "image": "IMAGE_IMPORTER",
+                    "imagePullPolicy": "Never",
+                    "securityContext": {
+                      "allowPrivilegeEscalation": false,
+                      "capabilities": {
+                        "drop": [
+                          "ALL"
+                        ]
+                      }
+                    },
+                    "resources": {
+                      "requests": {
+                        "cpu": "50m",
+                        "memory": "64Mi"
+                      },
+                      "limits": {
+                        "cpu": "1",
+                        "memory": "512Mi"
+                      }
+                    },
+                    "command": [
+                      "python",
+                      "-c",
+                      "import json; from stellar_importer.maintenance import retention; print(json.dumps(retention()))"
+                    ],
+                    "env": [
+                      {
+                        "name": "JOURNEY_DSN_FILE",
+                        "value": "/run/secrets/journey_app_dsn"
+                      }
+                    ],
+                    "volumeMounts": [
+                      {
+                        "name": "secrets",
+                        "mountPath": "/run/secrets",
+                        "readOnly": true
+                      }
+                    ]
+                  }
+                ],
+                "volumes": [
+                  {
+                    "name": "secrets",
+                    "secret": {
+                      "secretName": "journey-app",
+                      "defaultMode": 292
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
