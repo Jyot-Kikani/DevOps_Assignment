@@ -43,7 +43,7 @@ export function App() {
   return <><a className="skip" href="#content">Skip to content</a><header>
     <a className="brand" href="/explore"><span aria-hidden="true">✧</span> STELLAR ATLAS</a>
     <nav aria-label="Main navigation">{['explore', 'journeys', 'saved', 'about'].map(name => <a key={name} href={`/${name}`} aria-current={page === name ? 'page' : undefined}>{name[0].toUpperCase() + name.slice(1)}</a>)}</nav>
-    <span className="edition">OUR STELLAR NEIGHBORHOOD · GITOPS DEMO</span></header>
+    <span className="edition">TEMPORARY PUBLIC DEMO</span></header>
     {notice && <div className="notice" role="status">{notice}<button aria-label="Dismiss notification" onClick={() => setNotice('')}>×</button></div>}
     <main id="content">{page === 'saved' ? <SavedPage saved={saved} store={store} /> : page === 'about' ? <About snapshot={snapshot} /> :
       page === 'journeys' && (params.has('id') || params.has('local')) ? <Journeys snapshot={snapshot} view={view} save={save} copy={copy} saved={saved} /> :
