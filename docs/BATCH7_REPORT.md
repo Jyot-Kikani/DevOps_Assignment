@@ -1,6 +1,6 @@
 # Batch 7 report — P22–P23
 
-Review date: **21 October 2026**. Scope is final usability/performance review
+Completed **21 October 2026**. Scope is final usability/performance review
 and course submission under ADR 0005. No future infrastructure is started.
 
 | Phase | Actual result |
@@ -42,17 +42,42 @@ including admins, with zero mandatory human approvals.
 
 ## Final runtime and delivery
 
-At the initial final-review checkpoint, Argo was **Synced/Healthy** at deploy
-`82bd0318aa50fa205baa5078c9aee3ffc5313d61`, with running source
-`2abd14c22f316c180ff163557b9690f18cfa1704`, release
-`r39557433765-a1-2abd14c22f31`. Source/report commits and running image commits
-are distinct. Final publication and public checks after the wording fix are
-recorded in the delivery addendum when actually observed.
+Implementation [7cdcb85](https://github.com/Jyot-Kikani/DevOps_Assignment/commit/7cdcb85f2b9733c4c4ca1be035b538259f1a75db)
+was merged through [PR #13](https://github.com/Jyot-Kikani/DevOps_Assignment/pull/13)
+as **`d44d639309d668ef8f74f41b20b319a9b601d76c`**, after both
+[current-head checks](https://github.com/Jyot-Kikani/DevOps_Assignment/actions/runs/39572258725)
+passed on an up-to-date base. Both [main checks](https://github.com/Jyot-Kikani/DevOps_Assignment/actions/runs/39572800136)
+and [trusted publication](https://github.com/Jyot-Kikani/DevOps_Assignment/actions/runs/39573285891)
+then succeeded. Final running release is **`r39573285891-a1-d44d639309d6`**.
+
+Final Argo: **Synced/Healthy**, deploy
+[`6c5f8e67b3bb92a60ade0b5e4da828bd9a240663`](https://github.com/Jyot-Kikani/DevOps_Assignment/tree/6c5f8e67b3bb92a60ade0b5e4da828bd9a240663).
+Web/Catalog/Journey are each **1/1**, with digests matching the
+[published release record](https://github.com/Jyot-Kikani/DevOps_Assignment/blob/6c5f8e67b3bb92a60ade0b5e4da828bd9a240663/release.json).
+The workflow also verified anonymous access to all four image digests. Data remains
+`gcns-edr3-20261013-20271720` with its unchanged raw checksum and schema/model versions.
+
+Final delivery observations are committed in
+[`bba356b`](https://github.com/Jyot-Kikani/DevOps_Assignment/commit/bba356bc1c796a43957ca0b282cb5d9a0512f1e8)
+and delivered through documentation-only
+[PR #14](https://github.com/Jyot-Kikani/DevOps_Assignment/pull/14).
+Its [current-head required checks](https://github.com/Jyot-Kikani/DevOps_Assignment/pull/14/checks)
+are authoritative. This documentation update requires no new application image;
+the release workflow preserves the observed deployment for documentation-only main commits.
 
 Temporary public app:
-<https://films-adrian-disabled-attribute.trycloudflare.com/explore>.
-Initial public smoke passed exact release/API/data identity, real Proxima
-estimate/share/read and five private-route 404s. This hostname works only while
+<https://bottles-milk-ethnic-macintosh.trycloudflare.com/explore>.
+Final public smoke passed exact release/API/data identity, real Proxima
+estimate/share/read and five private-route 404s at **16:22 IST**. Same-host public
+Chromium showed the corrected About wording and exact source/data/release;
+the screenshot was inspected. One final warm map reload took **1,488 ms** and
+profile request **225 ms**. Earlier 457-ms local/2,528-ms public observations
+remain separate checkpoints, not repeated benchmarks or guarantees.
+
+The former `films-adrian-disabled-attribute` hostname is **retired**: its DNS
+failed and the live process reported provider `Tunnel not found`. Normal
+`public-stop`/`public-start` replaced only the verified project tunnel. Copy new
+view/share links; old records remain in the same database. This hostname works only while
 this host, Docker, kind, cloudflared and internet are available; restart changes it.
 No new external-device check is claimed; Batch 5's user-confirmed phone/mobile-data
 test is reused as historical evidence.
@@ -69,7 +94,8 @@ Concise command summary: [batch7-final.txt](evidence/batch7-final.txt).
 
 Detailed ignored outputs: `.local/reports/batch7-{quality,security}.json`,
 `batch7-e2e.txt`, `web-review/review.json`, `p22/review.json`,
-`p23-clone-{locks.json,help.txt}` and final public/delivery observations.
+`p23-clone-{locks.json,help.txt}`, `batch7-final-{gitops,public-smoke,release,scan-summary}.json`,
+`batch7-release-artifact/`, `p23-public.json` and `p23-public-about.png`.
 The bounded clean clone is `.local/p23-clean-clone/`; it does not inherit local
 credentials, data or infrastructure. It is not a second deployed environment.
 
@@ -82,10 +108,22 @@ global installation was needed. Unrelated `devsecops-demo` stays untouched.
 
 ## Remaining limitations
 
-Grype's actual running-release strict high threshold remains **failed, exit 2**;
-the initial reused source has Web **91 High / 17 Critical**, Python images each
-**55 High / 0 Critical**. No finding suppression or signing/SBOM claim. A newly
-published source requires its own actual scan record, not these inherited counts.
+The final source's fresh Grype 0.120.1 scan is **failed, exit 2 for every image**:
+
+| Image | High | Critical |
+|---|---:|---:|
+| Web | 91 | 17 |
+| Catalog | 55 | 0 |
+| Journey | 55 | 1 |
+| Importer | 55 | 1 |
+
+Exact [scan summary](https://github.com/Jyot-Kikani/DevOps_Assignment/blob/6c5f8e67b3bb92a60ade0b5e4da828bd9a240663/scan-summary.json)
+and raw downloaded artifact were reviewed. The Journey/Importer Critical match is
+`GHSA-6q48-6c7w-9gw2`, certifi `2026.10.18`, with `2026.10.19` suggested by the
+scanner. It is the same advisory reviewed in P18; the older Journey bundle/root
+inspection is historical and was not repeated on this image. This final version
+match is retained as unresolved; no dependency/trust override, suppression,
+passing-threshold or signing/SBOM claim is made. See [image review](P10_IMAGE_REVIEW.md).
 
 Single-host availability, temporary hostname, software/mobile-emulated review,
 historical external-phone/billing evidence, old backup age, no formal accessibility

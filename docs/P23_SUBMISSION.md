@@ -38,7 +38,8 @@ flowchart LR
 
 Terraform owns platform resources; Argo owns application deployment after P17.
 Only Web is public. Databases, Kubernetes, Argo and monitoring remain private.
-No credentials/state/backups are in Git or Actions. No signing/SBOM or network
+No operator or cluster credentials, state or backups are committed or passed to
+release Actions. CI uses disposable database credentials. No signing/SBOM or network
 policy enforcement is claimed. Dependency pins/locks are in
 `tools/toolchain.lock.json`, `tools/locks/` and npm locks; original code uses
 [MIT](../LICENSE), and data retains its [own attribution/license](../data/LICENSE-NOTICE.md).
@@ -130,8 +131,11 @@ this submission performs no destructive deletion/rebuild.
 - Availability requires this host, Docker, kind, cloudflared and internet. One
   node/PVC is not HA. Stop took a 60-second grace period and exit 137 in Batch 6;
   persistence passed after recovery, but that is not a clean DB shutdown claim.
-- Grype strict high-severity thresholds remain failed; actual findings are
-  documented. CI success does not certify a vulnerability-free image.
+- Grype strict high-severity thresholds remain failed; the final scan includes
+  Web 91 High/17 Critical, Catalog 55 High/0 Critical and Journey/Importer each
+  55 High/1 Critical (certifi version match). Actual findings and the unchanged
+  historical advisory review are documented. CI success does not certify a
+  vulnerability-free image.
 - P22 uses one software Chromium and mobile emulation. The earlier physical
   external-phone check is historical; no fresh external-device/FPS/load or
   complete accessibility certification is claimed.

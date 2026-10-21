@@ -83,3 +83,22 @@ in the advisory, so no certificate/trust override or dependency upgrade was made
 The version-range match remains recorded as Critical and the threshold remains
 failed. P18 raw reports and the on-image observation are retained locally; this
 review does not claim that either image has a passing scan.
+
+## Batch 7 final scan (21 October 2026)
+
+Final source `d44d639309d668ef8f74f41b20b319a9b601d76c`, release
+`r39573285891-a1-d44d639309d6`, was freshly built and scanned in
+[run 39573285891](https://github.com/Jyot-Kikani/DevOps_Assignment/actions/runs/39573285891).
+The exact [deploy scan summary](https://github.com/Jyot-Kikani/DevOps_Assignment/blob/6c5f8e67b3bb92a60ade0b5e4da828bd9a240663/scan-summary.json)
+records Web **91 High / 17 Critical**, Catalog **55 High / 0 Critical**,
+Journey/Importer each **55 High / 1 Critical**. Every high threshold is still
+**failed, exit 2**. The raw artifact is preserved locally in
+`.local/reports/batch7-release-artifact/` beyond hosted artifact retention.
+
+The two Python Critical matches are the same certifi advisory described above:
+installed version `2026.10.18`, scanner-suggested fix `2026.10.19`. The earlier
+P18 bundle inspection is historical; this final image's bundle was not independently
+reinspected. No upgrade, trust override or finding waiver was introduced for the
+submission. These version matches remain unresolved in the final scan. ADR 0005
+allows the scanned/reviewed educational demonstration without a zero-findings
+claim. [Batch 7](BATCH7_REPORT.md) records the final runtime and other limitations.

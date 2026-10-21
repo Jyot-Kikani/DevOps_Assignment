@@ -26,4 +26,22 @@ Existing host dumps rehashed: catalog 5edf72cc0412413c37e652f5aa81e2babbd225bd50
 Backup predates later shares; prior isolated restore reused. No live restore/reimport/delete.
 Main protection readback: strict/up-to-date required ci / quality and ci / security;
   admins included, zero mandatory reviewers. No protection change.
-See Batch 7 report delivery addendum for final PR/CI/publication/runtime observations.
+PR #13 -> merged d44d639309d668ef8f74f41b20b319a9b601d76c after current-head checks passed.
+PR CI 39572258725 -> quality/security success; main CI 39572800136 -> success.
+Trusted release 39573285891 -> success; four images anonymously verified and deploy promoted.
+Final release r39573285891-a1-d44d639309d6; source d44d639309d668ef8f74f41b20b319a9b601d76c.
+Final deploy 6c5f8e67b3bb92a60ade0b5e4da828bd9a240663 -> Argo Synced Healthy, web/catalog/journey 1/1.
+All running digests match the exact deploy release.json; data/schema/model unchanged.
+Old hostname failed DNS; provider reported Tunnel not found. Guarded public-stop/start replaced
+  only recorded project tunnel, preserving cluster/database/PVC and unrelated resources.
+Final public URL https://bottles-milk-ethnic-macintosh.trycloudflare.com/explore
+Final public smoke 2026-10-21T10:52:02Z -> passed source/API/data identity, Proxima estimate/share/read,
+  five private-route 404s; no fresh external-device claim.
+Final public Chromium -> passed keyboard/default map/About; actual updated availability text,
+  source/release/checksum visible; screenshot inspected. Warm map 1488 ms, profile 225 ms.
+Final fresh Grype 0.120.1 high threshold -> failed, exit 2 each:
+  web 91 High/17 Critical; catalog 55/0; journey 55/1; importer 55/1.
+Journey/Importer Critical GHSA-6q48-6c7w-9gw2: certifi 2026.10.18, suggested fix 2026.10.19.
+  Same advisory reviewed in P18; old bundle observation not repeated on final images.
+  Final version match retained unresolved; no suppression/threshold/dependency/trust change.
+Final docs-only evidence PR/checks are linked from Batch 7 report; no new image needed.
