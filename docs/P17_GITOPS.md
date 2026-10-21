@@ -14,6 +14,9 @@ The pinned namespace installation/CRDs are verified against the existing lock.
 Only controller, repo server, Redis and UI run; unused SSO/ApplicationSet/
 notification components are omitted. Platform, database, PVC and monitoring stay
 with Terraform. Credentials are never committed or put in Terraform state.
+The initial Argo registry download can take over ten minutes on this host;
+startup waits up to fifteen minutes per workload. Keep a failed report and retry
+after the pull completes rather than reinstalling tools or deleting the cluster.
 
 Bootstrap validates the public release and runs the existing ordered idempotent
 bootstrap/migration/import Jobs before enabling auto-sync. Existing data stays in
