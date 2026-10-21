@@ -8,6 +8,11 @@ in order and consult [acceptance status](docs/ACCEPTANCE.md) for actual progress
 
 ## Prerequisites
 
+For a DevOps-focused walkthrough, open the standalone
+[interactive architecture visualiser](docs/architecture_visualiser.html) in a browser,
+read the [architecture and file guide](docs/architecture_guide.md), and use the
+[demonstration script and talking points](docs/demo_guide.md).
+
 Windows, Python 3.13, Git, Docker Desktop with Linux containers/WSL2, at least
 16 GiB RAM/4 logical CPUs/40 GiB free disk. Use existing hardware only. P00's
 reference host and actual checks are recorded in docs/P00_PREREQUISITES.md.
