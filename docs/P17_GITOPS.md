@@ -29,6 +29,7 @@ digests and running source/release/data, then calculates/shares a real journey.
 Argo's resource cache includes only the application kinds and their read-only
 Pod/ReplicaSet/Job support objects, matching the namespace Role; Secrets and
 unrelated platform kinds are excluded from destination discovery.
+This uses Argo's documented [resource inclusions](https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/#resource-exclusioninclusion).
 It does not call an image push a deployed release. The UI Service is ClusterIP;
 for a temporary private UI use the project's kubectl/config/context with
 `-n argocd port-forward service/argocd-server 8081:443 --address=127.0.0.1`.

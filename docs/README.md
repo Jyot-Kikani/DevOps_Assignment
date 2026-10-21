@@ -32,4 +32,5 @@ Batch 4 guides: [P12 platform](P12_KUBERNETES.md), [P13 deployment](P13_LOCAL_DE
 
 Batch 5 guides: [P15 publication](P15_PUBLICATION.md), [P16 public access](P16_PUBLIC_DEMO.md),
 [P17 GitOps](P17_GITOPS.md), [P18 update/rollback](P18_UPDATE_ROLLBACK.md).
-P19 remains unstarted.
+Read [Batch 5 results](BATCH5_REPORT.md) for actual public/GitOps/update/rollback
+evidence. P19 remains unstarted.

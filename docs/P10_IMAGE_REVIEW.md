@@ -68,3 +68,18 @@ Under ADR 0005, scan/review/documentation allows the educational publication
 while the threshold remains failed. Raw reports are retained in release Actions
 artifacts for three days and locally under `.local/reports/p15-release-first/`;
 `deploy/scan-summary.json` preserves concise counts/policy after artifact expiry.
+
+The P18 scan at `ee68173f6f30c1fc48787ce4a8793bce0035daa3` retained those
+counts and added one Critical certifi match in Journey and Importer:
+[GHSA-6q48-6c7w-9gw2](https://github.com/advisories/GHSA-6q48-6c7w-9gw2),
+with 2026.10.19 listed as fixed. The advisory's description also states that
+2026.10.18 removed all emSign roots and .19 restored unaffected roots. Inspection
+of the actual running Journey image found certifi **2026.10.18**, **117** trusted
+CAs and **zero emSign roots**, with bundle SHA-256
+`d87887200c9a705dccc937b9b83b5e67e47024c4a4b7f9dd15700c72e0f55453`.
+Importer uses the same locked certifi distribution; that image's bundle was not
+independently inspected. The observed Journey bundle already excludes the roots
+in the advisory, so no certificate/trust override or dependency upgrade was made.
+The version-range match remains recorded as Critical and the threshold remains
+failed. P18 raw reports and the on-image observation are retained locally; this
+review does not claim that either image has a passing scan.
