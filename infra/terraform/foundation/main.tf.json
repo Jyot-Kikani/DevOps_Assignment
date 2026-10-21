@@ -1,0 +1,59 @@
+{
+  "provider": {
+    "kubernetes": {
+      "config_path": "${var.kubeconfig}",
+      "config_context": "kind-stellar-atlas-demo"
+    }
+  },
+  "variable": {
+    "kubeconfig": {
+      "type": "string"
+    }
+  },
+  "resource": {
+    "kubernetes_namespace_v1": {
+      "project": {
+        "for_each": "${toset([\"stellar-atlas\", \"stellar-data\", \"stellar-monitoring\"])}",
+        "metadata": [
+          {
+            "name": "${each.value}",
+            "labels": {
+              "app.kubernetes.io/part-of": "stellar-atlas",
+              "managed-by": "terraform",
+              "demo": "stellar-atlas"
+            }
+          }
+        ]
+      }
+    },
+    "kubernetes_persistent_volume_claim_v1": {
+      "postgres": {
+        "metadata": [
+          {
+            "name": "postgres-data",
+            "namespace": "${kubernetes_namespace_v1.project[\"stellar-data\"].metadata[0].name}"
+          }
+        ],
+        "wait_until_bound": false,
+        "spec": [
+          {
+            "access_modes": [
+              "ReadWriteOnce"
+            ],
+            "storage_class_name": "standard",
+            "resources": [
+              {
+                "requests": {
+                  "storage": "10Gi"
+                }
+              }
+            ]
+          }
+        ],
+        "lifecycle": {
+          "prevent_destroy": true
+        }
+      }
+    }
+  }
+}

@@ -18,9 +18,14 @@ The [Batch 2 report](BATCH2_REPORT.md) records P04–P07 database/import/API wor
 and exact validation. Read its phase guides for reproducible database and HTTP
 checks. The early-CI and Batch 1 documents remain historical checkpoints.
 Batch 3 now implements P08–P11 local application work; read [its report](BATCH3_REPORT.md)
-for exact results, local image metadata and the failed Grype threshold. Kubernetes
-and public access remain pending; P12 has not started.
+for exact results, local image metadata and the failed Grype threshold. Batch 4 adds
+local kind Kubernetes, Terraform, deployment, monitoring and isolated restore.
+Read [its report](BATCH4_REPORT.md) for actual results. Publication, GitOps and public
+access remain later phases; P15 has not started.
 
 Read [ADR 0005](adr/0005-course-assignment-scope.md) before future work. It narrows checks to a practical course demonstration and supersedes older mandatory hardening language. The revised PRD and implementation plan agree with it; historical completion reports remain unchanged.
 
 Current guides: [P08 web](P08_WEB.md), [P09 Compose](P09_COMPOSE.md), [P10 checks](P10_CHECKS.md), [P11 images](P11_RELEASE_IMAGES.md).
+
+Batch 4 guides: [P12 platform](P12_KUBERNETES.md), [P13 deployment](P13_LOCAL_DEPLOYMENT.md),
+[P14 monitoring/recovery](P14_MONITORING_RECOVERY.md).

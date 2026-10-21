@@ -11,6 +11,13 @@ from .bootstrap import ROOT, LOCAL, doctor, write_json
 def parser():
     result = argparse.ArgumentParser(description="Stellar Atlas host operations")
     commands = result.add_subparsers(dest="action", required=True)
+    for name in ('cluster-create', 'platform-plan', 'platform-apply', 'cluster-secrets', 'demo-bootstrap', 'monitoring-up', 'monitoring-check', 'backup', 'restore'):
+        action = commands.add_parser(name, help='Local kind platform operation; see docs/P12_KUBERNETES.md')
+        action.add_argument('--json', action='store_true')
+        if name.startswith('platform-'):
+            action.add_argument('--root', choices=['foundation', 'runtime'], required=True)
+        if name == 'restore':
+            action.add_argument('--target', choices=['restore-check'], required=True)
     for name in ('dev-up', 'dev-down', 'smoke', 'compose-check', 'images-build', 'images-check', 'security'):
         action = commands.add_parser(name, help='Local application/images operation; see docs/P09_COMPOSE.md')
         action.add_argument('--json', action='store_true')
@@ -57,7 +64,10 @@ def main(argv=None):
     LOCAL.mkdir(exist_ok=True)
     (LOCAL / "reports").mkdir(exist_ok=True)
     try:
-        if arguments.action == 'security':
+        if arguments.action in ('cluster-create', 'platform-plan', 'platform-apply', 'cluster-secrets', 'demo-bootstrap', 'monitoring-up', 'monitoring-check', 'backup', 'restore'):
+            from .kubernetes import action
+            report = action(arguments.action, root=getattr(arguments, 'root', 'foundation'), target=getattr(arguments, 'target', None))
+        elif arguments.action == 'security':
             from .security import security
             report = security()
         elif arguments.action in ('dev-up', 'dev-down', 'smoke', 'compose-check', 'images-build', 'images-check'):
