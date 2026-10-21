@@ -1,0 +1,31 @@
+Stellar Atlas Batch 6 - actual command observations, 21 October 2026
+python tools/ci_security.py --json -> passed; safe fake-token Gitleaks rejection -> exit 1
+P19 public private-route checks -> 10 x 404; live web/catalog/journey UID -> 10001
+Running release Grype high threshold reused -> failed (exit 2); see P19 guide
+python tools/run.py pod-replace --json -> passed; recovery_seconds=7.22
+deleted_uid=a4ab5421-caf5-45bc-aff0-2652a5508dac
+replacement_uid=5429f5a5-dde5-434c-bd63-212a1fdc6324
+GitOps scale-up revision=7b64485c78030f3c86eaa80041bec5e361f901fb; Synced Healthy; replicas=2
+NAME                      READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                                                                                                              SELECTOR
+deployment.apps/journey   2/2     2            2           11h   journey      ghcr.io/jyot-kikani/stellar-atlas-journey@sha256:a85a9e0a549ea1d6d0fd1070d05542a950985a29595aca831562912e7840e384   app=journey
+
+NAME                           READY   STATUS    RESTARTS   AGE     IP            NODE                               NOMINATED NODE   READINESS GATES
+pod/journey-79f85cc6cc-7phrd   1/1     Running   0          2m42s   10.244.0.36   stellar-atlas-demo-control-plane   <none>           <none>
+pod/journey-79f85cc6cc-zp8qs   1/1     Running   0          3m40s   10.244.0.35   stellar-atlas-demo-control-plane   <none>           <none>
+GitOps normal revert revision=82bd0318aa50fa205baa5078c9aee3ffc5313d61; Synced Healthy; replicas=1
+NAME                      READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                                                                                                              SELECTOR
+deployment.apps/journey   1/1     1            1           11h   journey      ghcr.io/jyot-kikani/stellar-atlas-journey@sha256:a85a9e0a549ea1d6d0fd1070d05542a950985a29595aca831562912e7840e384   app=journey
+
+NAME                           READY   STATUS    RESTARTS   AGE     IP            NODE                               NOMINATED NODE   READINESS GATES
+pod/journey-79f85cc6cc-7phrd   1/1     Running   0          3m10s   10.244.0.36   stellar-atlas-demo-control-plane   <none>           <none>
+git diff pre-scale..revert -- app/app.json release.json scan-summary.json -> empty
+python tools/run.py demo-stop --json -> passed; project node retained, Exited (137)
+docker ps -a -> devsecops-demo-control-plane remained Up; project node was stopped
+Actual loaded browser search while stopped -> Failed to fetch; Retry search shown
+python tools/run.py demo-start --json -> passed; duration_seconds=225.218
+catalog_count=331312
+identical_journey_http_and_row=True
+same_bound_pvc_uid=c0b128bf-74cd-4b69-bf22-19b4a5a32666
+public_smoke=passed; public_browser=passed; URL=https://films-adrian-disabled-attribute.trycloudflare.com
+Local quality -> 74 Python + 5 frontend tests; contracts/types/typecheck/lint/build passed
+P22/P23 unstarted. Detailed raw logs and three screenshots remain ignored under .local/reports.
