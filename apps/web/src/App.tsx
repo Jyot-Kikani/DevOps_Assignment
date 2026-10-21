@@ -237,7 +237,7 @@ function About({ snapshot }: { snapshot?: Snapshot }) {
     <p>Changes: selected fields, unit normalization, curated verified aliases, deterministic binary chunks and illustrative photometric styling. Original software is MIT licensed; that license does not relabel the dataset.</p>
     <dl><div><dt>Dataset</dt><dd>{snapshot?.snapshot_id ?? 'Unavailable'}</dd></div><div><dt>Raw SHA-256</dt><dd>{snapshot?.raw_sha256 ?? 'Unavailable'}</dd></div><div><dt>Epoch</dt><dd>J2016.0</dd></div><div><dt>Source commit</dt><dd>{String(version?.source_sha ?? 'Development build — not recorded')}</dd></div><div><dt>Application release</dt><dd>{String(release?.release_id ?? version?.release_id ?? 'Development build — not recorded')}</dd></div></dl>
     {snapshot && <p><a href={snapshot.source_url}>Catalog source</a>{snapshot.citation_urls.map(url => <span key={url}> · <a href={url}>Source citation</a></span>)}</p>}
-    {release && <details><summary>Local release image metadata</summary><pre>{JSON.stringify(release, null, 2)}</pre></details>}
-    <h2>Availability</h2><p>The app runs on existing local hardware. Access depends on its host, Docker and internet; future public access also requires Kubernetes and a temporary Cloudflare Quick Tunnel. There is no 24/7 uptime guarantee or permanent public hostname. This build is a local application.</p>
+    {release && <details><summary>Release image metadata</summary><pre>{JSON.stringify(release, null, 2)}</pre></details>}
+    <h2>Availability</h2><p>The app runs on existing local hardware. Public access depends on its host, Docker, Kubernetes, internet and a temporary Cloudflare Quick Tunnel. The public hostname changes whenever the tunnel restarts; copy new share links after a restart. There is no 24/7 uptime guarantee or permanent public hostname.</p>
   </section>;
 }

@@ -1,0 +1,29 @@
+Stellar Atlas Batch 7 - actual observations, 21 October 2026
+Starting clean head: 25eb0a2 on codex/batch6-operations; refreshed main 44bfa37.
+PR #12: current-head ci / quality and ci / security success; clean/up-to-date base.
+Protected merge: 81a0edbe354c4e053470ed5868ab1127e880985d; new codex/batch7-final-handoff.
+python tools/run.py test --json -> passed: 74 Python, 5 frontend, contracts/type/lint/build.
+python tools/ci_security.py --json -> passed: full-history Gitleaks/publication exclusions.
+Existing Playwright real-API E2E -> 2 passed against http://127.0.0.1:8080.
+tools/review_web.mjs -> passed: desktop Saved/reload/cancel/remove, four mobile routes,
+  explicit injected 410, aborted catalog error, WebGL-disabled real list/profile.
+Focused P22 -> passed: 1151 at 50 ly; 300526 at exactly 100 pc; maps completed;
+  keyboard Proxima, five neighbors, orbit and layer/observer/camera URL round-trip;
+  malformed URL defaults, real empty search, mobile estimate/save/share/reopen;
+  storage denial warning, opt-in reduced motion, catalog error/real Retry recovery.
+Browser: Chromium 156.0.8078.4, SwiftShader; desktop 1440x900, mobile emulation 390x844.
+One warm local observation: default map 457 ms; profile/search/map HTTP 19/14/23 ms.
+Same-host public HTTPS Chromium -> passed; warm map 2528 ms; warm profile 469 ms;
+  keyboard Tab reached visible Skip to content; About source/data displayed.
+Initial public smoke -> passed: real source/data/release, Proxima share/read, five 404s.
+Initial Argo -> Synced Healthy at 82bd0318aa50fa205baa5078c9aee3ffc5313d61.
+Initial running source -> 2abd14c22f316c180ff163557b9690f18cfa1704.
+Initial release -> r39557433765-a1-2abd14c22f31.
+Clean clone canonical main -> 81a0edbe354c4e053470ed5868ab1127e880985d; clean status;
+  tools-lock --verify-only passed; CLI --help passed. No dependency install/new cluster.
+Existing host dumps rehashed: catalog 5edf72cc0412413c37e652f5aa81e2babbd225bd50417ed81fdb928cb4258015;
+  journey 6845e9357c7614edcce02fe4a6058df84aed3b49115995491a4fb0f95ad87a34.
+Backup predates later shares; prior isolated restore reused. No live restore/reimport/delete.
+Main protection readback: strict/up-to-date required ci / quality and ci / security;
+  admins included, zero mandatory reviewers. No protection change.
+See Batch 7 report delivery addendum for final PR/CI/publication/runtime observations.

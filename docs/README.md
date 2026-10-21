@@ -39,4 +39,9 @@ Batch 6 guides: [P19 security summary](P19_SECURITY_SUMMARY.md),
 [P20 Kubernetes operations](P20_KUBERNETES_OPERATIONS.md) and
 [P21 operating/recovery guide](P21_OPERATIONS.md).
 Read [Batch 6 results](BATCH6_REPORT.md) for security controls, pod replacement,
-Git-managed scaling and safe stop/start evidence. P22/P23 remain unstarted.
+Git-managed scaling and safe stop/start evidence.
+
+Final handoff: [P22 review](P22_FINAL_REVIEW.md), [P23 course submission](P23_SUBMISSION.md),
+[acceptance register](ACCEPTANCE.md) and [Batch 7 results](BATCH7_REPORT.md).
+P23 provides the architecture, evidence matrix, assessment script and limitations;
+Batch 7 records the current runtime/public route and delivery evidence.
