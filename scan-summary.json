@@ -1,0 +1,47 @@
+{
+  "source_sha": "2abd14c22f316c180ff163557b9690f18cfa1704",
+  "scanner": "Grype 0.120.1",
+  "threshold": "high",
+  "images": {
+    "web": {
+      "exit_code": 2,
+      "findings": {
+        "Negligible": 107,
+        "Critical": 17,
+        "Low": 13,
+        "High": 91,
+        "Medium": 70,
+        "Unknown": 33
+      }
+    },
+    "catalog": {
+      "exit_code": 2,
+      "findings": {
+        "High": 55,
+        "Medium": 50,
+        "Negligible": 46,
+        "Low": 10
+      }
+    },
+    "journey": {
+      "exit_code": 2,
+      "findings": {
+        "High": 55,
+        "Medium": 50,
+        "Negligible": 46,
+        "Low": 10
+      }
+    },
+    "importer": {
+      "exit_code": 2,
+      "findings": {
+        "High": 55,
+        "Medium": 50,
+        "Negligible": 46,
+        "Low": 10
+      }
+    }
+  },
+  "status": "failed",
+  "publication_policy": "ADR 0005: scan/review/documentation; strict threshold is retained, not a publication prerequisite. See docs/P10_IMAGE_REVIEW.md."
+}
