@@ -47,7 +47,14 @@ deployment. Prior runtime observations remain attributed to their dated reports.
   visible manual-copy fallback was verified. No clipboard-success claim is made.
 - Focused review output: ignored `.local/reports/devops-guides/review.json` and
   `desktop-dark.png`, `desktop-light.png`, `mobile-light.png` in that directory.
-- Required GitHub CI: pending PR milestone. PR/head details will be recorded here.
+- Local full-history Gitleaks, publication exclusions and pinned-action checks
+  passed after the implementation commit; no leaks or boundary violations.
+- Implementation commit: [`3af6e5b`](https://github.com/Jyot-Kikani/DevOps_Assignment/commit/3af6e5bdd0c5fea45a343c13fba50436e0137514).
+  Delivery: [PR #15](https://github.com/Jyot-Kikani/DevOps_Assignment/pull/15).
+  Both required GitHub jobs were launched; their
+  [current-head results](https://github.com/Jyot-Kikani/DevOps_Assignment/pull/15/checks)
+  are authoritative. The PR remains available for review; no merge is performed
+  as part of this documentation request.
 
 No application source, dependency lock, scientific data, original validation,
 mockup, deployment manifest or workflow was changed. No cluster start/stop,
