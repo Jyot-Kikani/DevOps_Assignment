@@ -228,4 +228,21 @@ cluster; first-time setup follows the earlier guides. Preserve host backups.
 See [security evidence](docs/P19_SECURITY_SUMMARY.md),
 [pod replacement/scaling](docs/P20_KUBERNETES_OPERATIONS.md), the short
 [operating/recovery guide](docs/P21_OPERATIONS.md) and [Batch 6 results](docs/BATCH6_REPORT.md).
-The strict Grype threshold remains failed. P22/P23 final review is separate.
+The strict Grype threshold remains failed. P22/P23 final review is recorded below.
+
+## Final course submission (P22–P23)
+
+Start with [the submission and demo script](docs/P23_SUBMISSION.md),
+[final review](docs/P22_FINAL_REVIEW.md), [acceptance register](docs/ACCEPTANCE.md)
+and [Batch 7 report](docs/BATCH7_REPORT.md). The submission includes the architecture,
+course-topic evidence table, operating/recovery links, selected actual screenshots,
+measurements and remaining limitations. Use the Batch 7 runtime record for the
+current temporary public URL and running source; earlier reports are checkpoints.
+
+P22 verifies 1,151 objects at 50 ly and 300,526 at exactly 100 pc, desktop/mobile
+flows, keyboard selection, view links, Saved and representative fallback/retry
+states. Mobile is viewport emulation and Chromium uses software rendering; no
+formal accessibility/FPS/load certification is claimed. Existing scientific,
+transfer, retention, deployment and recovery evidence is reused where unchanged.
+The strict image-scan failures remain documented. No additional infrastructure
+is required for assessment; routine operation follows [P21](docs/P21_OPERATIONS.md).

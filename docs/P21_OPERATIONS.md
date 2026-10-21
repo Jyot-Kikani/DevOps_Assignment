@@ -48,7 +48,8 @@ These commands require an **existing** initialized GitOps cluster. For a first
 checkout, follow README bootstrap, [P12](P12_KUBERNETES.md),
 [P13](P13_LOCAL_DEPLOYMENT.md), [P15](P15_PUBLICATION.md) and [P17](P17_GITOPS.md)
 in order. Do not run first-time setup to repair a routine stop, and do not apply
-`demo-bootstrap` after Argo owns the app. A clean-clone acceptance review is P23.
+`demo-bootstrap` after Argo owns the app. The bounded clean-clone source/lock/CLI
+review and final handoff are recorded in [Batch 7](BATCH7_REPORT.md).
 
 ## Update, rollback and public route
 
@@ -112,5 +113,5 @@ loopback-only forwards. Monitoring counters/history are ephemeral across restart
 This guide intentionally offers no cluster-delete/volume-prune command. A future
 destructive teardown/rebuild needs an explicitly named target and verified host
 backup. Ordinary shutdown is `demo-stop`. [Batch 6](BATCH6_REPORT.md) records the
-tested stop/start and final running state. P22 usability/performance and P23 final
-acceptance/handoff remain separate work.
+tested stop/start. [Batch 7](BATCH7_REPORT.md) records P22 final review, P23
+acceptance/handoff and the final observed runtime/public route.
