@@ -47,3 +47,24 @@ Actual package/non-root/health/source/data checks and the local browser/persiste
 flows pass on these images. The strict vulnerability gate still fails. Detailed
 per-image reports retain their immutable ID in `.local/reports/image-scans/`.
 No zero-findings release-readiness claim is made.
+
+## Batch 5 publication scan (21 October 2026)
+
+The first trusted-main release at `2abd14c22f316c180ff163557b9690f18cfa1704`
+rebuilt and scanned all four images with Grype 0.120.1. The strict high threshold
+returned **exit 2 for every image**: web **91 High / 17 Critical**; Catalog,
+Journey and Importer each **55 High / 0 Critical**. This differs from the older
+local scan and does not alter its historical findings.
+
+Review of the actual JSON found no High/Critical match with an available fixed
+version: web has 96 `wont-fix` and 12 `not-fixed` matches; each Python image has
+54 `wont-fix` and 1 `not-fixed`. These are scanner-provided fix states, not a
+finding waiver or independent exploitability determination. Representative
+matches concern curl/libcurl, libxml2 and util-linux base packages. Application
+dependencies/base locks were preserved; no intentionally vulnerable code was
+introduced. Non-root runtime and private-route controls remain in place.
+
+Under ADR 0005, scan/review/documentation allows the educational publication
+while the threshold remains failed. Raw reports are retained in release Actions
+artifacts for three days and locally under `.local/reports/p15-release-first/`;
+`deploy/scan-summary.json` preserves concise counts/policy after artifact expiry.

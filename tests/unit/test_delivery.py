@@ -52,3 +52,11 @@ def test_argo_scope_excludes_platform_and_secrets():
     assert project['clusterResourceWhitelist'] == []
     assert project['destinations'] == [{'server': 'https://kubernetes.default.svc', 'namespace': 'stellar-atlas'}]
     assert 'Secret' not in [x['kind'] for x in project['namespaceResourceWhitelist']]
+
+
+def test_recovery_records_running_gitops_release(monkeypatch):
+    from stellar_ops import application, kubernetes
+    expected = {**record(), 'source_dirty': False, 'dataset': {'fixture': False, 'snapshot_id': 'gcns-test'}}
+    monkeypatch.setattr(application, 'http', lambda path: (200, {}, json.dumps(
+        expected if path == '/release.json' else {'source_sha': expected['source_sha']}).encode()))
+    assert kubernetes.running_release() == expected
