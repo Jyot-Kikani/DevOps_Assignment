@@ -1,5 +1,5 @@
 {
-  "source_sha": "81a0edbe354c4e053470ed5868ab1127e880985d",
+  "source_sha": "d44d639309d668ef8f74f41b20b319a9b601d76c",
   "scanner": "Grype 0.120.1",
   "threshold": "high",
   "images": {
