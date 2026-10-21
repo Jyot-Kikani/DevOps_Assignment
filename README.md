@@ -1,7 +1,7 @@
 # Stellar Atlas
 
 A nearby-star atlas and zero-cost DevOps course project. Catalog and Journey
-will run as separate services on local Kubernetes. Delivery, security, recovery
+run as separate services on local Kubernetes. Delivery, security, recovery
 and demonstrable operations are the priority. The product specification is in
 [PRD](docs/PRD.md); execute the [implementation plan](docs/IMPLEMENTATION_PLAN.md)
 in order and consult [acceptance status](docs/ACCEPTANCE.md) for actual progress.
@@ -145,4 +145,34 @@ high-severity gate still fails on base-image findings, even after the documented
 runtime update. This is not a clean-scan release. No findings are hidden and no
 image is published; review [the actual findings](docs/P10_IMAGE_REVIEW.md) before
 the separate P15 publication decision. Existing required CI checks remain intact.
-P12 is the next infrastructure phase and has not been started.
+Batch 4 adds the local Kubernetes platform, deployment and recovery demonstration below.
+
+## Batch 4 local Kubernetes (P12–P14)
+
+After the existing bootstrap and clean-source image preparation, run in your normal
+Windows session. Stop the Stellar Atlas Compose gateway first to free port 8080:
+
+```powershell
+python tools/run.py dev-down --json
+python tools/run.py cluster-create --json
+python tools/run.py platform-apply --root foundation --json
+python tools/run.py cluster-secrets --json
+python tools/run.py platform-apply --root runtime --json
+python tools/run.py demo-bootstrap --json
+python tools/run.py monitoring-up --json
+python tools/run.py monitoring-check --json
+python tools/run.py backup --json
+python tools/run.py restore --target restore-check --json
+```
+
+Open `http://127.0.0.1:8080/explore`. The app uses the prepared real-data image
+digests and separate PostgreSQL roles. Both Terraform roots keep state under
+ignored `.local/terraform`; credentials are applied outside Terraform. Monitoring
+is private, accessible through loopback port-forwards. Restore uses a unique
+temporary target and preserves the working database and host backups.
+
+See [Batch 4 results](docs/BATCH4_REPORT.md), [P12 platform](docs/P12_KUBERNETES.md),
+[P13 deployment](docs/P13_LOCAL_DEPLOYMENT.md) and [P14 monitoring/recovery](docs/P14_MONITORING_RECOVERY.md).
+Routine node stop/start preserves the PVC; cluster deletion can destroy it.
+Do not start Compose while kind owns 8080. P15 publication, Argo delivery and public
+tunnel access remain unstarted. Existing Grype findings remain recorded in Batch 3.
