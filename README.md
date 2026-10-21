@@ -208,3 +208,24 @@ See [Batch 5 results](docs/BATCH5_REPORT.md) for the current temporary URL,
 external-device confirmation, published versions and update/rollback evidence.
 Database backups now record the running release, including a GitOps rollback,
 rather than an older local Compose image record.
+
+## Batch 6 operations (P19–P21)
+
+Use the retained, initialized GitOps cluster for routine demonstrations:
+
+```powershell
+python tools/run.py demo-start --json
+python tools/run.py pod-replace --json
+python tools/run.py demo-stop --json
+```
+
+Safe stop retains the exact kind node container and PVC, records a catalog/journey
+checkpoint and stops only the project's recorded tunnel. Start verifies persisted
+data and Argo, resuming a previously active tunnel with a new temporary URL.
+`demo-start --local-only` skips opening a tunnel. It does not create a missing
+cluster; first-time setup follows the earlier guides. Preserve host backups.
+
+See [security evidence](docs/P19_SECURITY_SUMMARY.md),
+[pod replacement/scaling](docs/P20_KUBERNETES_OPERATIONS.md), the short
+[operating/recovery guide](docs/P21_OPERATIONS.md) and [Batch 6 results](docs/BATCH6_REPORT.md).
+The strict Grype threshold remains failed. P22/P23 final review is separate.

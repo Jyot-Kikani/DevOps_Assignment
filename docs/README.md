@@ -33,4 +33,10 @@ Batch 4 guides: [P12 platform](P12_KUBERNETES.md), [P13 deployment](P13_LOCAL_DE
 Batch 5 guides: [P15 publication](P15_PUBLICATION.md), [P16 public access](P16_PUBLIC_DEMO.md),
 [P17 GitOps](P17_GITOPS.md), [P18 update/rollback](P18_UPDATE_ROLLBACK.md).
 Read [Batch 5 results](BATCH5_REPORT.md) for actual public/GitOps/update/rollback
-evidence. P19 remains unstarted.
+evidence.
+
+Batch 6 guides: [P19 security summary](P19_SECURITY_SUMMARY.md),
+[P20 Kubernetes operations](P20_KUBERNETES_OPERATIONS.md) and
+[P21 operating/recovery guide](P21_OPERATIONS.md).
+Read [Batch 6 results](BATCH6_REPORT.md) for security controls, pod replacement,
+Git-managed scaling and safe stop/start evidence. P22/P23 remain unstarted.

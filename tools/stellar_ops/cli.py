@@ -11,6 +11,11 @@ from .bootstrap import ROOT, LOCAL, doctor, write_json
 def parser():
     result = argparse.ArgumentParser(description="Stellar Atlas host operations")
     commands = result.add_subparsers(dest="action", required=True)
+    for name in ('demo-stop', 'demo-start', 'pod-replace'):
+        action = commands.add_parser(name, help='Existing kind demo lifecycle; see docs/P21_OPERATIONS.md')
+        action.add_argument('--json', action='store_true')
+        if name == 'demo-start':
+            action.add_argument('--local-only', action='store_true', help='Resume without opening a public tunnel')
     for name in ('public-start', 'public-stop', 'gitops-bootstrap', 'gitops-check'):
         action = commands.add_parser(name, help='Batch 5 public tunnel / GitOps; see docs/P16_PUBLIC_DEMO.md')
         action.add_argument('--json', action='store_true')
@@ -67,7 +72,12 @@ def main(argv=None):
     LOCAL.mkdir(exist_ok=True)
     (LOCAL / "reports").mkdir(exist_ok=True)
     try:
-        if arguments.action in ('public-start', 'public-stop', 'gitops-bootstrap', 'gitops-check', 'smoke'):
+        if arguments.action in ('demo-stop', 'demo-start', 'pod-replace'):
+            from . import operations
+            report = {'demo-stop': operations.demo_stop,
+                'demo-start': lambda: operations.demo_start(arguments.local_only),
+                'pod-replace': operations.pod_replace}[arguments.action]()
+        elif arguments.action in ('public-start', 'public-stop', 'gitops-bootstrap', 'gitops-check', 'smoke'):
             from .delivery import action
             report = action(arguments.action, target=getattr(arguments, 'target', 'local'))
         elif arguments.action in ('cluster-create', 'platform-plan', 'platform-apply', 'cluster-secrets', 'demo-bootstrap', 'monitoring-up', 'monitoring-check', 'backup', 'restore'):
