@@ -105,7 +105,7 @@ def test_github_publication_digest_and_rights_fail_safely(monkeypatch):
     state = {"private": True, "digest": "sha256:" + asset["fixture.txt"]["sha256"], "present": True}
 
     def fake_command(args, **kwargs):
-        if args[1:3] == ["api", "repos/fixture-owner/DevOps_Assignment"]:
+        if args[1:3] == ["api", "repos/Jyot-Kikani/DevOps_Assignment"]:
             result = {"private": state["private"], "owner": {"type": "User"}}
         elif args[1] == "api":
             release = {"tag_name": data.RELEASE, "draft": False, "prerelease": False,
@@ -118,18 +118,19 @@ def test_github_publication_digest_and_rights_fail_safely(monkeypatch):
         return {"exit_code": 0, "stdout": json.dumps(result), "stderr": ""}
 
     monkeypatch.setattr(data, "find_tool", lambda _: "gh-fixture")
-    monkeypatch.setattr(data, "command", fake_command)
+    from stellar_ops import github
+    monkeypatch.setattr(github, "call", lambda args: fake_command(["gh-fixture", *args])["stdout"])
     monkeypatch.setattr(data, "LOCAL", boundary)
     with pytest.raises(ValueError, match="public personal"):
-        data.publish_github(boundary, asset, "fixture-owner/DevOps_Assignment", metadata)
+        data.publish_github(boundary, asset, "Jyot-Kikani/DevOps_Assignment", metadata)
     state["private"] = False
     state["digest"] = "sha256:" + "0" * 64
     with pytest.raises(ValueError, match="refusing overwrite"):
-        data.publish_github(boundary, asset, "fixture-owner/DevOps_Assignment", metadata)
+        data.publish_github(boundary, asset, "Jyot-Kikani/DevOps_Assignment", metadata)
     assert not uploads
     state["digest"] = "sha256:" + asset["fixture.txt"]["sha256"]
-    result = data.publish_github(boundary, asset, "fixture-owner/DevOps_Assignment", metadata)
+    result = data.publish_github(boundary, asset, "Jyot-Kikani/DevOps_Assignment", metadata)
     assert result["status"] == "passed" and not uploads
     state["present"] = False
-    data.publish_github(boundary, asset, "fixture-owner/DevOps_Assignment", metadata)
+    data.publish_github(boundary, asset, "Jyot-Kikani/DevOps_Assignment", metadata)
     assert len(uploads) == 1 and "--clobber" not in uploads[0]
