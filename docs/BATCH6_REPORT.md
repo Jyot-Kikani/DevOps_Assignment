@@ -13,8 +13,12 @@ Completed 21 October 2026 under ADR 0005. **P22/P23 remain unstarted.**
 Batch 5's report [PR #11](https://github.com/Jyot-Kikani/DevOps_Assignment/pull/11)
 was merged as `44bfa376587809d01a59c5c699e23e85edc516ab` after checking both
 required current-head jobs successful and an up-to-date base. Batch 6 uses
-`codex/batch6-operations`; its PR/current-head CI are recorded below when available.
-Origin/history and protected-main checks remain intact.
+`codex/batch6-operations`: [PR #12](https://github.com/Jyot-Kikani/DevOps_Assignment/pull/12),
+implementation [2b04a68](https://github.com/Jyot-Kikani/DevOps_Assignment/commit/2b04a68c8e9dc8ea06bb40b29afd19becf57e1b4).
+The [current-head PR checks](https://github.com/Jyot-Kikani/DevOps_Assignment/pull/12/checks)
+are authoritative for later evidence-only commits. The PR is left open for review;
+no new image publication is needed for these host commands. Origin/history and
+protected-main checks remain intact.
 
 The live application remains the verified Batch 5 rollback release
 `r39557433765-a1-2abd14c22f31`, source `2abd14c22f316c180ff163557b9690f18cfa1704`.
