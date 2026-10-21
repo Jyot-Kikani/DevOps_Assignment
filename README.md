@@ -107,8 +107,9 @@ P03 operations: `python tools/run.py data-seal --json` verifies and seals the
 existing baseline; `python tools/run.py data-publish --json` stages the immutable
 release locally. The full-data check is
 `.local/venvs/ops/Scripts/python.exe tools/check_sealed_data.py` (Windows).
-See [sealed data and publication scope](docs/P03_DATA.md). Actual GitHub release
-publication is deferred to P15; no public URL is claimed by these local checks.
+See [sealed data and publication scope](docs/P03_DATA.md). P15 now provides the
+verified public data release; the local staging/sealing checks alone make no
+public-access claim. See [publication](docs/P15_PUBLICATION.md).
 
 ## Early GitHub CI
 
@@ -144,8 +145,9 @@ clean commit; `dev-up --no-build` reuses its exact prepared local image set.
 **Known image-security limitation:** pinned Grype scans complete but the strict
 high-severity gate still fails on base-image findings, even after the documented
 runtime update. This is not a clean-scan release. No findings are hidden and no
-image is published; review [the actual findings](docs/P10_IMAGE_REVIEW.md) before
-the separate P15 publication decision. Existing required CI checks remain intact.
+image was published in Batch 3. Batch 5 publishes scanned images under ADR 0005
+with the strict failures preserved; review [the actual findings](docs/P10_IMAGE_REVIEW.md).
+Existing required CI checks remain intact.
 Batch 4 adds the local Kubernetes platform, deployment and recovery demonstration below.
 
 ## Batch 4 local Kubernetes (P12–P14)
@@ -201,3 +203,8 @@ The tunnel URL changes on restart and works only while this host, Docker, kind,
 cloudflared and internet are available. Argo/UI/monitoring/database remain private.
 After Argo takes application ownership, use Git deploy commits for updates;
 do not reapply the earlier manual bootstrap overlay. P19 is a separate batch.
+
+See [Batch 5 results](docs/BATCH5_REPORT.md) for the current temporary URL,
+external-device confirmation, published versions and update/rollback evidence.
+Database backups now record the running release, including a GitOps rollback,
+rather than an older local Compose image record.
