@@ -57,6 +57,14 @@ Web/Catalog/Journey are each **1/1**, with digests matching the
 The workflow also verified anonymous access to all four image digests. Data remains
 `gcns-edr3-20261013-20271720` with its unchanged raw checksum and schema/model versions.
 
+Final delivery observations are committed in
+[`bba356b`](https://github.com/Jyot-Kikani/DevOps_Assignment/commit/bba356bc1c796a43957ca0b282cb5d9a0512f1e8)
+and delivered through documentation-only
+[PR #14](https://github.com/Jyot-Kikani/DevOps_Assignment/pull/14).
+Its [current-head required checks](https://github.com/Jyot-Kikani/DevOps_Assignment/pull/14/checks)
+are authoritative. This documentation update requires no new application image;
+the release workflow preserves the observed deployment for documentation-only main commits.
+
 Temporary public app:
 <https://bottles-milk-ethnic-macintosh.trycloudflare.com/explore>.
 Final public smoke passed exact release/API/data identity, real Proxima
