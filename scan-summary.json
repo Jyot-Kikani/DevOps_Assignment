@@ -1,5 +1,5 @@
 {
-  "source_sha": "2abd14c22f316c180ff163557b9690f18cfa1704",
+  "source_sha": "81a0edbe354c4e053470ed5868ab1127e880985d",
   "scanner": "Grype 0.120.1",
   "threshold": "high",
   "images": {
@@ -29,7 +29,8 @@
         "High": 55,
         "Medium": 50,
         "Negligible": 46,
-        "Low": 10
+        "Low": 10,
+        "Critical": 1
       }
     },
     "importer": {
@@ -38,7 +39,8 @@
         "High": 55,
         "Medium": 50,
         "Negligible": 46,
-        "Low": 10
+        "Low": 10,
+        "Critical": 1
       }
     }
   },
