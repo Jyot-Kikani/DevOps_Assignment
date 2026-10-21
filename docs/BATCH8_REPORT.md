@@ -37,6 +37,8 @@ deployment. Prior runtime observations remain attributed to their dated reports.
 - CLI action/help inspection completed; operational demonstration commands were
   checked against the implemented dispatcher and existing phase guides.
   **16 documented CLI invocations parsed** without executing their operations.
+  PowerShell wrapper argument checks verified quoted comma-separated kubectl
+  resource lists and custom-column expressions stay single string arguments.
 - Offline Chromium **156.0.8078.4** review passed: **32 component selections**
   across four maps, **27 guided steps**, previous/next bounds, keyboard tab
   navigation and **276 local-link checks** (including repeated references).

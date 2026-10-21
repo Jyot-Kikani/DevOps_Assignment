@@ -33,7 +33,7 @@ Set a convenient **project-scoped** kubectl command for this PowerShell session:
 ```powershell
 $demoKubectl = Join-Path (Get-Location) '.local/tools/kubectl/1.35.8/kubectl.exe'
 function kdemo { & $demoKubectl --kubeconfig .local/kubernetes/config --context kind-stellar-atlas-demo @args }
-kdemo -n stellar-atlas get deployments,pods,services
+kdemo -n stellar-atlas get 'deployments,pods,services'
 kdemo -n stellar-data get pvc
 ```
 
@@ -133,8 +133,8 @@ Terraform roots and `infra/argocd/application.json`.
 
 ```powershell
 kdemo get nodes
-kdemo -n stellar-atlas get deployments,pods,services
-kdemo -n stellar-data get deployments,services,pvc
+kdemo -n stellar-atlas get 'deployments,pods,services'
+kdemo -n stellar-data get 'deployments,services,pvc'
 ```
 
 **Say:** “kind creates one Kubernetes node inside Docker. Terraform foundation
@@ -164,9 +164,9 @@ This deliberately replaces **one Journey pod**, with a possible brief request
 interruption. Run after the initial checks, once the examiner is ready.
 
 ```powershell
-kdemo -n stellar-atlas get pods -l app=journey -o custom-columns=NAME:.metadata.name,UID:.metadata.uid,READY:.status.containerStatuses[0].ready
+kdemo -n stellar-atlas get pods -l app=journey -o 'custom-columns=NAME:.metadata.name,UID:.metadata.uid,READY:.status.containerStatuses[0].ready'
 python tools/run.py pod-replace --json
-kdemo -n stellar-atlas get pods -l app=journey -o custom-columns=NAME:.metadata.name,UID:.metadata.uid,READY:.status.containerStatuses[0].ready
+kdemo -n stellar-atlas get pods -l app=journey -o 'custom-columns=NAME:.metadata.name,UID:.metadata.uid,READY:.status.containerStatuses[0].ready'
 ```
 
 **Expected:** new ready pod UID, command reports passed, the same saved sample
