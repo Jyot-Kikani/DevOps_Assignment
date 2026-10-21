@@ -239,9 +239,20 @@ def sql(database, statement, namespace='stellar-data', deployment='postgres'):
         namespace=namespace, deployment=deployment)
 
 
+def running_release():
+    from .application import http
+    status, _, raw = http('/release.json')
+    record = json.loads(raw)
+    if status != 200 or record.get('source_dirty') or record['dataset']['fixture']:
+        raise ValueError('A healthy real-data running release is required')
+    if json.loads(http('/version.json')[2])['source_sha'] != record['source_sha']:
+        raise ValueError('Running web/release identity mismatch')
+    return record
+
+
 def sample():
     from .application import http
-    sid = release()['dataset']['snapshot_id']
+    sid = running_release()['dataset']['snapshot_id']
     stars = json.loads(http(f'/api/catalog/v1/snapshots/{sid}/stars?q=Proxima')[2])
     star = stars['items'][0]['source_id']
     if star != '5853498713190525696':
@@ -274,7 +285,7 @@ def backup():
         path = directory / (database + '.dump')
         path.write_bytes(raw)
         record['databases'][database] = {'file': path.name, 'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()}
-    record['release'] = release()
+    record['release'] = running_release()
     write_json(directory / 'manifest.json', record)
     write_json(WORK / 'latest-backup.json', {'directory': str(directory.relative_to(LOCAL))})
     return {'status': 'passed', 'backup': str(directory.relative_to(ROOT)), 'catalog_count': record['catalog_count'], 'journey_id': record['journey_id'], 'format': 'two host-side pg_dump custom archives; current-user-only directory; originals retained'}

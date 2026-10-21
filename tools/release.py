@@ -168,6 +168,12 @@ def publish():
     if run(['git', 'status', '--porcelain']):
         raise ValueError('Release source must be clean')
     current_main(sha)
+    if os.environ.get('GITHUB_EVENT_NAME') == 'workflow_run':
+        changed = api(f'repos/{REPOSITORY}/commits/{sha}')['files']
+        # A final evidence-only merge must not undo the demonstrated deploy rollback.
+        if changed and len(changed) < 300 and all(f['filename'].startswith('docs/') or f['filename'] in ('README.md', 'CONTRIBUTING.md', 'AGENTS.md') for f in changed):
+            print('Documentation-only main commit; existing deployment preserved. Manual dispatch can publish explicitly.')
+            return
     directory, lock = dataset()
     tag = f'r{os.environ["GITHUB_RUN_ID"]}-a{os.environ["GITHUB_RUN_ATTEMPT"]}-{sha[:12]}'
     images = build(sha, directory, tag)

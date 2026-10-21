@@ -152,8 +152,8 @@ def gitops_bootstrap():
         'namespaces': 'stellar-atlas', 'clusterResources': 'false', 'config': '{}'})
     kubectl('-n', 'argocd', 'label', 'secret', 'stellar-cluster', 'argocd.argoproj.io/secret-type=cluster', '--overwrite')
     for name in ('argocd-server', 'argocd-repo-server', 'argocd-redis'):
-        kubectl('-n', 'argocd', 'rollout', 'status', 'deployment/' + name, '--timeout=300s')
-    kubectl('-n', 'argocd', 'rollout', 'status', 'statefulset/argocd-application-controller', '--timeout=300s')
+        kubectl('-n', 'argocd', 'rollout', 'status', 'deployment/' + name, '--timeout=900s', timeout=960)
+    kubectl('-n', 'argocd', 'rollout', 'status', 'statefulset/argocd-application-controller', '--timeout=900s', timeout=960)
     apply(json.loads((ROOT / 'infra/argocd/project.json').read_text()))
     apply(json.loads((ROOT / 'infra/argocd/application.json').read_text()))
     return {'status': 'passed', 'scope': 'namespace install; platform and DB preserved; UI ClusterIP only', 'deployment': 'sync pending; run gitops-check'}

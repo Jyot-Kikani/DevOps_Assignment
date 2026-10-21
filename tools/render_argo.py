@@ -16,6 +16,13 @@ for document in documents:
     if any(part in name for part in ('dex-server', 'applicationset-controller', 'notifications-controller')):
         continue
     document['metadata']['namespace'] = 'argocd'
+    if name == 'argocd-cm':
+        # Match the namespace Role instead of asking for unrelated kinds/secrets.
+        document['data'] = {'resource.inclusions': json.dumps([
+            {'apiGroups': [''], 'kinds': ['Service', 'ConfigMap', 'Pod', 'Endpoints', 'Event'], 'clusters': ['*']},
+            {'apiGroups': ['apps'], 'kinds': ['Deployment', 'ReplicaSet', 'ControllerRevision'], 'clusters': ['*']},
+            {'apiGroups': ['batch'], 'kinds': ['CronJob', 'Job'], 'clusters': ['*']}
+        ])}
     spec = document.get('spec', {}).get('template', {}).get('spec')
     if spec:
         for container in spec.get('containers', []) + spec.get('initContainers', []):

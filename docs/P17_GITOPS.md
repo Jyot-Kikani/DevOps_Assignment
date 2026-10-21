@@ -14,6 +14,9 @@ The pinned namespace installation/CRDs are verified against the existing lock.
 Only controller, repo server, Redis and UI run; unused SSO/ApplicationSet/
 notification components are omitted. Platform, database, PVC and monitoring stay
 with Terraform. Credentials are never committed or put in Terraform state.
+The initial Argo registry download can take over ten minutes on this host;
+startup waits up to fifteen minutes per workload. Keep a failed report and retry
+after the pull completes rather than reinstalling tools or deleting the cluster.
 
 Bootstrap validates the public release and runs the existing ordered idempotent
 bootstrap/migration/import Jobs before enabling auto-sync. Existing data stays in
@@ -23,6 +26,9 @@ namespace, with Services, Deployments, ConfigMaps and CronJobs. Argo watches
 
 `gitops-check` waits for current deploy revision Synced/Healthy, checks deployment
 digests and running source/release/data, then calculates/shares a real journey.
+Argo's resource cache includes only the application kinds and their read-only
+Pod/ReplicaSet/Job support objects, matching the namespace Role; Secrets and
+unrelated platform kinds are excluded from destination discovery.
 It does not call an image push a deployed release. The UI Service is ClusterIP;
 for a temporary private UI use the project's kubectl/config/context with
 `-n argocd port-forward service/argocd-server 8081:443 --address=127.0.0.1`.

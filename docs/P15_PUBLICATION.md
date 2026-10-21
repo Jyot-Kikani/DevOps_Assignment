@@ -20,6 +20,8 @@ checks, downloads the verified public data, builds/scans four images, publishes
 GHCR digest references and pushes generated application manifests to `deploy`.
 Fork PRs never receive publication permissions. One concurrency group serializes
 releases; stale main cannot promote. No cluster credentials enter Actions.
+Documentation-only main commits keep the existing deployment, including a Git
+rollback; manual main dispatch can explicitly republish if wanted.
 
 First GHCR publication may create private packages. In each package's GitHub
 settings, select **public** once; no new account/token is required. Anonymous
