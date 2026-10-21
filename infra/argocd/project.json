@@ -1,0 +1,15 @@
+{
+  "apiVersion": "argoproj.io/v1alpha1",
+  "kind": "AppProject",
+  "metadata": {"name": "stellar-atlas", "namespace": "argocd"},
+  "spec": {
+    "description": "Only Stellar Atlas application resources; Terraform owns the platform",
+    "sourceRepos": ["https://github.com/Jyot-Kikani/DevOps_Assignment.git"],
+    "destinations": [{"server": "https://kubernetes.default.svc", "namespace": "stellar-atlas"}],
+    "clusterResourceWhitelist": [],
+    "namespaceResourceWhitelist": [
+      {"group": "", "kind": "Service"}, {"group": "", "kind": "ConfigMap"},
+      {"group": "apps", "kind": "Deployment"}, {"group": "batch", "kind": "CronJob"}
+    ]
+  }
+}

@@ -18,7 +18,7 @@ jobs:
   quality:
     name: ci / quality
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -55,6 +55,8 @@ jobs:
         run: python tools/run.py db-check --json
       - name: Run two real API browser flows using the attributed fixture
         run: python tools/check_web_ci.py
+      - name: Build four non-root application images without publication
+        run: python tools/release.py build-check
       - name: Stop database, preserving volume
         if: always()
         run: python tools/run.py db-stop --json

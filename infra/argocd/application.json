@@ -1,0 +1,12 @@
+{
+  "apiVersion": "argoproj.io/v1alpha1",
+  "kind": "Application",
+  "metadata": {"name": "stellar-atlas", "namespace": "argocd"},
+  "spec": {
+    "project": "stellar-atlas",
+    "source": {"repoURL": "https://github.com/Jyot-Kikani/DevOps_Assignment.git", "targetRevision": "deploy", "path": "app", "directory": {"recurse": false}},
+    "destination": {"server": "https://kubernetes.default.svc", "namespace": "stellar-atlas"},
+    "syncPolicy": {"automated": {"prune": true, "selfHeal": true}, "syncOptions": ["ApplyOutOfSyncOnly=true"]},
+    "revisionHistoryLimit": 3
+  }
+}

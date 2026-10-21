@@ -11,6 +11,9 @@ from .bootstrap import ROOT, LOCAL, doctor, write_json
 def parser():
     result = argparse.ArgumentParser(description="Stellar Atlas host operations")
     commands = result.add_subparsers(dest="action", required=True)
+    for name in ('public-start', 'public-stop', 'gitops-bootstrap', 'gitops-check'):
+        action = commands.add_parser(name, help='Batch 5 public tunnel / GitOps; see docs/P16_PUBLIC_DEMO.md')
+        action.add_argument('--json', action='store_true')
     for name in ('cluster-create', 'platform-plan', 'platform-apply', 'cluster-secrets', 'demo-bootstrap', 'monitoring-up', 'monitoring-check', 'backup', 'restore'):
         action = commands.add_parser(name, help='Local kind platform operation; see docs/P12_KUBERNETES.md')
         action.add_argument('--json', action='store_true')
@@ -24,7 +27,7 @@ def parser():
         if name == 'dev-up':
             action.add_argument('--no-build', action='store_true', help='Reuse already built images and metadata')
         if name == 'smoke':
-            action.add_argument('--target', choices=['local'], default='local')
+            action.add_argument('--target', choices=['local', 'public'], default='local')
     for name, help_text in (("secrets-init", "Generate/reuse private local credentials"),
                             ("db-start", "Start only PostgreSQL with no host port"),
                             ("db-stop", "Stop only PostgreSQL, preserving its volume"),
@@ -64,7 +67,10 @@ def main(argv=None):
     LOCAL.mkdir(exist_ok=True)
     (LOCAL / "reports").mkdir(exist_ok=True)
     try:
-        if arguments.action in ('cluster-create', 'platform-plan', 'platform-apply', 'cluster-secrets', 'demo-bootstrap', 'monitoring-up', 'monitoring-check', 'backup', 'restore'):
+        if arguments.action in ('public-start', 'public-stop', 'gitops-bootstrap', 'gitops-check', 'smoke'):
+            from .delivery import action
+            report = action(arguments.action, target=getattr(arguments, 'target', 'local'))
+        elif arguments.action in ('cluster-create', 'platform-plan', 'platform-apply', 'cluster-secrets', 'demo-bootstrap', 'monitoring-up', 'monitoring-check', 'backup', 'restore'):
             from .kubernetes import action
             report = action(arguments.action, root=getattr(arguments, 'root', 'foundation'), target=getattr(arguments, 'target', None))
         elif arguments.action == 'security':
