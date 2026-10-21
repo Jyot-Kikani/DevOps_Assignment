@@ -138,17 +138,12 @@ def publish(stage=None, github=False, repository=None):
 
 
 def publish_github(target, assets, repository, lock):
-    if not repository or not re.fullmatch(r"[A-Za-z0-9-]+/DevOps_Assignment", repository):
-        raise ValueError("Explicit --repository <owner>/DevOps_Assignment required")
+    from .github import call, REPOSITORY
+    if repository != REPOSITORY:
+        raise ValueError("Publication requires the canonical Jyot-Kikani/DevOps_Assignment repository")
     gh = find_tool("gh")
     if not gh:
         raise ValueError("Restore pinned gh first")
-    # P15 intentionally uses gh's existing human login/environment. Never launch login or MFA.
-    def call(args):
-        result = command([gh] + args, timeout=120)
-        if result["exit_code"] != 0:
-            raise ValueError("GitHub operation failed; no assets overwritten: " + result.get("stderr", ""))
-        return result["stdout"]
     repo = json.loads(call(["api", f"repos/{repository}"]))
     if repo["private"] or repo["owner"]["type"] != "User":
         raise ValueError("Data publication requires the inspected public personal repository")

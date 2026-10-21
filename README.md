@@ -15,7 +15,8 @@ GitHub Free and account-level zero paid-usage budgets were reviewed. The source
 repository is the existing `Jyot-Kikani/DevOps_Assignment`. Basic GitHub CI runs
 before P04. The user made this repository public on 2026-10-20;
 `main` requires PRs and both passing CI checks, including for admins.
-Data/image distribution and the temporary HTTPS app URL remain later gates.
+Batch 5 adds data/image distribution, GitOps and a temporary HTTPS app route;
+see its report for actual verification and the current URL.
 No AWS, purchased domain, paid hosting or expiring credit is required.
 
 ## Bootstrap
@@ -174,5 +175,29 @@ temporary target and preserves the working database and host backups.
 See [Batch 4 results](docs/BATCH4_REPORT.md), [P12 platform](docs/P12_KUBERNETES.md),
 [P13 deployment](docs/P13_LOCAL_DEPLOYMENT.md) and [P14 monitoring/recovery](docs/P14_MONITORING_RECOVERY.md).
 Routine node stop/start preserves the PVC; cluster deletion can destroy it.
-Do not start Compose while kind owns 8080. P15 publication, Argo delivery and public
-tunnel access remain unstarted. Existing Grype findings remain recorded in Batch 3.
+Do not start Compose while kind owns 8080. Existing Grype findings remain recorded
+in Batch 3; new release scans retain their actual threshold results.
+
+## Batch 5 public delivery (P15–P18)
+
+The trusted successful-main release workflow builds/scans/publishes four GHCR
+images, verifies anonymous access and writes digest manifests to `deploy`.
+The frozen data assets are distributed through the canonical repository release.
+Publication alone does not establish a working deployment.
+
+```powershell
+python tools/run.py public-start --json
+python tools/run.py smoke --target public --json
+python tools/run.py platform-apply --root foundation --json
+python tools/run.py gitops-bootstrap --json
+python tools/run.py gitops-check --json
+# Stop the current temporary public route when finished:
+python tools/run.py public-stop --json
+```
+
+See [publication](docs/P15_PUBLICATION.md), [public access](docs/P16_PUBLIC_DEMO.md),
+[Argo](docs/P17_GITOPS.md) and [update/rollback](docs/P18_UPDATE_ROLLBACK.md).
+The tunnel URL changes on restart and works only while this host, Docker, kind,
+cloudflared and internet are available. Argo/UI/monitoring/database remain private.
+After Argo takes application ownership, use Git deploy commits for updates;
+do not reapply the earlier manual bootstrap overlay. P19 is a separate batch.

@@ -21,7 +21,7 @@ Batch 3 now implements P08–P11 local application work; read [its report](BATCH
 for exact results, local image metadata and the failed Grype threshold. Batch 4 adds
 local kind Kubernetes, Terraform, deployment, monitoring and isolated restore.
 Read [its report](BATCH4_REPORT.md) for actual results. Publication, GitOps and public
-access remain later phases; P15 has not started.
+access are implemented in Batch 5; see the P15–P18 guides and actual Batch 5 report.
 
 Read [ADR 0005](adr/0005-course-assignment-scope.md) before future work. It narrows checks to a practical course demonstration and supersedes older mandatory hardening language. The revised PRD and implementation plan agree with it; historical completion reports remain unchanged.
 
@@ -29,3 +29,7 @@ Current guides: [P08 web](P08_WEB.md), [P09 Compose](P09_COMPOSE.md), [P10 check
 
 Batch 4 guides: [P12 platform](P12_KUBERNETES.md), [P13 deployment](P13_LOCAL_DEPLOYMENT.md),
 [P14 monitoring/recovery](P14_MONITORING_RECOVERY.md).
+
+Batch 5 guides: [P15 publication](P15_PUBLICATION.md), [P16 public access](P16_PUBLIC_DEMO.md),
+[P17 GitOps](P17_GITOPS.md), [P18 update/rollback](P18_UPDATE_ROLLBACK.md).
+P19 remains unstarted.

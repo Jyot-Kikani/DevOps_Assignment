@@ -1,0 +1,24 @@
+{
+  "resource": {
+    "kubernetes_role_v1": {
+      "gitops": {
+        "metadata": [{"name": "stellar-gitops", "namespace": "${kubernetes_namespace_v1.project[\"stellar-atlas\"].metadata[0].name}"}],
+        "rule": [
+          {"api_groups": [""], "resources": ["configmaps", "services"], "verbs": ["get", "list", "watch", "create", "update", "patch", "delete"]},
+          {"api_groups": [""], "resources": ["pods", "pods/log", "endpoints", "events"], "verbs": ["get", "list", "watch"]},
+          {"api_groups": ["apps"], "resources": ["deployments"], "verbs": ["get", "list", "watch", "create", "update", "patch", "delete"]},
+          {"api_groups": ["apps"], "resources": ["replicasets", "controllerrevisions"], "verbs": ["get", "list", "watch"]},
+          {"api_groups": ["batch"], "resources": ["cronjobs"], "verbs": ["get", "list", "watch", "create", "update", "patch", "delete"]},
+          {"api_groups": ["batch"], "resources": ["jobs"], "verbs": ["get", "list", "watch"]}
+        ]
+      }
+    },
+    "kubernetes_role_binding_v1": {
+      "gitops": {
+        "metadata": [{"name": "stellar-gitops", "namespace": "stellar-atlas"}],
+        "role_ref": {"api_group": "rbac.authorization.k8s.io", "kind": "Role", "name": "${kubernetes_role_v1.gitops.metadata[0].name}"},
+        "subject": [{"kind": "ServiceAccount", "name": "argocd-application-controller", "namespace": "${kubernetes_namespace_v1.project[\"argocd\"].metadata[0].name}"}]
+      }
+    }
+  }
+}
