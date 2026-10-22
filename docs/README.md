@@ -1,5 +1,20 @@
 # Stellar Atlas planning handoff
 
+## DevOps learning and demonstration
+
+- [Interactive architecture visualiser](architecture_visualiser.html): open directly
+  in a browser; explore delivery, platform ownership, operations and security.
+- [Architecture and file guide](architecture_guide.md): which configuration/helpers
+  implement each concept and where to make changes.
+- [Demo guide](demo_guide.md): preparation, command sequence, expected results,
+  faculty talking points, optional exercises and troubleshooting.
+
+These learning materials describe the completed implementation; dated evidence
+remains in the batch reports. [Batch 8](BATCH8_REPORT.md) records the documentation-only
+follow-up and its focused verification.
+
+## Original planning and implementation handoff
+
 1. Read [PRD.md](PRD.md) for the product and assessment acceptance requirements.
 2. Execute [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) in phase order. Its contracts and decisions are authoritative unless the user changes them.
 3. Preserve `validation/` and `design/mockups/`. The existing files are feasibility evidence and visual references, not an implemented application.
