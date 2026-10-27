@@ -6,6 +6,10 @@ Read with [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md). That document specif
 
 The user-approved [course-scope amendment](adr/0005-course-assignment-scope.md) controls future checks. Use basic reliable demonstrations and focused tests. Advanced hardening is optional; completed code, sealed data and existing CI checks remain intact.
 
+The user-approved [six-service refactor](adr/0006-six-application-services.md)
+supersedes the original two-backend topology. Current validation/delivery is in
+[Batch 9](BATCH9_REPORT.md); earlier evidence remains dated.
+
 ## 1. Purpose and priority
 
 Stellar Atlas is a data-backed, interactive map of the stellar neighborhood around the Sun. Visitors explore measured star positions, inspect catalog measurements, measure interstellar separations, and calculate simplified journey times.
@@ -25,7 +29,7 @@ Priority order:
 |---|---|
 | C01 | No AWS, paid hosting, paid database, purchased domain, subscription upgrade, or dependency on expiring credits. |
 | C02 | Application compute, persistence, Kubernetes, and monitoring run on an existing local machine. Free GitHub services and a free public tunnel may be used. Existing hardware, internet, and electricity are assumed. |
-| C03 | The final application has independently deployed Catalog and Journey backend services, a web frontend, and a containerized import job. |
+| C03 | The final application has independently deployed Catalog, Search, Atlas Map, Snapshot, Calculation and Journey backend services, a web frontend, and a containerized import job. |
 | C04 | The public link reaches the Kubernetes deployment, not a separate static replica of the frontend. |
 | C05 | Normal application operation uses a locally stored, versioned data snapshot; visitors do not depend on live astronomy API calls. |
 | C06 | Existing validation files and generated mockups are preserved. Mockups are visual references, not accurate star-position diagrams. |
@@ -153,7 +157,7 @@ NF03–NF05 require simple usability observations; their original numeric benchm
 
 | ID | Topic | Mandatory evidence |
 |---|---|---|
-| DV01 | Microservices | Separate contracts/images/deployments; Journey calls Catalog over HTTP; independent deployment/recovery demonstration; database grants prevent cross-service writes. |
+| DV01 | Microservices | Separate contracts/images/deployments; Journey calls Calculation, which calls Catalog over HTTP; independent deployment/recovery demonstration; database grants prevent cross-service writes. |
 | DV02 | Docker | Reproducible Compose startup, non-root application images, health checks, pinned bases, and image digests. |
 | DV03 | IaC | kind configuration plus Terraform-managed platform; first apply, second no-change plan and one detected/restored label drift. A full rebuild is optional. |
 | DV04 | Kubernetes | Running services, probes, limits, rollout, pod replacement, Git-managed replica change, persistent data. Custom CNI/network-policy enforcement is optional. |

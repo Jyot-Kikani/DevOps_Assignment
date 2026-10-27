@@ -20,7 +20,7 @@ class Dataset(Model):
 
 class Image(Model):
     # Local Docker IDs are usable immutable references; registry refs belong to P15.
-    ref: Annotated[str, Field(pattern=r"^(sha256:[a-f0-9]{64}|ghcr\.io/[a-z0-9-]+/stellar-atlas-(web|catalog|journey|importer)@sha256:[a-f0-9]{64})$")]
+    ref: Annotated[str, Field(pattern=r"^(sha256:[a-f0-9]{64}|ghcr\.io/[a-z0-9-]+/stellar-atlas-(web|catalog|search|atlas-map|snapshot|calculation|journey|importer)@sha256:[a-f0-9]{64})$")]
     manifest_digest: Annotated[str, Field(pattern=r"^sha256:[a-f0-9]{64}$")]
     local_tag: str | None = None
 
@@ -30,6 +30,10 @@ class Images(Model):
     catalog: Image
     journey: Image
     importer: Image
+    search: Image | None = None
+    atlas_map: Image | None = Field(default=None, alias="atlas-map")
+    snapshot: Image | None = None
+    calculation: Image | None = None
 
 
 class Compatibility(Model):
@@ -56,7 +60,13 @@ class Release(Model):
         if not self.release_id.endswith(self.source_sha[:12]):
             raise ValueError("Release suffix must match source SHA")
         owner = self.source_repository.split("/")[0].lower()
+        extracted = [self.images.search, self.images.atlas_map, self.images.snapshot, self.images.calculation]
+        if any(image is not None for image in extracted) and not all(image is not None for image in extracted):
+            raise ValueError("Six-service release must include all four extracted service images")
         for role, image in self.images:
+            if image is None:
+                continue
+            role = role.replace("_", "-")
             if image.ref.startswith("ghcr.io/"):
                 if not image.ref.startswith(f"ghcr.io/{owner}/stellar-atlas-{role}@sha256:") or image.ref.split("@")[-1] != image.manifest_digest:
                     raise ValueError("Registry image owner/role/digest does not match source")

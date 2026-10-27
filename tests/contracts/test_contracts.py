@@ -8,7 +8,17 @@ from pydantic import ValidationError
 from stellar_catalog.app import app as catalog
 from stellar_journey.app import app as journey
 from stellar_journey.models import EstimateRequest
+from stellar_search.app import app as search
+from stellar_atlas_map.app import app as atlas_map
+from stellar_snapshot.app import app as snapshot
 from schema_models import Release, PhaseReport
+import re
+
+def catalog_client(path):
+    if re.search(r"/stars$|/neighbors$",path.split('?')[0]): return TestClient(search)
+    if re.search(r"/map$|/chunks/",path): return TestClient(atlas_map)
+    if re.fullmatch(r"/v1/snapshots/[^/]+",path): return TestClient(snapshot)
+    return TestClient(catalog)
 
 ROOT = Path(__file__).resolve().parents[2]
 SNAPSHOT = "gcns-edr3-20261013-20271720"
@@ -21,7 +31,7 @@ def test_all_routes_and_internal_boundary():
                 f"/v1/snapshots/{SNAPSHOT}/stars", f"/v1/snapshots/{SNAPSHOT}/stars/sun",
                 f"/v1/snapshots/{SNAPSHOT}/ordinals/1", f"/v1/snapshots/{SNAPSHOT}/stars/sun/neighbors",
                 f"/v1/snapshots/{SNAPSHOT}/map", f"/v1/snapshots/{SNAPSHOT}/chunks/000000.bin"]:
-        response = cat.get(url, headers={"X-Request-ID": "contract-test"})
+        response = catalog_client(url).get(url, headers={"X-Request-ID": "contract-test"})
         assert response.status_code == 503, (url, response.text)
         assert response.json()["error"]["request_id"] == "contract-test"
         assert response.headers["X-Request-ID"] == "contract-test"
@@ -30,7 +40,7 @@ def test_all_routes_and_internal_boundary():
     assert cat.post(f"/v1/snapshots/{SNAPSHOT}/positions", json={"ids": ["sun"]}).status_code == 503
     schema = catalog.openapi()
     assert schema["paths"][f"/v1/snapshots/{{snapshot}}/positions"]["post"]["x-internal"] is True
-    assert len(schema["paths"]) == 13
+    assert len(schema["paths"]) == 7
     cli = TestClient(journey)
     assert cli.post("/v1/estimate", json=BODY).status_code == 503
     assert cli.post("/v1/journeys", json=BODY, headers={"Idempotency-Key": "00000000-0000-4000-8000-000000000001"}).status_code == 503
@@ -57,7 +67,7 @@ def test_http_validation_no_reflection_and_bounds():
     assert len(response.headers["X-Request-ID"]) <= 64
     cat = TestClient(catalog)
     for query in ("limit=0", "limit=101", "radius_ly=NaN", "radius_ly=326.17", "q=" + "x" * 101, "cursor=../"):
-        assert cat.get(f"/v1/snapshots/{SNAPSHOT}/stars?{query}").status_code == 400
+        assert TestClient(search).get(f"/v1/snapshots/{SNAPSHOT}/stars?{query}").status_code == 400
 
 
 def release_fixture():
@@ -81,6 +91,20 @@ def test_release_schema_rejects_mutable_or_inconsistent_artifacts():
             Release.model_validate(invalid)
     PhaseReport.model_validate({"phase": "P02", "status": "in_progress", "checked_at_utc": "2026-10-19T00:00:00Z",
         "source_commit": None, "depends_on": ["P01"], "steps": [], "commands": [], "notes": [], "human_actions": []})
+
+
+def test_six_service_release_and_legacy_rollback_records():
+    legacy = release_fixture()
+    Release.model_validate(legacy)
+    modern = copy.deepcopy(legacy)
+    for role in ("search", "atlas-map", "snapshot", "calculation"):
+        modern["images"][role] = {"ref": f"ghcr.io/fixture-owner/stellar-atlas-{role}@sha256:" + "c" * 64,
+                                  "manifest_digest": "sha256:" + "c" * 64}
+    result = Release.model_validate(modern)
+    assert result.images.atlas_map is not None
+    del modern["images"]["snapshot"]
+    with pytest.raises(ValidationError, match="all four"):
+        Release.model_validate(modern)
 
 
 def test_local_release_requires_real_image_ids_and_matching_source_tags():

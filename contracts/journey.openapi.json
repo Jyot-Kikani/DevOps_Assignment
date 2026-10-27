@@ -435,6 +435,10 @@
           "service": {
             "enum": [
               "catalog",
+              "search",
+              "atlas_map",
+              "snapshot",
+              "calculation",
               "journey"
             ],
             "title": "Service",

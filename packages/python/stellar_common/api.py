@@ -45,6 +45,7 @@ def create_base(service, models, lifespan, readiness):
                422:"Invalid body fields",429:"Rate limit; Retry-After header",503:"Dependency unavailable"}.items()}
     app = FastAPI(title=f"Stellar Atlas {service.title()}", version="1.0.0", responses=errors, lifespan=lifespan,
                   description="Versioned local-catalog API. Immutable snapshots and anonymous constant-speed journeys.")
+    app.state.service_name = service
     registry = CollectorRegistry()
     app.state.registry = registry
     app.state.requests = Counter("stellar_http_requests_total", "HTTP responses", ["service","method","route","status"], registry=registry)

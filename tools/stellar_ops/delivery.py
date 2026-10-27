@@ -98,7 +98,7 @@ def smoke(target='local'):
         raise ValueError('Expected canonical real-data release')
     if json.loads(request('/version.json')[2])['source_sha'] != record['source_sha']:
         raise ValueError('Frontend source mismatch')
-    for role in ('catalog', 'journey'):
+    for role in (r for r in record['images'] if r not in ('web', 'importer')):
         status, _, body = request(f'/api/{role}/v1/meta')
         meta = json.loads(body)
         if status != 200 or not meta['readiness'] or meta['source_sha'] != record['source_sha'] or meta['release_id'] != record['release_id']:
@@ -169,7 +169,7 @@ def gitops_check():
         status = application.get('status', {})
         if status.get('sync', {}).get('status') == 'Synced' and status.get('health', {}).get('status') == 'Healthy' and status['sync']['revision'] == expected:
             record = json.loads(__import__('base64').b64decode(call(['api', f'repos/{REPOSITORY}/contents/release.json?ref=deploy', '--jq', '.content'])))
-            for role in ('web', 'catalog', 'journey'):
+            for role in (r for r in record['images'] if r != 'importer'):
                 deployment = json.loads(kubectl('-n', 'stellar-atlas', 'get', 'deployment', role, '-o', 'json'))
                 if deployment['spec']['template']['spec']['containers'][0]['image'] != record['images'][role]['ref']:
                     raise ValueError('Running deployment digest differs from deploy: ' + role)

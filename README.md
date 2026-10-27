@@ -1,10 +1,13 @@
 # Stellar Atlas
 
-A nearby-star atlas and zero-cost DevOps course project. Catalog and Journey
-run as separate services on local Kubernetes. Delivery, security, recovery
+A nearby-star atlas and zero-cost DevOps course project. Six backend services—
+Catalog, Search, Atlas Map, Snapshot, Calculation and Journey—are configured for local Kubernetes. Delivery, security, recovery
 and demonstrable operations are the priority. The product specification is in
 [PRD](docs/PRD.md); execute the [implementation plan](docs/IMPLEMENTATION_PLAN.md)
 in order and consult [acceptance status](docs/ACCEPTANCE.md) for actual progress.
+
+See [the six-service implementation](docs/SIX_SERVICES.md) and
+[Batch 9](docs/BATCH9_REPORT.md) for the refactor and actual validation/delivery status.
 
 ## Prerequisites
 

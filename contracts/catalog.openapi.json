@@ -323,6 +323,10 @@
           "service": {
             "enum": [
               "catalog",
+              "search",
+              "atlas_map",
+              "snapshot",
+              "calculation",
               "journey"
             ],
             "title": "Service",
@@ -1447,6 +1451,18 @@
               "pattern": "^[A-Za-z0-9._-]+$",
               "type": "string"
             }
+          },
+          {
+            "description": "Propagated internal ID. Invalid or overlong values replaced; gateway generates public IDs.",
+            "example": "contract-example-1",
+            "in": "header",
+            "name": "X-Request-ID",
+            "required": false,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9._-]+$",
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1612,6 +1628,18 @@
               ],
               "pattern": "^[a-z0-9][a-z0-9-]{0,95}$",
               "title": "Snapshot",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Propagated internal ID. Invalid or overlong values replaced; gateway generates public IDs.",
+            "example": "contract-example-1",
+            "in": "header",
+            "name": "X-Request-ID",
+            "required": false,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9._-]+$",
               "type": "string"
             }
           },
@@ -1832,6 +1860,18 @@
               "pattern": "^[A-Za-z0-9._-]+$",
               "type": "string"
             }
+          },
+          {
+            "description": "Propagated internal ID. Invalid or overlong values replaced; gateway generates public IDs.",
+            "example": "contract-example-1",
+            "in": "header",
+            "name": "X-Request-ID",
+            "required": false,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9._-]+$",
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2037,6 +2077,18 @@
               "maximum": 326.16,
               "title": "Radius Ly",
               "type": "number"
+            }
+          },
+          {
+            "description": "Propagated internal ID. Invalid or overlong values replaced; gateway generates public IDs.",
+            "example": "contract-example-1",
+            "in": "header",
+            "name": "X-Request-ID",
+            "required": false,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9._-]+$",
+              "type": "string"
             }
           },
           {
@@ -2662,6 +2714,18 @@
               "pattern": "^[A-Za-z0-9._-]+$",
               "type": "string"
             }
+          },
+          {
+            "description": "Propagated internal ID. Invalid or overlong values replaced; gateway generates public IDs.",
+            "example": "contract-example-1",
+            "in": "header",
+            "name": "X-Request-ID",
+            "required": false,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9._-]+$",
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -3059,6 +3123,18 @@
               "minimum": 1,
               "title": "Limit",
               "type": "integer"
+            }
+          },
+          {
+            "description": "Propagated internal ID. Invalid or overlong values replaced; gateway generates public IDs.",
+            "example": "contract-example-1",
+            "in": "header",
+            "name": "X-Request-ID",
+            "required": false,
+            "schema": {
+              "maxLength": 64,
+              "pattern": "^[A-Za-z0-9._-]+$",
+              "type": "string"
             }
           },
           {

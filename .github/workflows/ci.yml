@@ -55,8 +55,10 @@ jobs:
         run: python tools/run.py db-check --json
       - name: Run two real API browser flows using the attributed fixture
         run: python tools/check_web_ci.py
-      - name: Build four non-root application images without publication
+      - name: Build eight non-root application images without publication
         run: python tools/release.py build-check
+      - name: Check production gateway with six fixture-backed service images
+        run: python tools/check_six_gateway.py
       - name: Stop database, preserving volume
         if: always()
         run: python tools/run.py db-stop --json

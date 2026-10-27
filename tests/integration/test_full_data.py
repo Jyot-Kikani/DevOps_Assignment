@@ -46,29 +46,29 @@ def test_full_catalog_http_read_timings(tmp_path):
     from http_support import live_service
     sid = "gcns-edr3-20261013-20271720"
     timings = {}
-    with live_service("catalog",sid,tmp_path) as (base,_):
-        with httpx.Client(base_url=base,timeout=10,trust_env=False) as client:
-            assert client.get("/health/ready").status_code==200
-            prefix = "/v1/snapshots/"+sid
-            for radius,count in ((25,142),(50,1151),(326.16,300526)):
-                manifest = client.get(prefix+"/map",params={"radius_ly":radius}).json()
-                assert manifest["total_count"]==count
-            paths = {"profile":prefix+"/stars/5853498713190525696","search":prefix+"/stars?q=Proxima&radius_ly=326.16",
-                     "neighbors":prefix+"/stars/5853498713190525696/neighbors?radius_ly=326.16","map":prefix+"/map?radius_ly=50"}
-            for name,path in paths.items():
-                assert client.get(path).status_code==200
-                values = []
-                for _ in range(20):
-                    started = time.perf_counter()
-                    response = client.get(path)
-                    assert response.status_code==200,response.text
-                    values.append((time.perf_counter()-started)*1000)
-                timings[name] = {"requests":20,"median_ms":round(statistics.median(values),3),"max_ms":round(max(values),3)}
-            manifest = client.get(prefix+"/map?radius_ly=50").json()
-            binary = client.get(manifest["chunks"][0]["url"].removeprefix("/api/catalog"))
-            assert len(binary.content)==manifest["chunks"][0]["uncompressed_bytes"]
-            timings["default_manifest_bytes"] = len(json.dumps(manifest,separators=(",",":")).encode())
-            timings["scope"] = "20 sequential warm requests per endpoint over worker loopback HTTP; P22 concurrency/reference-host/public-path performance remains pending"
+    from read_support import LiveReadClient
+    with LiveReadClient(sid,tmp_path) as client:
+        assert client.get("/health/ready").status_code==200
+        prefix = "/v1/snapshots/"+sid
+        for radius,count in ((25,142),(50,1151),(326.16,300526)):
+            manifest = client.get(prefix+"/map",params={"radius_ly":radius}).json()
+            assert manifest["total_count"]==count
+        paths = {"profile":prefix+"/stars/5853498713190525696","search":prefix+"/stars?q=Proxima&radius_ly=326.16",
+                 "neighbors":prefix+"/stars/5853498713190525696/neighbors?radius_ly=326.16","map":prefix+"/map?radius_ly=50"}
+        for name,path in paths.items():
+            assert client.get(path).status_code==200
+            values = []
+            for _ in range(20):
+                started = time.perf_counter()
+                response = client.get(path)
+                assert response.status_code==200,response.text
+                values.append((time.perf_counter()-started)*1000)
+            timings[name] = {"requests":20,"median_ms":round(statistics.median(values),3),"max_ms":round(max(values),3)}
+        manifest = client.get(prefix+"/map?radius_ly=50").json()
+        binary = client.get(manifest["chunks"][0]["url"].removeprefix("/api/catalog"))
+        assert len(binary.content)==manifest["chunks"][0]["uncompressed_bytes"]
+        timings["default_manifest_bytes"] = len(json.dumps(manifest,separators=(",",":")).encode())
+        timings["scope"] = "20 sequential warm requests per endpoint over worker loopback HTTP; P22 concurrency/reference-host/public-path performance remains pending"
     (ROOT / ".local/reports/p06-full-http.json").write_text(json.dumps(timings,indent=2))
 
 
@@ -79,7 +79,7 @@ def test_full_journey_http_oracle_and_frozen_share_survives_restart(tmp_path):
     from http_support import live_service
     sid = "gcns-edr3-20261013-20271720"
     with live_service("catalog",sid,tmp_path) as (catalog_base,catalog_log):
-        with httpx.Client(base_url=catalog_base,timeout=5,trust_env=False) as catalog:
+        with live_service("search",sid,tmp_path) as (search_base,_), httpx.Client(base_url=search_base,timeout=5,trust_env=False) as catalog:
             nearest = catalog.get(f"/v1/snapshots/{sid}/stars?radius_ly=50&limit=2").json()["items"]
         request = {"snapshot_id":sid,"origin_id":nearest[0]["source_id"],"destination_id":nearest[1]["source_id"],"speed_fraction_c":0.1}
         key = str(uuid4())

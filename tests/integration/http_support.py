@@ -9,18 +9,25 @@ import httpx
 
 
 @contextmanager
-def live_service(service,sid,tmp_path,*,catalog_url=None):
+def live_service(service,sid,tmp_path,*,catalog_url=None,calculation_url=None):
+    if service == "journey" and catalog_url and not calculation_url:
+        with live_service("calculation",sid,tmp_path,catalog_url=catalog_url) as (base,_):
+            with live_service("journey",sid,tmp_path,calculation_url=base) as peer:
+                yield peer
+        return
     with socket.socket() as listener:
         listener.bind(("127.0.0.1",0))
         port = listener.getsockname()[1]
     env = os.environ.copy()
-    own = "CATALOG_READER_DSN" if service == "catalog" else "JOURNEY_DSN"
+    own = "CATALOG_READER_DSN" if service in ("catalog", "search", "atlas_map", "snapshot") else "JOURNEY_DSN" if service == "journey" else None
     for key in tuple(env):
         if (key.endswith("_DSN") or key.endswith("_DSN_FILE")) and key != own:
             del env[key]
     env.update(CATALOG_SNAPSHOT_ID=sid,APP_ENV="ci")
     if catalog_url:
         env["CATALOG_INTERNAL_URL"] = catalog_url
+    if calculation_url:
+        env["CALCULATION_INTERNAL_URL"] = calculation_url
     log_path = tmp_path / (service+"-http.log")
     with log_path.open("w") as log:
         process = subprocess.Popen([sys.executable,"-m","uvicorn",f"stellar_{service}.app:app","--host","127.0.0.1","--port",str(port),"--log-level","warning","--no-access-log"],env=env,stdout=log,stderr=log)

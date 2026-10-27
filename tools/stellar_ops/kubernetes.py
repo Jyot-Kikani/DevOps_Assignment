@@ -146,7 +146,7 @@ def image_refs(record):
 
 
 def render(name, record):
-    values = {'IMAGE_' + role.upper(): ref for role, ref in image_refs(record).items()}
+    values = {'IMAGE_' + role.upper().replace('-', '_'): ref for role, ref in image_refs(record).items()}
     values.update(RELEASE_ID=record['release_id'], SNAPSHOT_ID=record['dataset']['snapshot_id'])
     def replace(item):
         if isinstance(item, str): return values.get(item, item)
@@ -195,7 +195,7 @@ def demo_bootstrap():
         run_job(job)
     apply({'apiVersion': 'v1', 'kind': 'ConfigMap', 'metadata': {'name': 'release', 'namespace': 'stellar-atlas'}, 'data': {'release.json': json.dumps(record)}})
     apply(app)
-    for role in ('catalog', 'journey', 'web'):
+    for role in ('catalog', 'search', 'atlas-map', 'snapshot', 'calculation', 'journey', 'web'):
         kubectl('-n', 'stellar-atlas', 'rollout', 'status', 'deployment/' + role, '--timeout=180s')
     from .application import smoke
     report = smoke()
@@ -362,8 +362,10 @@ def monitoring_check():
         else:
             raise ValueError('Gateway request did not appear in Prometheus')
         targets = json.loads(http('/api/v1/targets', base=base)[2])['data']['activeTargets']
-        if len(targets) != 2 or any(t['health'] != 'up' for t in targets):
-            raise ValueError('Both API scrape targets must be up')
+        expected = set(r for r in running_release()['images'] if r not in ('web', 'importer'))
+        actual = {t['labels']['instance'].split('.')[0] for t in targets}
+        if actual != expected or any(t['health'] != 'up' for t in targets):
+            raise ValueError('All running release API scrape targets must be up')
     with forward('stellar-monitoring', 'grafana', 3000) as port:
         base = 'http://127.0.0.1:' + str(port)
         password = (LOCAL / 'secrets/grafana_admin').read_text().strip()
@@ -371,7 +373,7 @@ def monitoring_check():
         status, _, raw = http('/api/dashboards/uid/stellar-atlas', headers=auth, base=base)
         if status != 200 or len(json.loads(raw)['dashboard']['panels']) != 4:
             raise ValueError('Provisioned Grafana dashboard is unavailable')
-    return {'status': 'passed', 'scrape_targets_up': 2, 'catalog_meta_requests_before': before, 'catalog_meta_requests_after': after, 'grafana_dashboard': 'stellar-atlas; four provisioned panels', 'access': 'loopback-only temporary port-forwards; stopped after check'}
+    return {'status': 'passed', 'scrape_targets_up': len(expected), 'catalog_meta_requests_before': before, 'catalog_meta_requests_after': after, 'grafana_dashboard': 'stellar-atlas; four provisioned panels', 'access': 'loopback-only temporary port-forwards; stopped after check'}
 
 
 def action(name, root='foundation', target=None):

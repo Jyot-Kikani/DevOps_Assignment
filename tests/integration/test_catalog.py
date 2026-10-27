@@ -11,6 +11,7 @@ from stellar_catalog.app import app
 from stellar_common.map_format import decode
 from stellar_importer.pipeline import load_catalog
 from import_support import ROOT, CSV, fixture_manifest
+from read_support import ReadClient, APPS
 
 
 @pytest.fixture
@@ -23,7 +24,7 @@ def catalog(tmp_path, monkeypatch):
     sha = os.environ["SOURCE_SHA"]
     monkeypatch.setenv("SOURCE_SHA",sha)
     monkeypatch.setenv("RELEASE_ID","local-"+sha[:12])
-    with TestClient(app) as client:
+    with ReadClient() as client:
         yield client,sid
 
 
@@ -143,7 +144,7 @@ def test_catalog_errors_metrics_and_request_ids(catalog):
     engine = app.state.engine
     app.state.engine = create_engine("postgresql+psycopg://catalog_reader:invalid@127.0.0.1:1/stellar_catalog",hide_parameters=True,connect_args={"connect_timeout":1})
     try:
-        response = client.get("/v1/snapshots/active")
+        response = client.get(f"/v1/snapshots/{sid}/stars/sun")
         assert response.status_code == 503 and "invalid@" not in response.text
         assert client.get("/health/live").status_code == 200
         assert client.get("/health/ready").status_code == 503
@@ -155,12 +156,14 @@ def test_catalog_errors_metrics_and_request_ids(catalog):
 def test_demo_never_serves_retained_ci_fixtures(catalog):
     from dataclasses import replace
     client,sid = catalog
-    settings = app.state.settings
-    app.state.settings = replace(settings,app_env="demo")
+    settings = {name:api.state.settings for name,api in APPS.items()}
+    for name,api in APPS.items():
+        api.state.settings = replace(settings[name],app_env="demo")
     try:
         assert client.get("/health/ready").status_code==503
         assert client.get("/v1/snapshots/active").status_code==409
         assert client.get(f"/v1/snapshots/{sid}/stars").status_code==409
         assert client.get(f"/v1/snapshots/{sid}/chunks/000000.bin").status_code==409
     finally:
-        app.state.settings = settings
+        for name,api in APPS.items():
+            api.state.settings = settings[name]

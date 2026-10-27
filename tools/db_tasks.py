@@ -105,9 +105,10 @@ def main():
                 os.environ['CATALOG_SNAPSHOT_ID'] = json.loads(manifest.read_text())['snapshot_id']
         processes = []
         try:
-            for role, port, dsn in (("catalog", "18000", "CATALOG_READER_DSN"), ("journey", "18001", "JOURNEY_DSN")):
+            for role, port, dsn in (("catalog", "18000", "CATALOG_READER_DSN"), ("journey", "18001", "JOURNEY_DSN"), ("search", "18002", "CATALOG_READER_DSN"), ("atlas_map", "18003", "CATALOG_READER_DSN"), ("snapshot", "18004", "CATALOG_READER_DSN"), ("calculation", "18005", None)):
                 env = {k: v for k, v in os.environ.items() if not k.endswith(("_DSN", "_DSN_FILE")) or k == dsn}
                 env["CATALOG_INTERNAL_URL"] = "http://127.0.0.1:18000"
+                env["CALCULATION_INTERNAL_URL"] = "http://127.0.0.1:18005"
                 processes.append(subprocess.Popen([sys.executable, "-m", "uvicorn", f"stellar_{role}.app:app", "--host", "0.0.0.0", "--port", port, "--no-access-log"], env=env))
             processes[0].wait()
         finally:

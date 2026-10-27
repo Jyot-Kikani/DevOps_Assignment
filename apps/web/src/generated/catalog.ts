@@ -347,7 +347,7 @@ export interface components {
              * Service
              * @enum {string}
              */
-            readonly service: "catalog" | "journey";
+            readonly service: "catalog" | "search" | "atlas_map" | "snapshot" | "calculation" | "journey";
             /** Source Sha */
             readonly source_sha: string;
         };

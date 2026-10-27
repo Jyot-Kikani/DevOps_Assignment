@@ -8,12 +8,13 @@ from stellar_ops import kubernetes as k
 
 def prepared():
     return {'release_id': 'local-' + 'a' * 12, 'source_sha': 'a' * 40,
-        'dataset': {'snapshot_id': 'gcns-test'}, 'images': {r: {'manifest_digest': 'sha256:' + 'b' * 64} for r in ('web', 'catalog', 'journey', 'importer')}}
+        'dataset': {'snapshot_id': 'gcns-test'}, 'images': {r: {'manifest_digest': 'sha256:' + 'b' * 64} for r in ('web', 'catalog', 'search', 'atlas-map', 'snapshot', 'calculation', 'journey', 'importer')}}
 
 
 def test_runtime_identity_and_private_services():
     app = k.render('app.json', prepared())['items']
     deployments = [x for x in app if x['kind'] == 'Deployment']
+    assert {x['metadata']['name'] for x in deployments} == {'web', 'catalog', 'search', 'atlas-map', 'snapshot', 'calculation', 'journey'}
     for deployment in deployments:
         spec = deployment['spec']['template']['spec']
         container = spec['containers'][0]
@@ -26,6 +27,9 @@ def test_runtime_identity_and_private_services():
         assert all(key in container for key in ('resources', 'readinessProbe', 'livenessProbe'))
     services = [x for x in app if x['kind'] == 'Service']
     assert [x['metadata']['name'] for x in services if x['spec']['type'] == 'NodePort'] == ['web']
+    calculation = next(x for x in deployments if x['metadata']['name'] == 'calculation')['spec']['template']['spec']
+    assert 'volumes' not in calculation
+    assert all('DSN' not in env['name'] for env in calculation['containers'][0]['env'])
     jobs = k.render('jobs.json', prepared())['items']
     assert [x['metadata']['name'] for x in jobs] == ['bootstrap', 'catalog-migrate', 'journey-migrate', 'importer']
     cron = next(x for x in app if x['kind'] == 'CronJob')

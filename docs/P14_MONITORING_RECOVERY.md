@@ -11,7 +11,7 @@ Runtime Terraform adds pinned Prometheus 3.15.0 and Grafana 13.2.4 in
 `stellar-monitoring`, each with probes, requests/limits and a private ClusterIP.
 `monitoring-up` saves the enabled setting beneath `.local/terraform/runtime` so
 subsequent platform plans preserve it. Both roots still produce no-change plans.
-Prometheus scrapes the two existing API `/metrics` endpoints every five seconds.
+Prometheus scrapes all six API `/metrics` endpoints every five seconds.
 Grafana provisions the Prometheus datasource and four panels: availability,
 request counts/status, p95 request duration and database failures. No exporter,
 alerting suite or dashboard account is required. The generated Grafana admin
@@ -20,7 +20,7 @@ Healthy services show zero database failures. Configuration checksum annotations
 roll the monitoring pods when their provisioned files change.
 
 `monitoring-check` creates a gateway request, waits for its counter to rise,
-requires both scrape targets up, and verifies the four-panel dashboard through
+requires all API targets in the running release up (six after the refactor), and verifies the four-panel dashboard through
 the authenticated Grafana API. Its temporary loopback port-forwards are closed
 on exit. To view the dashboard manually, keep these commands running in separate
 normal PowerShell terminals (Ctrl+C closes only the forward):
