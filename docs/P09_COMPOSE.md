@@ -1,4 +1,4 @@
-# P09 â€” Local application
+# P09 — Local application
 
 Current six-service topology and transition: [service guide](SIX_SERVICES.md),
 [ADR 0006](adr/0006-six-application-services.md), [Batch 9](BATCH9_REPORT.md).
