@@ -34,9 +34,10 @@ document is included and updated for the six-service topology.
 
 ## Actual local validation
 
-- Generated contracts/types, locked artifacts, Python unit/contract tests, five
-  frontend tests, typecheck, lint and frontend build passed. Final test counts are
-  recorded with delivery below.
+- Generated contracts/types, locked artifacts, **76 Python unit/contract tests**,
+  **five frontend tests**, typecheck, lint and
+  frontend build passed. The final Python run is recorded in
+  `.local/reports/six-final-python.log`.
 - **26 PostgreSQL/integration tests passed**, including six simultaneous HTTP API
   processes with distinct metadata, the Journey → Calculation → Catalog chain,
   binary map gzip/ETag behavior, idempotency, expiry/retention and failure handling.
@@ -59,9 +60,13 @@ document is included and updated for the six-service topology.
 
 ## Delivery, runtime and limitations
 
-Implementation commit and PR: pending final local review and creation. Required
-`ci / quality` and `ci / security` must pass on the final PR head before any merge.
-No protection is bypassed.
+Implementation: [`f503271`](https://github.com/Jyot-Kikani/DevOps_Assignment/commit/f50327169b6c38e94db2a5c902f6fa20b2a37aea).
+Review: [PR #16](https://github.com/Jyot-Kikani/DevOps_Assignment/pull/16).
+Local full-history Gitleaks, locked artifacts, pinned actions and publication
+boundaries passed after the implementation commit. Required `ci / quality` and
+`ci / security` are running on the PR; their
+[current-head results](https://github.com/Jyot-Kikani/DevOps_Assignment/pull/16/checks)
+are authoritative. No merge, publication or protection bypass is performed.
 
 No images have been published and the retained Kubernetes deployment has not been
 upgraded by this refactor. Existing published manifests/images are unchanged.
@@ -72,8 +77,9 @@ results will come from the existing release scan, not from a clean-scan assumpti
 
 Docker Desktop was started for validation and automatically resumed the two old
 kind nodes; both were returned to their stopped state. Temporary API/browser and
-gateway-check processes are stopped by their check commands. Final test-database
-shutdown is recorded with delivery. Node/PVC, stored journeys, host backups and
+gateway-check processes are stopped by their check commands. The test database was also stopped, and final Docker inspection found no
+running containers. The fixture API/Vite/gateway test ports were closed; host
+ports 8080 and 3000 remain owned by unrelated processes and were left untouched. Node/PVC, stored journeys, host backups and
 sealed catalog are preserved. No public tunnel was started.
 
 Human demonstration after publication: let Argo apply the six-service application,

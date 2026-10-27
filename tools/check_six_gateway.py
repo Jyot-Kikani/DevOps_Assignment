@@ -45,6 +45,10 @@ def main():
         service['depends_on'] = {k:v for k,v in service.get('depends_on', {}).items() if k in document['services']}
         if role != 'web':
             service['environment']['CATALOG_SNAPSHOT_ID'] = sid
+            # Linux bind-mounted 0600 test secrets belong to the CI runner.
+            # Keep the check non-root while allowing that owner to read them.
+            if os.name != 'nt' and os.getuid() != 0:
+                service['user'] = f'{os.getuid()}:{os.getgid()}'
     release_path = LOCAL / 'six-check-release.json'
     write_json(release_path, {'source_sha': sha, 'release_id': 'local-' + sha[:12],
         'source_repository': 'Jyot-Kikani/DevOps_Assignment', 'dataset': {'snapshot_id': sid, 'fixture': True}})
