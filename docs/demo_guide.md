@@ -22,9 +22,9 @@ python tools/run.py monitoring-check --json
 ```
 
 Expected: commands report `status: passed`, Argo is Synced/Healthy at the current
-deploy revision, Web/Catalog/Journey normally have one ready replica each, and
+deploy revision, Web and all six backend APIs normally have one ready replica each, and
 smoke verifies real APIs plus release/data identity. `monitoring-check` verifies
-two scrape targets, a rising request counter and the four-panel dashboard.
+six scrape targets for the new release, a rising request counter and the four-panel dashboard.
 Some verification commands create a sample journey/request; they are not all
 strictly read-only. Keep outputs in `.local/reports/` as the tools already do.
 
@@ -88,7 +88,7 @@ Use the exact implementation PR/run links in [Batch 7](BATCH7_REPORT.md).
 
 **Say:** “Main requires a PR, an up-to-date branch and both `ci / quality`
 and `ci / security`. Quality includes real PostgreSQL integration, browser
-flows and four image builds. Security includes pinned-action/lock checks and
+flows and eight image builds. Security includes pinned-action/lock checks and
 full-history Gitleaks. The CI database uses disposable credentials and a small
 fixture; it does not connect to my live database.”
 
@@ -111,7 +111,7 @@ kdemo -n argocd get application stellar-atlas
 kdemo -n stellar-atlas get deployments
 ```
 
-**Say:** “The publisher verifies current main and required checks, builds four
+**Say:** “The publisher verifies current main and required checks, builds eight
 images, scans them, pushes GHCR digests and verifies anonymous access. It writes
 generated application manifests to deploy. Argo watches deploy/app and reconciles
 the local cluster. Actions has no local kubeconfig. Synced means live desired state
@@ -143,6 +143,10 @@ monitoring. Local helpers install Argo and inject credentials separately.
 Argo owns application resources. Kubernetes Deployments replace missing pods,
 while Services preserve stable routing. Readiness/liveness probes and resource
 requests/limits are declared in the manifests.”
+
+Point out the six backend Deployments: Catalog, Search, Atlas Map, Snapshot,
+Calculation and Journey. Explain Journey → Calculation → Catalog and show the
+unchanged UI. See [the service map](SIX_SERVICES.md) for responsibilities.
 
 Point out Web's NodePort and private ClusterIP services. Explain that PostgreSQL
 uses a Deployment plus PVC in this small setup. The 10 GiB PVC survives pod

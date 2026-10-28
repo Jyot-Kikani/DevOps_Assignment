@@ -75,7 +75,7 @@
           "type": "string"
         },
         "ref": {
-          "pattern": "^(sha256:[a-f0-9]{64}|ghcr\\.io/[a-z0-9-]+/stellar-atlas-(web|catalog|journey|importer)@sha256:[a-f0-9]{64})$",
+          "pattern": "^(sha256:[a-f0-9]{64}|ghcr\\.io/[a-z0-9-]+/stellar-atlas-(web|catalog|search|atlas-map|snapshot|calculation|journey|importer)@sha256:[a-f0-9]{64})$",
           "title": "Ref",
           "type": "string"
         }
@@ -90,6 +90,28 @@
     "Images": {
       "additionalProperties": false,
       "properties": {
+        "atlas-map": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Image"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "calculation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Image"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
         "catalog": {
           "$ref": "#/$defs/Image"
         },
@@ -98,6 +120,28 @@
         },
         "journey": {
           "$ref": "#/$defs/Image"
+        },
+        "search": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Image"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "snapshot": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Image"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         },
         "web": {
           "$ref": "#/$defs/Image"

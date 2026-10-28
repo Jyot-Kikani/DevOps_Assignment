@@ -126,7 +126,8 @@ def demo_start(local_only=False):
     k.require_cluster()
     for namespace, roles in [('kube-system', ('coredns',)), ('stellar-data', ('postgres',)),
             ('argocd', ('argocd-redis', 'argocd-repo-server', 'argocd-server')),
-            ('stellar-atlas', ('catalog', 'journey', 'web'))]:
+            ('stellar-atlas', tuple(x['metadata']['name'] for x in json.loads(
+                k.kubectl('-n', 'stellar-atlas', 'get', 'deployments', '-o', 'json'))['items']))]:
         for role in roles:
             k.kubectl('-n', namespace, 'rollout', 'status', 'deployment/' + role, '--timeout=180s')
     k.kubectl('-n', 'argocd', 'rollout', 'status', 'statefulset/argocd-application-controller', '--timeout=180s')

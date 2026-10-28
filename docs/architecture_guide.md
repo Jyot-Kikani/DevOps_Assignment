@@ -7,6 +7,11 @@ This guide describes the completed P00–P23 implementation inspected on
 21 October 2026. Runtime checks establish what is running today;
 [Batch 7](BATCH7_REPORT.md) records the final implementation checkpoint.
 
+Current backend topology: [six-service map](SIX_SERVICES.md). Journey calls
+Calculation → Catalog; Search, Atlas Map and Snapshot are independent read APIs.
+Shared read libraries and data access are described in ADR 0006. See Batch 9 for
+actual deployment status; earlier batch reports describe the original release.
+
 ## 1. The architecture in one explanation
 
 “I use GitHub to review and test changes, Docker to package them, GHCR to
@@ -20,7 +25,7 @@ through a temporary HTTPS route.”
 SOURCE / DELIVERY — hosted GitHub, no laptop kubeconfig in Actions
 codex/* → PR → ci / quality + ci / security → protected main
                                                    ↓ successful main CI
-                  verified data → build four images → Grype → GHCR digests
+                  verified data → build eight images → Grype → GHCR digests
                                                               ↓
                               deploy branch: app/app.json + release + scan record
                                                               ↓ pull / reconcile
@@ -85,14 +90,14 @@ enforcement and additional scanner stacks are not part of the demonstrated scope
 
 | File | What it actually does |
 |---|---|
-| [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | PR/main/manual CI. `ci / quality` verifies locks, restores dependencies, checks contracts/tests/web, runs real PostgreSQL integration and two browser flows, and builds four images without publication. `ci / security` verifies locks/pinned actions and runs full-history secret/publication checks. |
+| [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | PR/main/manual CI. `ci / quality` verifies locks, restores dependencies, checks contracts/tests/web, runs real PostgreSQL integration and two browser flows, and builds eight images without publication. `ci / security` verifies locks/pinned actions and runs full-history secret/publication checks. |
 | [`tools/stellar_ops/quality.py`](../tools/stellar_ops/quality.py), [`tools/check_web_ci.py`](../tools/check_web_ci.py) | Implement quality checks and fixture-backed API/browser CI. CI uses disposable credentials and a small attributed data fixture, not the laptop's full dataset. |
 | [`tools/ci_security.py`](../tools/ci_security.py) | Full-history Gitleaks and publication exclusion checks. This is what the required security job runs; a green check is not a clean image scan. |
 | [`.github/workflows/release.yml`](../.github/workflows/release.yml) | Trusted successful-main CI triggers publication; manual main dispatch is also supported. Uses narrowly scoped write permissions, serializes releases, retains release/scan artifacts for three days. |
-| [`tools/release.py`](../tools/release.py) | Verifies latest main/checks, downloads checksum-verified data, builds/scans four images, pushes GHCR images, verifies anonymous digest access and writes `deploy`. Scanner execution errors abort; recorded severity-threshold failures are retained under ADR 0005's reviewed-publication policy. |
+| [`tools/release.py`](../tools/release.py) | Verifies latest main/checks, downloads checksum-verified data, builds/scans eight images, pushes GHCR images, verifies anonymous digest access and writes `deploy`. Scanner execution errors abort; recorded severity-threshold failures are retained under ADR 0005's reviewed-publication policy. |
 | [`apps/web/Dockerfile`](../apps/web/Dockerfile) | Multi-stage asset build → non-root Nginx gateway runtime, pinned bases, revision label and health check. |
 | [`services/catalog/Dockerfile`](../services/catalog/Dockerfile), [`services/journey/Dockerfile`](../services/journey/Dockerfile) | Separate non-root API images with pinned bases, hashed dependency installation, revision labels and health checks. |
-| [`jobs/importer/Dockerfile`](../jobs/importer/Dockerfile) | Fourth image: controlled data/bootstrap job tooling. CI's build-only importer context is not a published real-data image. |
+| [`jobs/importer/Dockerfile`](../jobs/importer/Dockerfile) | Importer image: controlled data/bootstrap job tooling. CI's build-only importer context is not a published real-data image. |
 | [`tools/stellar_ops/application.py`](../tools/stellar_ops/application.py) | Local Compose lifecycle and image preparation/checking; earlier local release metadata. |
 | [`tools/stellar_ops/security.py`](../tools/stellar_ops/security.py) | Local secret-control demonstration and Grype image scans, including a fake-token rejection generated only in process memory. |
 | [`contracts/`](../contracts/), [`tests/`](../tests/) | Versioned interface/release contracts and executable quality evidence. Prevent contract drift and catch integration failures before delivery. |
@@ -134,7 +139,7 @@ These files are on the **separate `deploy` branch**, not missing from main:
 | Generated file | Purpose |
 |---|---|
 | `app/app.json` | Concrete digest-pinned application resources Argo applies. |
-| `release.json` | Source/release/data identity and all four published image references. |
+| `release.json` | Source/release/data identity and all eight published image references. |
 | `scan-summary.json` | Grype version, threshold, actual exit codes and severity counts. |
 
 Inspect them in the [deploy branch](https://github.com/Jyot-Kikani/DevOps_Assignment/tree/deploy).

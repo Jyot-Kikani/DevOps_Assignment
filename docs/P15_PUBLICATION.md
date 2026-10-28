@@ -1,7 +1,11 @@
 # P15: trusted-main publication
 
+Current six-service topology and transition: [service guide](SIX_SERVICES.md),
+[ADR 0006](adr/0006-six-application-services.md), [Batch 9](BATCH9_REPORT.md).
+Earlier dated validation describes the original two-backend release.
+
 The existing `ci / quality` and `ci / security` names/protections remain required.
-Quality also builds four non-root images with a **build-only** importer context;
+Quality also builds eight non-root images with a **build-only** importer context;
 those CI images contain no real catalog and are never published.
 
 Publish sealed data once, from the existing clone:
@@ -16,7 +20,7 @@ is preserved; the resolved destination is written under ignored `.local/data/`.
 `data-check` downloads anonymously and verifies compressed/raw bytes and notices.
 
 After successful **main** CI, `release.yml` checks latest main and both required
-checks, downloads the verified public data, builds/scans four images, publishes
+checks, downloads the verified public data, builds/scans eight images, publishes
 GHCR digest references and pushes generated application manifests to `deploy`.
 Fork PRs never receive publication permissions. One concurrency group serializes
 releases; stale main cannot promote. No cluster credentials enter Actions.

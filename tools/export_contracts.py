@@ -1,9 +1,14 @@
 """Deterministic schema export, with strict comparison mode for CI."""
 import argparse
+import copy
 import json
 from pathlib import Path
 from stellar_catalog.app import app as catalog
 from stellar_journey.app import app as journey
+from stellar_search.app import app as search
+from stellar_atlas_map.app import app as atlas_map
+from stellar_snapshot.app import app as snapshot
+from stellar_calculation.app import app as calculation
 from schema_models import Release, PhaseReport
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -15,7 +20,16 @@ def main():
     args = parser.parse_args()
     documents = {"catalog.openapi.json": catalog.openapi(), "journey.openapi.json": journey.openapi(),
                  "release.schema.json": Release.model_json_schema(), "phase-report.schema.json": PhaseReport.model_json_schema()}
-    for name in ("catalog.openapi.json", "journey.openapi.json"):
+    documents["star-catalog.openapi.json"] = catalog.openapi()
+    # catalog.openapi.json remains the combined browser-facing Catalog namespace.
+    documents["catalog.openapi.json"] = copy.deepcopy(catalog.openapi())
+    for name, app in (("search", search), ("atlas-map", atlas_map), ("snapshot", snapshot), ("calculation", calculation)):
+        documents[name + ".openapi.json"] = app.openapi()
+        if name != "calculation":
+            combined = documents["catalog.openapi.json"]
+            combined["paths"].update({p: v for p, v in app.openapi()["paths"].items() if p.startswith("/v1/snapshots")})
+            combined["components"]["schemas"].update(app.openapi()["components"]["schemas"])
+    for name in [n for n in documents if n.endswith(".openapi.json")]:
         document = documents[name]
         document["x-max-body-bytes"] = 4096
         document["x-timestamp-format"] = "UTC RFC3339"

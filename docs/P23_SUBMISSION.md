@@ -6,6 +6,10 @@ P00–P23 have course-sized evidence under ADR 0005. Read the
 [final acceptance register](ACCEPTANCE.md), [Batch 7 results](BATCH7_REPORT.md)
 and [remaining limits](#remaining-limitations) before presenting this as a demo.
 
+Current source topology: [six backend services](SIX_SERVICES.md), accepted in
+[ADR 0006](adr/0006-six-application-services.md). See [Batch 9](BATCH9_REPORT.md)
+for current refactor evidence; earlier runtime measurements below remain historical.
+
 ## Architecture
 
 ```mermaid
@@ -16,7 +20,15 @@ flowchart LR
   subgraph kind[Local kind Kubernetes - one retained node]
     Web --> Catalog[Catalog API]
     Web --> Journey[Journey API]
-    Journey -->|HTTP positions and snapshot| Catalog
+    Web --> Search[Search API]
+    Web --> Map[Atlas Map API]
+    Web --> Snapshot[Snapshot API]
+    Web --> Calculation[Calculation API]
+    Journey -->|HTTP estimate| Calculation
+    Calculation -->|HTTP positions| Catalog
+    Search --> CDB
+    Map --> CDB
+    Snapshot --> CDB
     Catalog --> CDB[(Catalog database)]
     Journey --> JDB[(Journey database)]
     Importer[Private importer Job] --> CDB

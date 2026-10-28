@@ -63,17 +63,52 @@ services:
     secrets: [catalog_reader_dsn]
     depends_on:
       postgres: {condition: service_healthy}
+  search:
+    <<: *runtime
+    image: stellar-atlas-search:${IMAGE_TAG:?Use dev-up}
+    environment:
+      <<: *environment
+      CATALOG_READER_DSN_FILE: /run/secrets/catalog_reader_dsn
+    secrets: [catalog_reader_dsn]
+    depends_on:
+      postgres: {condition: service_healthy}
+  atlas-map:
+    <<: *runtime
+    image: stellar-atlas-atlas-map:${IMAGE_TAG:?Use dev-up}
+    environment:
+      <<: *environment
+      CATALOG_READER_DSN_FILE: /run/secrets/catalog_reader_dsn
+    secrets: [catalog_reader_dsn]
+    depends_on:
+      postgres: {condition: service_healthy}
+  snapshot:
+    <<: *runtime
+    image: stellar-atlas-snapshot:${IMAGE_TAG:?Use dev-up}
+    environment:
+      <<: *environment
+      CATALOG_READER_DSN_FILE: /run/secrets/catalog_reader_dsn
+    secrets: [catalog_reader_dsn]
+    depends_on:
+      postgres: {condition: service_healthy}
+  calculation:
+    <<: *runtime
+    image: stellar-atlas-calculation:${IMAGE_TAG:?Use dev-up}
+    environment:
+      <<: *environment
+      CATALOG_INTERNAL_URL: http://catalog:8000
+    depends_on:
+      catalog: {condition: service_healthy}
   journey:
     <<: *runtime
     image: stellar-atlas-journey:${IMAGE_TAG:?Use dev-up}
     environment:
       <<: *environment
       JOURNEY_DSN_FILE: /run/secrets/journey_app_dsn
-      CATALOG_INTERNAL_URL: http://catalog:8000
+      CALCULATION_INTERNAL_URL: http://calculation:8000
     secrets: [journey_app_dsn]
     depends_on:
       postgres: {condition: service_healthy}
-      catalog: {condition: service_healthy}
+      calculation: {condition: service_healthy}
   web:
     <<: *runtime
     image: stellar-atlas-web:${IMAGE_TAG:?Use dev-up}
@@ -82,6 +117,10 @@ services:
     depends_on:
       catalog: {condition: service_healthy}
       journey: {condition: service_healthy}
+      search: {condition: service_healthy}
+      atlas-map: {condition: service_healthy}
+      snapshot: {condition: service_healthy}
+      calculation: {condition: service_healthy}
 secrets:
   postgres_admin: {file: .local/secrets/postgres_admin}
   catalog_writer: {file: .local/secrets/catalog_writer}

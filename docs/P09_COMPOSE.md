@@ -1,5 +1,9 @@
 # P09 — Local application
 
+Current six-service topology and transition: [service guide](SIX_SERVICES.md),
+[ADR 0006](adr/0006-six-application-services.md), [Batch 9](BATCH9_REPORT.md).
+Earlier dated validation describes the original two-backend release.
+
 Run in the normal Windows account from this clone (Docker Desktop Linux engine):
 
 ```powershell
@@ -11,9 +15,9 @@ python tools/run.py dev-down --json
 ```
 
 Open [the local atlas](http://127.0.0.1:8080/explore). `dev-up` verifies/reuses
-protected credentials, verifies the preserved P03 archive, builds four images,
+protected credentials, verifies the preserved P03 archive, builds eight images,
 starts PostgreSQL, runs explicit bootstrap/migration/import jobs, then starts
-Catalog, Journey and Web and smokes the actual gateway. `--no-build` reuses the
+all six APIs and Web and smokes the actual gateway. `--no-build` reuses the
 last local images/release metadata. Stop preserves the named volume. Nothing
 here creates a cluster, tunnel, public release or remote package.
 
@@ -30,7 +34,7 @@ three runtime containers, and checks the identical share plus app smoke. It
 retains the anonymous test share for ordinary expiry. A named volume is not a
 host backup; backup/restore remains P14.
 
-Four Dockerfiles use digest-pinned Python, Node and Nginx bases and frozen
+Eight Dockerfiles use digest-pinned Python, Node and Nginx bases and frozen
 dependencies. Python packages build as wheels in a build stage; build tools
 are absent from runtime stages. API/job users are UID 10001, Web is UID 101.
 Only bootstrap receives admin credentials; migrations/import/runtime each get

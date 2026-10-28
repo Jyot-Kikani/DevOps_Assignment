@@ -1,5 +1,9 @@
 # P13 — Local Kubernetes application
 
+Current six-service topology and transition: [service guide](SIX_SERVICES.md),
+[ADR 0006](adr/0006-six-application-services.md), [Batch 9](BATCH9_REPORT.md).
+Earlier dated validation describes the original two-backend release.
+
 After P12, reuse the clean, prepared P11 release record and images:
 
 ```powershell

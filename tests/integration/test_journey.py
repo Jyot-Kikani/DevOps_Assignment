@@ -27,8 +27,10 @@ def journey_service(tmp_path,monkeypatch):
     monkeypatch.setenv("APP_ENV","ci")
     with live_service("catalog",sid,tmp_path) as (base,log):
         monkeypatch.setenv("CATALOG_INTERNAL_URL",base)
-        with TestClient(app) as client:
-            yield client,sid,base,log
+        with live_service("calculation",sid,tmp_path,catalog_url=base) as (calculation_base,_):
+            monkeypatch.setenv("CALCULATION_INTERNAL_URL",calculation_base)
+            with TestClient(app) as client:
+                yield client,sid,base,log
 
 
 def body(sid):
@@ -144,44 +146,20 @@ def test_controlled_clock_expiry_and_real_batched_purge(journey_service):
     engine.dispose()
 
 
-def test_catalog_retry_total_timeout_mismatch_and_own_db_failure(journey_service):
+def test_calculation_outage_preserves_shares_and_own_db_failure(journey_service):
     client,sid,_,_ = journey_service
-    original = app.state.catalog_client
-    calls = []
-    positions = {"snapshot_id":sid,"items":[{"source_id":"sun","position_pc":[0,0,0]},
-                 {"source_id":"5853498713190525696","position_pc":[3,4,0]}]}
-    def handle(request):
-        calls.append(request)
-        if len(calls)==1:
-            return httpx.Response(503,json={})
-        return httpx.Response(200,json=positions)
-    mocked = httpx.AsyncClient(base_url="http://catalog",transport=httpx.MockTransport(handle),follow_redirects=False,trust_env=False)
-    app.state.catalog_client = mocked
+    key = str(uuid4())
+    saved = client.post("/v1/journeys",json=body(sid),headers={"Idempotency-Key":key})
+    assert saved.status_code == 201
+    original = app.state.calculation_client
+    mocked = httpx.AsyncClient(base_url="http://calculation",transport=httpx.MockTransport(lambda r:httpx.Response(503,json={})))
+    app.state.calculation_client = mocked
     try:
-        response = client.post("/v1/estimate",json=body(sid),headers={"X-Request-ID":"retry-proof"})
-        assert response.status_code==200 and len(calls)==2
-        assert response.json()["distance_pc"]==5 and response.json()["duration_julian_years"]==pytest.approx(163.07818885)
-        assert all(r.headers["X-Request-ID"]=="retry-proof" for r in calls)
-        calls.clear()
-        def reset(request):
-            calls.append(request)
-            raise httpx.ConnectError("fixture reset")
-        app.state.catalog_client._transport = httpx.MockTransport(reset)
-        assert client.post("/v1/estimate",json=body(sid)).status_code==503 and len(calls)==2
-        for status,content,expected in ((503,{},503),(302,{},503),(200,positions|{"snapshot_id":"different"},409),
-                (200,{"snapshot_id":sid,"items":[]},503)):
-            app.state.catalog_client._transport = httpx.MockTransport(lambda r:httpx.Response(status,json=content,headers={"Location":"http://do-not-follow.invalid"}))
-            assert client.post("/v1/estimate",json=body(sid)).status_code==expected
-        async def slow(request):
-            await asyncio.sleep(4)
-            return httpx.Response(200,json=positions)
-        app.state.catalog_client._transport = httpx.MockTransport(slow)
-        started = time.monotonic()
-        assert client.post("/v1/estimate",json=body(sid)).status_code==503
-        assert 2.8<=time.monotonic()-started<3.8
-        # Catalog failure must not make the healthy Journey process/own DB unready.
-        assert client.get("/health/live").status_code==200
-        assert client.get("/health/ready").status_code==200
+        assert client.post("/v1/estimate",json=body(sid)).status_code == 503
+        assert client.post("/v1/journeys",json=body(sid),headers={"Idempotency-Key":str(uuid4())}).status_code == 503
+        assert client.get("/v1/journeys/"+saved.json()["id"]).json() == saved.json()
+        assert client.post("/v1/journeys",json=body(sid),headers={"Idempotency-Key":key}).json() == saved.json()
+        assert client.get("/health/ready").status_code == 200
         own = app.state.engine
         app.state.engine = create_engine("postgresql+psycopg://journey_app:invalid@127.0.0.1:1/stellar_journey",hide_parameters=True,connect_args={"connect_timeout":1})
         try:
@@ -195,4 +173,4 @@ def test_catalog_retry_total_timeout_mismatch_and_own_db_failure(journey_service
             app.state.engine = own
     finally:
         asyncio.run(mocked.aclose())
-        app.state.catalog_client = original
+        app.state.calculation_client = original

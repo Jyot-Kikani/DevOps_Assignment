@@ -14,7 +14,7 @@ from stellar_ops.bootstrap import ROOT, LOCAL, digest, find_tool, write_json
 from stellar_ops.github import REPOSITORY, api
 from stellar_ops.kubernetes import render
 
-ROLES = ('web', 'catalog', 'journey', 'importer')
+ROLES = ('web', 'catalog', 'search', 'atlas-map', 'snapshot', 'calculation', 'journey', 'importer')
 
 
 def run(args, *, env=None, payload=None, timeout=1200):
@@ -59,7 +59,7 @@ def dataset():
 def build(sha, directory, tag):
     images = {}
     for role in ROLES:
-        dockerfile = 'apps/web/Dockerfile' if role == 'web' else 'jobs/importer/Dockerfile' if role == 'importer' else f'services/{role}/Dockerfile'
+        dockerfile = 'apps/web/Dockerfile' if role == 'web' else 'jobs/importer/Dockerfile' if role == 'importer' else f"services/{role.replace("-", "_")}/Dockerfile"
         ref = f'stellar-atlas-{role}:{tag}'
         args = ['docker', 'buildx', 'build', '--load', '--provenance=false', '--build-arg', 'SOURCE_SHA=' + sha,
             '-f', dockerfile, '-t', ref]
@@ -246,7 +246,7 @@ def main():
         directory.mkdir(parents=True, exist_ok=True)
         (directory / 'README.txt').write_text('Build-only CI context. Not a runnable or publishable catalog.')
         build(run(['git', 'rev-parse', 'HEAD']), directory, 'ci-build')
-        print('Four non-root images built; importer context is build-only, no publication.')
+        print('Eight non-root images built; importer context is build-only, no publication.')
 
 
 if __name__ == '__main__':

@@ -4,6 +4,10 @@ Version: 1.4 | Course-scope revision: 20 October 2026 | Frozen design date: 18 O
 
 The user selected Cloudflare Quick Tunnel as the primary public-access method on 19 October 2026. [ADR 0001](adr/0001-public-access-quick-tunnel.md) supersedes the original Tailscale-first choice. On 20 October the user selected the existing `Jyot-Kikani/DevOps_Assignment` repository exclusively and authorized basic GitHub CI before Batch 2; [ADR 0004](adr/0004-existing-repository-and-early-ci.md) records this change. The user then made this repository public. Public visibility and free main protection are live-verified. No new `stellar-atlas` repository is to be created. The course-scope amendment in [ADR 0005](adr/0005-course-assignment-scope.md) now controls future work and supersedes the earlier production-hardening requirements.
 
+The user approved a post-completion [six-service refactor](adr/0006-six-application-services.md).
+Its topology supersedes the original two-backend design without changing product
+features or scientific rules. See [Batch 9](BATCH9_REPORT.md) for actual status.
+
 ## 0. Execution rules, scope, and evidence boundary
 
 This is an end-to-end implementation specification, not an instruction to invent a second architecture. Implement phases P00–P23 in order. Complete each phase's revised course checks before its dependants. Keep the existing P00–P07 implementation and checks; do not expand them without a concrete defect or course requirement. Every product requirement has an implementation phase and final evidence check below.

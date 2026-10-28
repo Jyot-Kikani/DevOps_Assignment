@@ -9,6 +9,10 @@
         {
           "targets": [
             "catalog.stellar-atlas.svc.cluster.local:8000",
+            "search.stellar-atlas.svc.cluster.local:8000",
+            "atlas-map.stellar-atlas.svc.cluster.local:8000",
+            "snapshot.stellar-atlas.svc.cluster.local:8000",
+            "calculation.stellar-atlas.svc.cluster.local:8000",
             "journey.stellar-atlas.svc.cluster.local:8000"
           ]
         }

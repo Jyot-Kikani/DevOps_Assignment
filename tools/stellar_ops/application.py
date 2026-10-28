@@ -15,7 +15,7 @@ from .bootstrap import ROOT, LOCAL, write_json
 from .guards import local_target
 from .db import run
 
-ROLES = ('web', 'catalog', 'journey', 'importer')
+ROLES = ('web', 'catalog', 'search', 'atlas-map', 'snapshot', 'calculation', 'journey', 'importer')
 
 def source(clean=False):
     if clean and run(['git', 'status', '--porcelain']):
@@ -60,7 +60,7 @@ def images_build(clean=False):
     tag = configure(sha)
     images = {}
     for role in ROLES:
-        dockerfile = f'apps/web/Dockerfile' if role == 'web' else f'jobs/importer/Dockerfile' if role == 'importer' else f'services/{role}/Dockerfile'
+        dockerfile = f'apps/web/Dockerfile' if role == 'web' else f'jobs/importer/Dockerfile' if role == 'importer' else f"services/{role.replace("-", "_")}/Dockerfile"
         args = ['docker', 'build', '--provenance=false', '--build-arg', 'SOURCE_SHA=' + sha, '-f', dockerfile, '-t', f'stellar-atlas-{role}:{tag}']
         if role == 'importer':
             args += ['--build-context', 'dataset=' + str(dataset)]
@@ -98,7 +98,7 @@ def image_smoke():
                 raise ValueError('Running image identity/health mismatch: ' + role)
         if role != 'web':
             run(['docker', 'run', '--rm', '--network', 'none', '--entrypoint', 'python', image['ref'], '-m', 'pip', 'check'])
-            modules = {'catalog': 'stellar_catalog.app, stellar_catalog.migrate', 'journey': 'stellar_journey.app, stellar_journey.migrate', 'importer': 'stellar_importer.pipeline, stellar_importer.maintenance'}[role]
+            modules = {'catalog': 'stellar_catalog.app, stellar_catalog.migrate', 'journey': 'stellar_journey.app, stellar_journey.migrate', 'importer': 'stellar_importer.pipeline, stellar_importer.maintenance'}.get(role, 'stellar_' + role.replace('-', '_') + '.app')
             code = f'import os; import {modules}; assert os.getuid() != 0; assert os.environ["SOURCE_SHA"] == "{release["source_sha"]}"'
             run(['docker', 'run', '--rm', '--network', 'none', '--entrypoint', 'python', image['ref'], '-c', code])
         results[role] = {'status': 'passed', 'ref': image['ref'], 'user': info['Config']['User'], 'manifest_digest': image['manifest_digest']}
@@ -131,7 +131,7 @@ def dev_up(build=True):
     run(cmd + ['up', '-d', '--wait', '--wait-timeout', '90', 'postgres'])
     for job in ('bootstrap', 'catalog-migrate', 'journey-migrate', 'importer'):
         run(cmd + ['--profile', 'jobs', 'run', '--rm', '--no-deps', job], timeout=600)
-    run(cmd + ['up', '-d', '--wait', '--wait-timeout', '120', 'catalog', 'journey', 'web'])
+    run(cmd + ['up', '-d', '--wait', '--wait-timeout', '120', 'catalog', 'search', 'atlas-map', 'snapshot', 'calculation', 'journey', 'web'])
     return smoke()
 
 def http(path, body=None, headers=None, base='http://127.0.0.1:8080'):
@@ -153,7 +153,7 @@ def smoke():
     version = json.loads(http('/version.json')[2])
     if version['source_sha'] != sha or json.loads(http('/release.json')[2]) != release:
         raise ValueError('Web source/release metadata mismatch')
-    for role in ('catalog', 'journey'):
+    for role in (r for r in release['images'] if r not in ('web', 'importer')):
         status, _, body = http(f'/api/{role}/v1/meta')
         meta = json.loads(body)
         if status != 200 or meta['source_sha'] != sha or meta['release_id'] != release['release_id'] or not meta['readiness']:
@@ -188,13 +188,13 @@ def persistence_check():
     if status != 201:
         raise ValueError('Persistence share creation failed')
     journey = json.loads(raw)
-    run(compose() + ['restart', 'postgres', 'catalog', 'journey', 'web'])
+    run(compose() + ['restart', 'postgres', 'catalog', 'search', 'atlas-map', 'snapshot', 'calculation', 'journey', 'web'])
     deadline = time.monotonic() + 90
     while time.monotonic() < deadline:
         try:
             if http('/api/journey/v1/journeys/' + journey['id'])[2] == raw:
                 report = smoke()
-                report.update(journey_id=journey['id'], restart='PostgreSQL and all three runtime containers; identical persisted journey')
+                report.update(journey_id=journey['id'], restart='PostgreSQL and all seven runtime containers; identical persisted journey')
                 return report
         except (OSError, ValueError):
             pass

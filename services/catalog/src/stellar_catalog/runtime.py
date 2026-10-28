@@ -9,7 +9,7 @@ from stellar_common.database import engine_for
 async def lifespan(app):
     app.state.settings = Settings.load()
     app.state.engine = engine_for("CATALOG_READER_DSN", "catalog_reader", "stellar_catalog")
-    app.state.version_info.labels("catalog",app.state.settings.source_sha,app.state.settings.snapshot_id).set(1)
+    app.state.version_info.labels(app.state.service_name,app.state.settings.source_sha,app.state.settings.snapshot_id).set(1)
     try:
         yield
     finally:
@@ -31,5 +31,5 @@ def readiness(app):
                     (required.get("fixture") or (active_row and active_row[1].get("fixture"))))
             return version == "catalog_0002" and active is not None and safe,active
     except SQLAlchemyError:
-        app.state.query_failures.labels("catalog").inc()
+        app.state.query_failures.labels(app.state.service_name).inc()
         return False,None

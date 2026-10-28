@@ -2,6 +2,11 @@
 
 ## DevOps learning and demonstration
 
+- [Six-service implementation and demonstration](SIX_SERVICES.md): responsibilities, HTTP connections, data access and deployment transition.
+- [DevOps topic mapping](DEVOPS_TOPIC_MAPPING.md): the eight course topics mapped to this implementation.
+- [Batch 9](BATCH9_REPORT.md): six-service refactor checks and delivery status.
+
+
 - [Interactive architecture visualiser](architecture_visualiser.html): open directly
   in a browser; explore delivery, platform ownership, operations and security.
 - [Architecture and file guide](architecture_guide.md): which configuration/helpers
