@@ -1,25 +1,61 @@
 {
-  "source_sha": "d44d639309d668ef8f74f41b20b319a9b601d76c",
+  "source_sha": "59468ebe39bdfa551369f413e8bb8519b4b60326",
   "scanner": "Grype 0.120.1",
   "threshold": "high",
   "images": {
     "web": {
       "exit_code": 2,
       "findings": {
-        "Negligible": 107,
-        "Critical": 17,
-        "Low": 13,
-        "High": 91,
-        "Medium": 70,
-        "Unknown": 33
+        "Negligible": 109,
+        "Critical": 14,
+        "High": 92,
+        "Medium": 69,
+        "Unknown": 33,
+        "Low": 12
       }
     },
     "catalog": {
       "exit_code": 2,
       "findings": {
         "High": 55,
-        "Medium": 50,
         "Negligible": 46,
+        "Medium": 50,
+        "Low": 10
+      }
+    },
+    "search": {
+      "exit_code": 2,
+      "findings": {
+        "High": 55,
+        "Negligible": 46,
+        "Medium": 50,
+        "Low": 10
+      }
+    },
+    "atlas-map": {
+      "exit_code": 2,
+      "findings": {
+        "High": 55,
+        "Negligible": 46,
+        "Medium": 50,
+        "Low": 10
+      }
+    },
+    "snapshot": {
+      "exit_code": 2,
+      "findings": {
+        "High": 55,
+        "Negligible": 46,
+        "Medium": 50,
+        "Low": 10
+      }
+    },
+    "calculation": {
+      "exit_code": 2,
+      "findings": {
+        "High": 55,
+        "Negligible": 46,
+        "Medium": 50,
         "Low": 10
       }
     },
@@ -27,20 +63,18 @@
       "exit_code": 2,
       "findings": {
         "High": 55,
-        "Medium": 50,
         "Negligible": 46,
-        "Low": 10,
-        "Critical": 1
+        "Medium": 50,
+        "Low": 10
       }
     },
     "importer": {
       "exit_code": 2,
       "findings": {
         "High": 55,
-        "Medium": 50,
         "Negligible": 46,
-        "Low": 10,
-        "Critical": 1
+        "Medium": 50,
+        "Low": 10
       }
     }
   },

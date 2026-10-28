@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "release_id": "r39573285891-a1-d44d639309d6",
-  "source_sha": "d44d639309d668ef8f74f41b20b319a9b601d76c",
+  "release_id": "r40645411510-a1-59468ebe39bd",
+  "source_sha": "59468ebe39bdfa551369f413e8bb8519b4b60326",
   "source_repository": "Jyot-Kikani/DevOps_Assignment",
   "source_dirty": false,
-  "created_at": "2026-10-21T09:00:47.508168+00:00",
+  "created_at": "2026-10-28T06:44:58.011600+00:00",
   "dataset": {
     "snapshot_id": "gcns-edr3-20261013-20271720",
     "raw_sha256": "20271720bc7b5038f05df0c25d17a5e1cc51158eed74ee1b27472c7faf4ede94",
@@ -17,20 +17,36 @@
   },
   "images": {
     "web": {
-      "ref": "ghcr.io/jyot-kikani/stellar-atlas-web@sha256:d9dea7717ac3881b444dd57630e89e4e39423baaf792e421c52d760a6692aebd",
-      "manifest_digest": "sha256:d9dea7717ac3881b444dd57630e89e4e39423baaf792e421c52d760a6692aebd"
+      "ref": "ghcr.io/jyot-kikani/stellar-atlas-web@sha256:66fc249b66bf1aca7e299642105782658e2ba90a12634fe8e4a1ab98c7f69635",
+      "manifest_digest": "sha256:66fc249b66bf1aca7e299642105782658e2ba90a12634fe8e4a1ab98c7f69635"
     },
     "catalog": {
-      "ref": "ghcr.io/jyot-kikani/stellar-atlas-catalog@sha256:04d0585113e16cdd7a9ea0b4706be16f7a8a1b4386f0ba99f87eff4130e56673",
-      "manifest_digest": "sha256:04d0585113e16cdd7a9ea0b4706be16f7a8a1b4386f0ba99f87eff4130e56673"
+      "ref": "ghcr.io/jyot-kikani/stellar-atlas-catalog@sha256:b83ad11e3cf0348344ba7b2524f770e0fe294a530beb1e2839dda9f7501dccb6",
+      "manifest_digest": "sha256:b83ad11e3cf0348344ba7b2524f770e0fe294a530beb1e2839dda9f7501dccb6"
+    },
+    "search": {
+      "ref": "ghcr.io/jyot-kikani/stellar-atlas-search@sha256:47b20794a87cc9708c82cdc272c51913dff6d59d1b6f0102d05aa9041b928ea3",
+      "manifest_digest": "sha256:47b20794a87cc9708c82cdc272c51913dff6d59d1b6f0102d05aa9041b928ea3"
+    },
+    "atlas-map": {
+      "ref": "ghcr.io/jyot-kikani/stellar-atlas-atlas-map@sha256:b97ad239cbe69dfbcc01390daca9055196cc1e15e84e46c30684ed32fe8c8fae",
+      "manifest_digest": "sha256:b97ad239cbe69dfbcc01390daca9055196cc1e15e84e46c30684ed32fe8c8fae"
+    },
+    "snapshot": {
+      "ref": "ghcr.io/jyot-kikani/stellar-atlas-snapshot@sha256:b273d999f1eb5bca26758668b9d148f46ac4eb5842f012465fc25669a6519514",
+      "manifest_digest": "sha256:b273d999f1eb5bca26758668b9d148f46ac4eb5842f012465fc25669a6519514"
+    },
+    "calculation": {
+      "ref": "ghcr.io/jyot-kikani/stellar-atlas-calculation@sha256:8818997fc261d0e526ee00672e0a97da1b707a5ee94e9c89fb3634fea34d277a",
+      "manifest_digest": "sha256:8818997fc261d0e526ee00672e0a97da1b707a5ee94e9c89fb3634fea34d277a"
     },
     "journey": {
-      "ref": "ghcr.io/jyot-kikani/stellar-atlas-journey@sha256:c0550228341f925b9ff0999d4847bb67a33acf8f5dfdddd8bd23e856e6c48c66",
-      "manifest_digest": "sha256:c0550228341f925b9ff0999d4847bb67a33acf8f5dfdddd8bd23e856e6c48c66"
+      "ref": "ghcr.io/jyot-kikani/stellar-atlas-journey@sha256:83f1a2c5078ddf5077961473f1734d96a5d17401f707c5855810b57588764cf4",
+      "manifest_digest": "sha256:83f1a2c5078ddf5077961473f1734d96a5d17401f707c5855810b57588764cf4"
     },
     "importer": {
-      "ref": "ghcr.io/jyot-kikani/stellar-atlas-importer@sha256:abb7674a097e6f6342565f0ede20df98c50da4a819b7ca3cc58af3a94892a074",
-      "manifest_digest": "sha256:abb7674a097e6f6342565f0ede20df98c50da4a819b7ca3cc58af3a94892a074"
+      "ref": "ghcr.io/jyot-kikani/stellar-atlas-importer@sha256:c24b62ec9372775caea4b865abbd6b1260247db39aa9ba30319b49f0daf9522c",
+      "manifest_digest": "sha256:c24b62ec9372775caea4b865abbd6b1260247db39aa9ba30319b49f0daf9522c"
     }
   }
 }
